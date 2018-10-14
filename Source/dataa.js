@@ -1,4 +1,5 @@
 var maxVideos = 3;
+var content;
 
 $(document).ready(function(){
 
@@ -13,6 +14,7 @@ $(document).ready(function(){
       key: 'AIzaSyDt1xT1UQe92i_0py55F5l7AQPY8hKsyhY'},
       function(data){
         var output;
+        content = data;
         $.each(data.items, function(i, item){
           console.log(item);
                 videTitle = item.snippet.title;
@@ -31,9 +33,19 @@ $(document).ready(function(){
                         '</div><div  id="cTitle"><a href="https://www.youtube.com/channel/'+cID+'" target="_blank">'+channelTitle+'</a></div></div>' +
                     '<div class="clearfix"></div>';
           $('#trending').append(output);
-        })
 
+
+
+          // var hiddenElement = document.createElement('a');
+          //
+          // hiddenElement.href = 'data:attachment/text,' + JSON.stringify(content);
+          // hiddenElement.target = '_blank';
+          // hiddenElement.download = 'myFile.txt';
+          // hiddenElement.click();
+          // console.log(encodeURI(JSON.stringify(content)));
+        })
       }
+
     );
 
 
