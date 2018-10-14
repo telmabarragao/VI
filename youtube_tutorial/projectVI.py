@@ -19,6 +19,11 @@ video_dict = {'youID':[], 'title':[], 'pub_date':[]}
 
 def grab_videos(keyword, token=None):
     res = youtube_search(keyword)
+    #res2 = videos_list_most_popular(client,
+        # part='snippet,contentDetails,statistics',
+        # chart='mostPopular',
+        # regionCode='',
+        # videoCategoryId='')
     token = res[0]
     videos = res[1]
 
