@@ -1,0 +1,97 @@
+#title{
+  display: block;
+  position: absolute;
+  font-family: monospace;
+  margin: auto;
+  margin-top: 2%;
+  margin-left: 35%;
+}
+
+#selectt{
+  display: block;
+  position: absolute;
+  font-family: monospace;
+  margin: auto;
+  margin-top: 5%;
+  margin-left: 38%;
+}
+
+#hiddenDivworld{
+  display: none;
+  visibility:hidden;
+  position: relative;
+  margin: auto;
+  margin-top: 5%;
+}
+
+#hiddenDivoverviewcontinents{
+  display: none;
+  visibility:hidden;
+  position: absolute;
+  margin: auto;
+  margin-top: 10%;
+}
+
+#hiddenDivcontinentevolution, #hiddenDivhistorical{
+  display: none;
+  visibility:hidden;
+  position: absolute;
+  margin: auto;
+  margin-top: 10%;
+}
+
+#hiddenDivcomparisoncountries{
+  display: none;
+  visibility:hidden;
+  position: absolute;
+  margin: auto;
+  margin-top: 10%;
+
+}
+
+#hiddenDivglossary{
+  display: none;
+  visibility:hidden;
+  position: absolute;
+  margin: auto;
+  margin-top: 10%;
+}
+
+#selectt2{
+  display: block;
+  position: relative;
+  font-family: monospace;
+  margin: auto;
+  margin-top: -2%;
+  margin-left: 2%;
+}
+
+#hiddenDivcontinentAmericaSouth{
+  display: none;
+  visibility:hidden;
+  position: relative;
+  margin: auto;
+  margin-top: 5%;
+}
+#hiddenDivcontinentsGraph{
+  display: none;
+  visibility:hidden;
+  position: relative;
+  margin: auto;
+  margin-top: 5%;
+}
+#hiddenDivcountries{
+  display: none;
+  visibility:hidden;
+  position: relative;
+  margin: auto;
+  margin-top: 5%;
+}
+
+
+.imagens{
+  display: block;
+  position: absolute;
+  margin: auto;
+  margin-left: 38%;
+}
