@@ -30,16 +30,17 @@ $( document ).ready(function() {
 ////////////////////D3//////////////////
 
 
-
+      var dispatch = d3.dispatch("countryEnter");
+      var selectedCountry;
       //Width and height
-      var w = 500;
-      var h = 300;
+      var w = 1000;
+      var h = 800;
 
       var margin = {
-          top: 60,
-          bottom: 40,
-          left: 70,
-          right: 40
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right:0
         };
 
       var width = w - margin.left - margin.right;
@@ -49,12 +50,12 @@ $( document ).ready(function() {
       // define map projection
       var projection = d3.geoEquirectangular()
                           .translate([w/2, h/2])
-                          .scale([500]);
+                          .scale([200]);
 
       //Define default path generator
       var path = d3.geoPath().projection(projection);
 
-      var svg = d3.select("body")
+      var svg = d3.select("#world_graph")
         .append("svg")
         .attr("id", "chart")
         .attr("width", w)
@@ -70,8 +71,6 @@ $( document ).ready(function() {
 
       d3.json("../data/CountryOutput.json").then(function(json){
 
-
-
         data = json.data;
         var count =0;
 
@@ -82,8 +81,6 @@ $( document ).ready(function() {
             console.log(data.length)
             var wrongCountries = [""];
             console.log(geojson);
-            //Merge the agriculture and GeoJSON data
-            //Loop through once for each agriculture data value
             for(var i = 0; i < data.length; i++){
                 // grab state name
                 var dataCountry = data[i].country_region;
@@ -121,32 +118,29 @@ $( document ).ready(function() {
 
             for (var wc = 0; wc < wrongCountries.length; wc++) {
               if(wrongCountries[wc]== ""){
-
+                console.log(wrongCountries)
               }else{
-                for (var c = 0; c < datageo.features.length; c++) {
-
-                      var jsonState = datageo.features[c].properties.FORMAL_EN;
-
-                      if (/\s/.test(jsonState)) {
-                            console.log(jsonState)
-
-                            var split1 = wrongCountries[wc].split(" ");
-                            var split2 = jsonState.split(" ");
-                            console.log(split1)
-                            console.log(split2)
-
-                            for(var word = 0; n < split1.length; n++){
-                              for(var word1 = 0; n < split2.length; n++){
-                                if(word == word1){
-                                  console.log("DONE "+word+ " "+ word1)
-                                  count += 1;
-                                }
-                              }
-                            }
-                        }
-
-
-                }
+                // for (var c = 0; c < datageo.features.length; c++) {
+                //
+                //       var jsonState = datageo.features[c].properties.FORMAL_EN;
+                //
+                //       if (/\s/.test(jsonState)) {
+                //
+                //             var split1 = wrongCountries[wc].split(" ");
+                //             var split2 = jsonState.split(" ");
+                //
+                //             for(var word = 0; n < split1.length; n++){
+                //               for(var word1 = 0; n < split2.length; n++){
+                //                 if(word == word1){
+                //                   count += 1;
+                //                   break;
+                //                 }
+                //               }
+                //             }
+                //         }
+                //
+                //
+                // }
               }
 
             }
@@ -154,23 +148,50 @@ $( document ).ready(function() {
 
 
         svg.selectAll("path")
-          .data(data.features)
+          .data(datageo.features)
           .enter()
           .append("path")
           .attr("d", path)
-          .style("fill", function(d){
-              //get the data value
-              var value = d.properties.value;
+            .style("fill", function(d){
+                //get the data value
+                var value = d.properties.value;
 
-              if(value){
-                //If value exists
-                return color(value);
-              } else {
-                // If value is undefined
-                //we do this because alaska and hawaii are not in dataset we are using but still in projections
-                return "#ccc"
+                if(value){
+                  //If value exists
+                  return color(value+200);
+                } else {
+                  // If value is undefined
+                  //we do this because alaska and hawaii are not in dataset we are using but still in projections
+                  return "#7a7a52"
+                }
+
+
+            })
+            .attr("title", function(d) {return d.properties.NAME;})
+            .on("mouseover", function(d){
+            //dispatch.call("countryEnter",d,d);
+              selectedCountry = d3.select("path[title=\'"+d.properties.NAME+"\']");
+              d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", "black")
+                              .text(d.properties.NAME);
+            })
+            .on("mouseout", function(d){
+              if(selectedCountry!= null){
+                selectedCountry.attr("fill", "#7a7a52");
+                selectedCountry = null;
               }
-          });
+            })
+            .on("mouseenter", function(d){
+              //dispatch.call("countryEnter",d,d);
+                selectedCountry = d3.select("path[title=\'"+d.properties.NAME+"\']");
+                d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", "black")
+                                .text(d.properties.NAME);
+            })
+            .on("mouseleave", function(d){
+              if(selectedCountry!= null){
+                selectedCountry.attr("fill", "#7a7a52");
+                selectedCountry = null;
+              }
+            });
 
         });
       });
