@@ -58,6 +58,7 @@ $( document ).ready(function() {
 
 
 
+
 ////////////////////D3//////////////////
 
       //Width and height
@@ -90,13 +91,14 @@ $( document ).ready(function() {
       }
 
 
-
       function countries_EcoFoot(){
         var svg = d3.select("#countries_graph")
           .append("svg")
           .attr("id", "chart")
           .attr("width", w)
-          .attr("height", h);
+          .attr("height", h)
+          .attr("tranform", "translate(" + 0 + "," + 500 + ")");
+
           // .append("g")
           // .attr("tranform", "translate(0" + margin.left + "," + margin.top + ")")
           // .attr("tranform", "slice(0,0)");
@@ -167,7 +169,7 @@ $( document ).ready(function() {
 
                         //var datawhat = topojson.feature(data[i], datageo.feautures[n].bbox, datageo.feautures[n].geometry, datageo.feautures[n].properties);
 
-
+                        console.log(datageo)
 
 
                         //stop looking through the JSON
