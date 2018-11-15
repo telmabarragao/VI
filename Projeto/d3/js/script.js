@@ -97,7 +97,7 @@ $( document ).ready(function() {
           .attr("id", "chart")
           .attr("width", w)
           .attr("height", h)
-          .attr("tranform", "translate(" + 0 + "," + 500 + ")");
+          .attr("tranform", "translate(" + 0 + "," + 0 + ")");
 
           // .append("g")
           // .attr("tranform", "translate(0" + margin.left + "," + margin.top + ")")

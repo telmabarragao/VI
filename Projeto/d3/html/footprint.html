@@ -26,15 +26,25 @@
       </div>
     </div>
 
-    <div class="container" id="container_eb">
-      <div class="switch" id="switch_eb">
-        <input type="radio" class="switchebinput" name="vieweb" value="weekeb" id="weekeb" checked>
-        <label for="weekeb" class="switcheblabel switcheblabeloff" >Ecological Footprint</label>
-        <input type="radio" class="switchebinput" name="vieweb" value="montheb" id="montheb">
-        <label for="montheb" class="switcheblabel switcheblabelon">Biocapacity</label>
-        <span class="switchebselection"></span>
-      </div>
+    <div class="second-header" id="search-var">
+        <div class="search-container" id="continents_view">
+          <form action="/action_page.php">
+            <input type="text" placeholder="Search.." name="search">
+            <button type="submit"><i class="fa fa-search"></i></button>
+          </form>
+        </div>
+        <div id="container_eb">
+          <div id="switch_eb">
+            <input type="radio" class="switchebinput" name="vieweb" value="weekeb" id="weekeb" checked>
+            <label for="weekeb" class="switcheblabel switcheblabeloff" >Ecological Footprint</label>
+            <input type="radio" class="switchebinput" name="vieweb" value="montheb" id="montheb">
+            <label for="montheb" class="switcheblabel switcheblabelon">Biocapacity</label>
+            <span class="switchebselection"></span>
+          </div>
+        </div>
+        <div id="grid-element"></div>
     </div>
+
 
     <div class="main_tab" id="continents_view">
 
@@ -46,12 +56,7 @@
 
 
     <div class="main_tab" id="countries_view">
-      <div class="search-container" id="continents_view">
-        <form action="/action_page.php">
-          <input type="text" placeholder="Search.." name="search">
-          <button type="submit"><i class="fa fa-search"></i></button>
-        </form>
-      </div>
+
 
           <div id="countries_graph">
 
