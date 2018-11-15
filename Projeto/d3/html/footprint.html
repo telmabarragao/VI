@@ -8,6 +8,7 @@
     <script src="https://d3js.org/d3.v5.min.js" charset="utf-8"></script>
     <script src="https://d3js.org/d3-selection.v1.min.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/topojson.v1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <script src="../js/script.js"></script>
@@ -25,32 +26,31 @@
       </div>
     </div>
 
+    <div class="container" id="container_eb">
+      <div class="switch" id="switch_eb">
+        <input type="radio" class="switchebinput" name="vieweb" value="weekeb" id="weekeb" checked>
+        <label for="weekeb" class="switcheblabel switcheblabeloff" >Ecological Footprint</label>
+        <input type="radio" class="switchebinput" name="vieweb" value="montheb" id="montheb">
+        <label for="montheb" class="switcheblabel switcheblabelon">Biocapacity</label>
+        <span class="switchebselection"></span>
+      </div>
+    </div>
 
     <div class="main_tab" id="continents_view">
 
-      <div class="container" id="container_eb">
-        <div class="switch" id="switch_eb">
-          <input type="radio" class="switchebinput" name="vieweb" value="weekeb" id="weekeb" checked>
-          <label for="weekeb" class="switcheblabel switcheblabeloff" >Ecological Footprint</label>
-          <input type="radio" class="switchebinput" name="vieweb" value="montheb" id="montheb">
-          <label for="montheb" class="switcheblabel switcheblabelon">Biocapacity</label>
-          <span class="switchebselection"></span>
+
+        <div id="world_graph">
         </div>
-      </div>
-
-      <div id="world_graph">
-      </div>
-
-
-
 
     </div>
 
-
-
-    </div>
 
     <div class="main_tab" id="countries_view">
+
+
+          <div id="countries_graph">
+          </div>
+
     </div>
 
 

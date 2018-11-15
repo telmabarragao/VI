@@ -8,11 +8,47 @@ body{
   font-family: Helvetica;
 }
 
+/************** MAIN TAB ***********/
+
+.main_tab{
+  position: absolute;
+  display: block;
+  width: 100%;
+  margin: 0%;
+  height:90%;
+  top:10%;
+  left: 0%;
+}
+
+#continents_view{
+  visibility: visible;
+}
+
+
+#world_graph, #countries_graph{
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 80%;
+  margin: 0%;
+  top:0%;
+  left:0%;
+}
+
+
+#countries_view{
+  visibility: hidden;
+}
+
+
+path{
+  border: 1px black;
+}
 /*******TOGGLE SWITCH ********/
 
 .container {
   position: fixed;
-  display:block;
+  display:  block;
   top: 0%;
   left: 0%;
   margin: 0;
@@ -22,15 +58,15 @@ body{
 }
 
 #container_eb{
-  position: relative;
+  position: fixed;
   display: block;
-  top: 0%;
-  margin: 0% 35.5% auto auto;
-  width: 30%;
-  height: 8%;
+  top: 6%;
+  margin: 0%;
+  margin-left: 37%;
+  width: 26%;
+  height: 5%;
   background-color: false;
 }
-
 
 .switch {
   position: relative;
@@ -42,11 +78,11 @@ body{
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
 }
 
-#switch_eb {
+#switch_eb{
   position: relative;
   height: 68%;
   width: 100%;
-  margin: 0%;
+  margin: auto;
   background-color: transparent;
   -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
@@ -67,7 +103,7 @@ body{
   cursor: pointer;
 }
 
-.switcheblabel {
+.switcheblabel, .switcheblabelc {
   position: relative;
   z-index: 2;
   float: left;
@@ -86,24 +122,24 @@ body{
   color: #888844;
 }
 
-.switcheblabel:active {
+.switcheblabel:active, .switcheblabelc:active {
   font-weight: bold;
   color: #888844;
 }
 
-.switch-label-off, .switcheblabeloff {
+.switch-label-off, .switcheblabeloff , .switcheblabeloffc{
   padding-left: 2px;
 }
 
-.switch-label-on, .switcheblabelon {
+.switch-label-on, .switcheblabelon, .switcheblabelonc {
   padding-right: 2px;
 }
 
 
-.switch-input, .switchebinput {
+.switch-input, .switchebinput, .switchebinputc {
   display: none;
 }
-.switch-input:checked + .switch-label, .switchebinput:checked + .switcheblabel {
+.switch-input:checked + .switch-label, .switchebinput:checked + .switcheblabel , .switchebinputc:checked + .switcheblabelc {
   font-weight: bold;
   color: #77773c;
 
@@ -119,7 +155,7 @@ body{
   -o-transition-property: color, text-shadow;
   transition-property: color, text-shadow;
 }
-.switch-input:checked + .switch-label-on ~ .switch-selection, .switchebinput:checked + .switcheblabelon ~ .switchebselection {
+.switch-input:checked + .switch-label-on ~ .switch-selection, .switchebinput:checked + .switcheblabelon ~ .switchebselection , .switchebinputc:checked + .switcheblabelonc ~ .switchebselectionc {
   left: 50%;
   /* Note: left: 50%; doesn't transition in WebKit */
 }
@@ -149,7 +185,7 @@ body{
   transition: left 0.15s ease-out;
 }
 
-.switchebselection {
+.switchebselection, .switchebselectionc {
   position: absolute;
   z-index: 1;
   top: 7%;
@@ -175,7 +211,7 @@ body{
 
 }
 
-.switch-blue .switch-selection, .switch-blue .switchebselection {
+.switch-blue .switch-selection, .switch-blue .switchebselection, .switch-blue .switchebselectionc {
   background-color: #white;
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #4fc9ee), color-stop(100%, #3aa2d0));
   background-image: -webkit-linear-gradient(top, #4fc9ee, #3aa2d0);
@@ -183,39 +219,4 @@ body{
   background-image: -ms-linear-gradient(top, #4fc9ee, #3aa2d0);
   background-image: -o-linear-gradient(top, #4fc9ee, #3aa2d0);
   background-image: linear-gradient(top, #4fc9ee, #3aa2d0);
-}
-
-
-
-
-
-/************** MAIN TAB ***********/
-
-.main_tab{
-  position: absolute;
-  display: block;
-  width: 100%;
-  margin: 0%;
-  height:90%;
-  top:10%;
-  left: 0%;
-}
-
-#continents_view{
-  visibility: visible;
-}
-
-
-#world_graph{
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 80%;
-  margin: 0%;
-  top:0%;
-  left:0%;
-}
-
-#countries_view{
-  visibility: hidden;
 }
