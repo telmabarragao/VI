@@ -8,30 +8,28 @@ $( document ).ready(function() {
             document.getElementById('continents_view').style.visibility = "visible" ;
             document.getElementById('countries_view').style.visibility = "hidden" ;
             var appendTo = "#world_graph";
+            continents_EcoFoot();
             console.log(variableToShow)
             console.log(appendTo)
           }else{
             document.getElementById('continents_view').style.visibility = "hidden" ;
             document.getElementById('countries_view').style.visibility = "visible" ;
             var appendTo = "#countries_graph"
-            console.log(variableToShow)
-            console.log(appendTo)
+            countries_EcoFoot();
+
           }
 
       });
 
 
       $(".switchebinput").on("click", function(){
-          if(this.value == "weekeb"){
+          if(this.value == "weekeb" && appendTo == "#countries_graph"){
             variableToShow = "EcoFoot";
             countries_EcoFoot();
-            console.log(variableToShow)
-            console.log(appendTo)
-          }else{
+
+          }else if(this.value == "montheb"  && appendTo == "#countries_graph"){
             variableToShow = "Biocapacity";
             countries_Biocapacity();
-            console.log(variableToShow)
-            console.log(appendTo)
 
           }
 
@@ -194,19 +192,19 @@ $( document ).ready(function() {
                                 selectedCountry.attr("fill", "#7a7a52");
                                 selectedCountry = null;
                               }
-                            })
-                            .on("mouseenter", function(d){
-                              //dispatch.call("countryEnter",d,d);
-                                selectedCountry = d3.select("path[title=\'"+d.properties.NAME+"\']");
-                                d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", "black")
-                                                .text(d.properties.NAME);
-                            })
-                            .on("mouseleave", function(d){
-                                  if(selectedCountry!= null){
-                                    selectedCountry.attr("fill", "#7a7a52");
-                                    selectedCountry = null;
-                                  }
                             });
+                            // .on("mouseenter", function(d){
+                            //   //dispatch.call("countryEnter",d,d);
+                            //     selectedCountry = d3.select("path[title=\'"+d.properties.NAME+"\']");
+                            //     d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", "black")
+                            //                     .text(d.properties.NAME);
+                            // })
+                            // .on("mouseleave", function(d){
+                            //       if(selectedCountry!= null){
+                            //         selectedCountry.attr("fill", "#7a7a52");
+                            //         selectedCountry = null;
+                            //       }
+                            // });
 
                     });
 
@@ -361,18 +359,37 @@ $( document ).ready(function() {
                       .style("stroke-width", "0.2px" )
                       .attr("title", function(d) {return d.properties.NAME;})
                       .on("mouseover", function(d){
-                          d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity+ 20)).text(d.properties.NAME);
+                          d3.select("path[title=\'"+d.properties.NAME+"\']")
+                            .style("fill", function(d){
+                                    var value = d.properties.totalBiocapacity;
+
+                                        if(value){
+                                          return ramp(value+2);
+                                        } else {
+                                          return "#bfbfbf"
+                                        }
+                            })
+
                         })
                         .on("mouseout", function(d){
-                            d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity));
-                        })
-                        .on("mouseenter", function(d){
-                          d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity+20)).text(d.properties.NAME);
-                        })
-                        .on("mouseleave", function(d){
-                          d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity));
+                            d3.select("path[title=\'"+d.properties.NAME+"\']")
+                              .style("fill", function(d){
+                                      var value = d.properties.totalBiocapacity;
 
+                                          if(value){
+                                            return ramp(value);
+                                          } else {
+                                            return "#bfbfbf"
+                                          }
+                              })
                         });
+                        // .on("mouseenter", function(d){
+                        //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity+20)).text(d.properties.NAME);
+                        // })
+                        // .on("mouseleave", function(d){
+                        //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity));
+                        //
+                        // });
 
                 });
 
