@@ -1,4 +1,5 @@
 $( document ).ready(function() {
+      var lastCountryOn = null;
 
       var variableToShow = "EcoFoot";
       var appendTo = "#world_graph";
@@ -10,9 +11,21 @@ $( document ).ready(function() {
       var minValColorContB, maxValColorContB;
 
 
-      function ramp(minVal, lowColor, highColor,value){
+      function ramp(minVal, lowColor, highColor, value){
+
         var colorup = d3.scaleLinear().domain([minVal,10]).range([lowColor, highColor]);
-        return colorup(value);
+
+        if(value == "mouseEF"){
+          return "#004d12";
+
+        }else if(value == "mouseB"){
+
+          return "#663300";
+
+        }else{
+          return colorup(value);
+
+        }
       }
 
       continents_EcoFoot();
@@ -84,7 +97,7 @@ $( document ).ready(function() {
 
           }else if(this.value == "montheb"  && appendTo == "#world_graph"){
             variableToShow = "Biocapacity";
-            if(document.getElementById("chart").length){
+            if(document.getElementById("chart").length != 0){
               document.getElementById("chart").remove();
               continents_Biocapacity();
             }else{
@@ -94,7 +107,7 @@ $( document ).ready(function() {
 
           }else if(this.value == "weekeb"  && appendTo == "#world_graph"){
             variableToShow = "EcoFoot";
-            if(document.getElementById("chart").length){
+            if(document.getElementById("chart").length != 0){
               document.getElementById("chart").remove();
               continents_EcoFoot();
             }else{
@@ -106,12 +119,14 @@ $( document ).ready(function() {
 
       });
 
-      //document.getElementById('submitSearch').onclick(light_up_search());
       var myButtonSearch = document.getElementById('submitSearch');
 
       myButtonSearch.addEventListener('click', function(event) {
         light_up_search();
       });
+
+
+
 ////////////////////D3//////////////////
 
       //Width and height
@@ -152,9 +167,6 @@ $( document ).ready(function() {
           .attr("height", h)
           .attr("tranform", "translate(" + 0 + "," + 0 + ")");
 
-          // .append("g")
-          // .attr("tranform", "translate(0" + margin.left + "," + margin.top + ")")
-          // .attr("tranform", "slice(0,0)");
 
         d3.json("../data/CountryOutput.json").then(function(json){
 
@@ -168,25 +180,19 @@ $( document ).ready(function() {
 
               for(var i = 0; i < data.length; i++){
 
-                  // grab country name
                   var dataCountry = data[i].country_region;
                   if(countries_list.indexOf(dataCountry) == -1){
                     countries_list.push(dataCountry);
-
                   }
 
-                  //find the corresponding state inside the GeoJSON
                   for(var n = 0; n < datageo.features.length; n++){
 
-                      // properties name gets the states name
                       var jsonState = datageo.features[n].properties.NAME;
                       var jsonState1 = datageo.features[n].properties.FORMAL_EN;
                       var jsonState2 = datageo.features[n].properties.NAME_LONG;
 
-                      // if statment to merge by name of state
                       if(dataCountry == jsonState || dataCountry == jsonState1 || dataCountry == jsonState2){
 
-                        //grab data value, and convert from string to float
                         var totalBiocapacity = parseFloat(data[i].total_biocapacity);
                         var totalEcoFootProd = parseFloat(data[i].total_ecological_footprint_production);
                         var totalEcoFootCons = parseFloat(data[i].total_ecological_footprint_consumption);
@@ -198,10 +204,33 @@ $( document ).ready(function() {
                         var hdi = parseFloat(data[i].hdi);
                         var deficereserve = parseFloat(data[i].ecological_deficit_or_reserve);
 
+                        var built_up_land_prod = parseFloat(data[i].built_up_land);
+                        var built_up_land_cons = parseFloat(data[i].built_up_land_2);
+                        var built_up_land_bio = parseFloat(data[i].built_up_land_3);
+
+                        var carbon_footprint_prod = parseFloat(data[i].carbon_footprint);
+                        var carbon_footprint_cons = parseFloat(data[i].carbon_footprint_2);
+
+                        var cropland_prod = parseFloat(data[i].cropland_footprint);
+                        var cropland_cons = parseFloat(data[i].cropland_footprint_2);
+                        var cropland_bio = parseFloat(data[i].cropland);
+
+                        var fish_footprint_prod = parseFloat(data[i].fish_footprint);
+                        var fish_footprint_cons = parseFloat(data[i].fish_footprint_2);
+                        var fish_footprint_bio = parseFloat(data[i].fishing_ground);
+
+                        var forest_product_footprint_prod = parseFloat(data[i].forest_product_footprint);
+                        var forest_product_footprint_cons = parseFloat(data[i].forest_product_footprint_2);
+                        var forest_product_footprint_bio = parseFloat(data[i].forest_land);
+
+                        var grazing_footprint_prod = parseFloat(data[i].grazing_footprint);
+                        var grazing_footprint_cons = parseFloat(data[i].grazing_footprint_2);
+                        var grazing_footprint_bio = parseFloat(data[i].grazing_land);
+
+
+
                         dataArray.push(totalEcoFootCons);
 
-                        //Copy the data value into the JSON
-                        // basically creating a new value column in JSON data
                         datageo.features[n].properties.totalBiocapacity = totalBiocapacity;
                         datageo.features[n].properties.totalEcoFootProd = totalEcoFootProd;
                         datageo.features[n].properties.totalEcoFootCons = totalEcoFootCons;
@@ -212,44 +241,36 @@ $( document ).ready(function() {
                         datageo.features[n].properties.countriesnumb = countriesnumb;
                         datageo.features[n].properties.hdi = hdi;
                         datageo.features[n].properties.deficereserve = deficereserve;
-
-                        //var datawhat = topojson.feature(data[i], datageo.feautures[n].bbox, datageo.feautures[n].geometry, datageo.feautures[n].properties);
+                        datageo.features[n].properties.built_up_land_prod = built_up_land_prod;
+                        datageo.features[n].properties.built_up_land_cons = built_up_land_cons;
+                        datageo.features[n].properties.built_up_land_bio = built_up_land_bio;
+                        datageo.features[n].properties.carbon_footprint_prod = carbon_footprint_prod;
+                        datageo.features[n].properties.carbon_footprint_cons = carbon_footprint_cons;
+                        datageo.features[n].properties.cropland_prod = cropland_prod;
+                        datageo.features[n].properties.cropland_cons = cropland_cons;
+                        datageo.features[n].properties.cropland_bio = cropland_bio;
+                        datageo.features[n].properties.fish_footprint_prod = fish_footprint_prod;
+                        datageo.features[n].properties.fish_footprint_cons = fish_footprint_cons;
+                        datageo.features[n].properties.fish_footprint_bio = fish_footprint_bio;
+                        datageo.features[n].properties.forest_product_footprint_prod = forest_product_footprint_prod;
+                        datageo.features[n].properties.forest_product_footprint_cons = forest_product_footprint_cons;
+                        datageo.features[n].properties.forest_product_footprint_bio = forest_product_footprint_bio;
+                        datageo.features[n].properties.grazing_footprint_prod = grazing_footprint_prod;
+                        datageo.features[n].properties.grazing_footprint_cons = grazing_footprint_cons;
+                        datageo.features[n].properties.grazing_footprint_bio = grazing_footprint_bio;
 
                         console.log(datageo)
-                        //stop looking through the JSON
                         break;
 
 
                       }else{
                       }
                   }
-
-
               }
 
 
               minValColorCouFT = d3.min(dataArray)
               maxValColorCouFT = d3.max(dataArray)
-
-//              var ramp = d3.scaleLinear().domain([minVal,10]).range([lowColorEF, highColorEF])
-
-              //var color_scalee = d3.scaleLinear.quantize().domain([minVal, maxVal]).range(['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet']);
-            //  var color = d3.scaleQuantile().domain([0, maxVal]).range(["rgb(237, 248, 233)", "rgb(186, 228, 179)", "rgb(116,196,118)", "rgb(49,163,84)", "rgb(0,109,44)"]);
-
-
-
-
-                      // svg.append("path")
-                      //     .datum(topojson.mesh(data))
-                      //     .attr("class", "mesh")
-                      //     .attr("d", path);
-                      //
-                      // svg.selectAll("d")
-                      //   .data(topojson.feature(data, data.objects.subunits).features)
-                      // .enter().append("path")
-                      //   .attr("class", function(d) { return "subunit " + d.id; })
-                      //   .attr("d", path);
-
 
 
               svg.selectAll("path")
@@ -257,7 +278,7 @@ $( document ).ready(function() {
                 .enter()
                 .append("path")
                 .attr("d", path)
-                .attr("id", function(d) {return d.properties.NAME;})
+                .attr("id", function(d) {return d.properties.NAME.replace(/\s/g, "_");})
                 .style("fill", function(d){
                   var value = d.properties.totalEcoFootCons;
 
@@ -272,17 +293,43 @@ $( document ).ready(function() {
                 .style("stroke-width", "0.2px" )
                 .attr("title", function(d) {return d.properties.NAME;})
                 .on("mouseover", function(d){
+
+                    var mouse = d3.mouse(this);
+                    console.log(mouse)
+                    var countryMouseOver = d.properties.NAME.replace(/\s/g, "_");
+
                     d3.select("path[title=\'"+d.properties.NAME+"\']")
                       .style("fill", function(d){
-                              var value = d.properties.totalEcoFootCons;
+                                  var value = d.properties.totalEcoFootCons;
 
                                   if(value){
-                                    return ramp(minValColorCouFT,lowColorEF, highColorEF, value+2)
-;
+                                    return ramp(minValColorCouFT,lowColorEF, highColorEF, "mouseEF")
                                   } else {
                                     return "#bfbfbf"
                                   }
                       })
+                      .attr("title", function(d) {return d.properties.NAME;});
+
+                      if(lastCountryOn==countryMouseOver){
+                        d3.select("#"+countryMouseOver+"mover").attr("transform","translate("+ mouse[0]+event.clientX+", "+mouse[1]+event.clientY+") ");
+                      }else if(lastCountryOn==null){
+                        d3.select("body")
+                              .append("div")
+                              .attr("id", function(){
+                                  lastCountryOn= ""+countryMouseOver;
+                                  console.log()
+                                  return lastCountryOn+"mover";
+
+                              })
+                              .style("position", "absolute")
+                              .style("z-index", "10")
+                              .style("visibility", "visible")
+                              .style("background", "#000")
+                              .attr("x", mouse[0]+event.clientX)
+                              .attr("y", mouse[1]+event.clientY)
+                              .text(countryMouseOver);
+                      }
+
 
                   })
                   .on("mouseout", function(d){
@@ -295,7 +342,12 @@ $( document ).ready(function() {
                                     } else {
                                       return "#bfbfbf"
                                     }
-                        })
+                        });
+
+
+                        d3.select("#"+lastCountryOn+"mover")
+                              .remove();
+                        lastCountryOn = null;
                   });
                   // .on("mouseenter", function(d){
                   //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity+20)).text(d.properties.NAME);
@@ -320,9 +372,6 @@ $( document ).ready(function() {
                 .attr("id", "chart")
                 .attr("width", w)
                 .attr("height", h);
-                // .append("g")
-                // .attr("tranform", "translate(0" + margin.left + "," + margin.top + ")")
-                // .attr("tranform", "slice(0,0)");
 
               d3.json("../data/CountryOutput.json").then(function(json){
 
@@ -336,27 +385,21 @@ $( document ).ready(function() {
 
                     for(var i = 0; i < data.length; i++){
 
-                        // grab country name
                         var dataCountry = data[i].country_region;
                         if(countries_list.indexOf(dataCountry) == -1){
                           countries_list.push(dataCountry);
-
                         }
 
                         autocomplete(document.getElementById("myInput"), countries_list);
 
-                        //find the corresponding state inside the GeoJSON
                         for(var n = 0; n < datageo.features.length; n++){
 
-                            // properties name gets the states name
                             var jsonState = datageo.features[n].properties.NAME;
                             var jsonState1 = datageo.features[n].properties.FORMAL_EN;
                             var jsonState2 = datageo.features[n].properties.NAME_LONG;
 
-                            // if statment to merge by name of state
                             if(dataCountry == jsonState || dataCountry == jsonState1 || dataCountry == jsonState2){
 
-                              //grab data value, and convert from string to float
                               var totalBiocapacity = parseFloat(data[i].total_biocapacity);
                               var totalEcoFootProd = parseFloat(data[i].total_ecological_footprint_production);
                               var totalEcoFootCons = parseFloat(data[i].total_ecological_footprint_consumption);
@@ -368,11 +411,32 @@ $( document ).ready(function() {
                               var hdi = parseFloat(data[i].hdi);
                               var deficereserve = parseFloat(data[i].ecological_deficit_or_reserve);
 
+                              var built_up_land_prod = parseFloat(data[i].built_up_land);
+                              var built_up_land_cons = parseFloat(data[i].built_up_land_2);
+                              var built_up_land_bio = parseFloat(data[i].built_up_land_3);
+
+                              var carbon_footprint_prod = parseFloat(data[i].carbon_footprint);
+                              var carbon_footprint_cons = parseFloat(data[i].carbon_footprint_2);
+
+                              var cropland_prod = parseFloat(data[i].cropland_footprint);
+                              var cropland_cons = parseFloat(data[i].cropland_footprint_2);
+                              var cropland_bio = parseFloat(data[i].cropland);
+
+                              var fish_footprint_prod = parseFloat(data[i].fish_footprint);
+                              var fish_footprint_cons = parseFloat(data[i].fish_footprint_2);
+                              var fish_footprint_bio = parseFloat(data[i].fishing_ground);
+
+                              var forest_product_footprint_prod = parseFloat(data[i].forest_product_footprint);
+                              var forest_product_footprint_cons = parseFloat(data[i].forest_product_footprint_2);
+                              var forest_product_footprint_bio = parseFloat(data[i].forest_land);
+
+                              var grazing_footprint_prod = parseFloat(data[i].grazing_footprint);
+                              var grazing_footprint_cons = parseFloat(data[i].grazing_footprint_2);
+                              var grazing_footprint_bio = parseFloat(data[i].grazing_land);
+
+
                               dataArray.push(totalBiocapacity);
 
-
-                              //Copy the data value into the JSON
-                              // basically creating a new value column in JSON data
                               datageo.features[n].properties.totalBiocapacity = totalBiocapacity;
                               datageo.features[n].properties.totalEcoFootProd = totalEcoFootProd;
                               datageo.features[n].properties.totalEcoFootCons = totalEcoFootCons;
@@ -383,53 +447,42 @@ $( document ).ready(function() {
                               datageo.features[n].properties.countriesnumb = countriesnumb;
                               datageo.features[n].properties.hdi = hdi;
                               datageo.features[n].properties.deficereserve = deficereserve;
+                              datageo.features[n].properties.built_up_land_prod = built_up_land_prod;
+                              datageo.features[n].properties.built_up_land_cons = built_up_land_cons;
+                              datageo.features[n].properties.built_up_land_bio = built_up_land_bio;
+                              datageo.features[n].properties.carbon_footprint_prod = carbon_footprint_prod;
+                              datageo.features[n].properties.carbon_footprint_cons = carbon_footprint_cons;
+                              datageo.features[n].properties.cropland_prod = cropland_prod;
+                              datageo.features[n].properties.cropland_cons = cropland_cons;
+                              datageo.features[n].properties.cropland_bio = cropland_bio;
+                              datageo.features[n].properties.fish_footprint_prod = fish_footprint_prod;
+                              datageo.features[n].properties.fish_footprint_cons = fish_footprint_cons;
+                              datageo.features[n].properties.fish_footprint_bio = fish_footprint_bio;
+                              datageo.features[n].properties.forest_product_footprint_prod = forest_product_footprint_prod;
+                              datageo.features[n].properties.forest_product_footprint_cons = forest_product_footprint_cons;
+                              datageo.features[n].properties.forest_product_footprint_bio = forest_product_footprint_bio;
+                              datageo.features[n].properties.grazing_footprint_prod = grazing_footprint_prod;
+                              datageo.features[n].properties.grazing_footprint_cons = grazing_footprint_cons;
+                              datageo.features[n].properties.grazing_footprint_bio = grazing_footprint_bio;
 
-                              //var datawhat = topojson.feature(data[i], datageo.feautures[n].bbox, datageo.feautures[n].geometry, datageo.feautures[n].properties);
 
                               console.log(datageo)
-                              //stop looking through the JSON
                               break;
-
 
                             }else{
                             }
                         }
-
-
                     }
-
 
                     minValColorCouB = d3.min(dataArray)
                     maxValColorCouB = d3.max(dataArray)
-
-                    //var ramp = d3.scaleLinear().domain([minVal,10]).range([lowColorB, highColorB])
-
-
-                    //var color_scalee = d3.scaleLinear.quantize().domain([minVal, maxVal]).range(['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet']);
-                  //  var color = d3.scaleQuantile().domain([0, maxVal]).range(["rgb(237, 248, 233)", "rgb(186, 228, 179)", "rgb(116,196,118)", "rgb(49,163,84)", "rgb(0,109,44)"]);
-
-
-
-
-                            // svg.append("path")
-                            //     .datum(topojson.mesh(data))
-                            //     .attr("class", "mesh")
-                            //     .attr("d", path);
-                            //
-                            // svg.selectAll("d")
-                            //   .data(topojson.feature(data, data.objects.subunits).features)
-                            // .enter().append("path")
-                            //   .attr("class", function(d) { return "subunit " + d.id; })
-                            //   .attr("d", path);
-
-
 
                     svg.selectAll("path")
                       .data(datageo.features)
                       .enter()
                       .append("path")
                       .attr("d", path)
-                      .attr("id", function(d) {return d.properties.NAME;})
+                      .attr("id", function(d) {return d.properties.NAME.replace(/\s/g, "_");})
                       .style("fill", function(d){
                         var value = d.properties.totalBiocapacity;
 
@@ -443,16 +496,39 @@ $( document ).ready(function() {
                       .style("stroke-width", "0.2px" )
                       .attr("title", function(d) {return d.properties.NAME;})
                       .on("mouseover", function(d){
+
+
+                        var countryMouseOver = d.properties.NAME.replace(/\s/g, "_");
+
                           d3.select("path[title=\'"+d.properties.NAME+"\']")
                             .style("fill", function(d){
                                     var value = d.properties.totalBiocapacity;
 
                                         if(value){
-                                          return ramp(minValColorCouB,lowColorB, highColorB, value+2)
+                                          return ramp(minValColorCouB,lowColorB, highColorB, "mouseB")
                                         } else {
                                           return "#bfbfbf"
                                         }
                             })
+                            .attr("title", function(d) {return d.properties.NAME;});
+
+                            if(lastCountryOn==countryMouseOver){
+                              d3.select("#"+countryMouseOver+"mover").attr("transform","translate("+ event.clientX+", "+event.clientY+") ");
+                            }else if(lastCountryOn==null){
+                              d3.select("body")
+                                    .append("div")
+                                    .attr("id", function(){
+                                        lastCountryOn= ""+countryMouseOver;
+                                        return lastCountryOn+"mover";
+                                    })
+                                    .style("position", "absolute")
+                                    .style("z-index", "10")
+                                    .style("visibility", "visible")
+                                    .style("background", "#000")
+                                    .attr("transform","translate("+ event.clientX+", "+event.clientY+") ")
+                                    .text(countryMouseOver);
+                            }
+
 
                         })
                         .on("mouseout", function(d){
@@ -465,7 +541,12 @@ $( document ).ready(function() {
                                           } else {
                                             return "#bfbfbf"
                                           }
-                              })
+                              });
+
+                              d3.select("#"+lastCountryOn+"mover")
+                                    .remove();
+                              lastCountryOn = null;
+
                         });
                         // .on("mouseenter", function(d){
                         //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity+20)).text(d.properties.NAME);
@@ -491,16 +572,14 @@ $( document ).ready(function() {
         var tryout = document.getElementById(valueinput);
         var country_to_light = d3.select("path[title=\'"+valueinput+"\']");
 
-        var colorvalue = tryout.style.color;
 
-        console.log(colorvalue)
 
             country_to_light.style("fill", function(valueinput){
 
                 if(variableToShow=="EcoFoot"){
                     var value = valueinput.properties.totalEcoFootCons;
                     if(value){
-                      return ramp(minValColorCouFT,lowColorEF, highColorEF, value+2)
+                      return ramp(minValColorCouFT,lowColorEF, highColorEF, "mouseEF")
                     } else {
                       return "#bfbfbf"
                     }
@@ -508,7 +587,7 @@ $( document ).ready(function() {
                     var value = valueinput.properties.totalBiocapacity;
 
                     if(value){
-                      return ramp(minValColorCouB,lowColorB, highColorB, value+2)
+                      return ramp(minValColorCouB,lowColorB, highColorB, "mouseB")
                     } else {
                       return "#bfbfbf"
                     }
