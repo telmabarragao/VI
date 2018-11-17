@@ -4,62 +4,114 @@ $( document ).ready(function() {
       var appendTo = "#world_graph";
       var countries_list = [];
       var continents_list = [];
+      var minValColorCouFT, maxValColorCouFT;
+      var minValColorCouB, maxValColorCouB;
+      var minValColorContFT, maxValColorContFT;
+      var minValColorContB, maxValColorContB;
 
+
+      function ramp(minVal, lowColor, highColor,value){
+        var colorup = d3.scaleLinear().domain([minVal,10]).range([lowColor, highColor]);
+        return colorup(value);
+      }
 
       continents_EcoFoot();
 
       $(".switch-input").on("click", function(){
+
           if(this.value == "week"){
                 if(variableToShow == "EcoFoot"){
-                  document.getElementById('continents_view').style.visibility = "visible" ;
-                  document.getElementById('countries_view').style.visibility = "hidden" ;
-                  var appendTo = "#world_graph";
+                  appendTo = "#world_graph";
                   continents_EcoFoot();
-                }else{
+
                   document.getElementById('continents_view').style.visibility = "visible" ;
                   document.getElementById('countries_view').style.visibility = "hidden" ;
-                  var appendTo = "#world_graph";
+
+                }else{
+                  appendTo = "#world_graph";
                   continents_Biocapacity();
+
+                  document.getElementById('continents_view').style.visibility = "visible" ;
+                  document.getElementById('countries_view').style.visibility = "hidden" ;
+
                 }
           }else{
               if(variableToShow == "EcoFoot"){
-                  document.getElementById('continents_view').style.visibility = "hidden" ;
-                  document.getElementById('countries_view').style.visibility = "visible" ;
-                  var appendTo = "#countries_graph"
+                  appendTo = "#countries_graph"
                   countries_EcoFoot();
 
-              }else{
                   document.getElementById('continents_view').style.visibility = "hidden" ;
                   document.getElementById('countries_view').style.visibility = "visible" ;
-                  var appendTo = "#countries_graph"
+
+
+              }else{
+                  appendTo = "#countries_graph"
                   countries_Biocapacity();
+
+                  document.getElementById('continents_view').style.visibility = "hidden" ;
+                  document.getElementById('countries_view').style.visibility = "visible" ;
               }
           }
       });
 
       $(".switchebinput").on("click", function(){
-          if(this.value == "weekeb" && appendTo == "#countries_graph"){
-            variableToShow = "EcoFoot";
-            countries_EcoFoot();
 
-          }else if(this.value == "montheb"  && appendTo == "#countries_graph"){
+          if(this.value == "weekeb" && appendTo == "#countries_graph"){
+
+                  variableToShow = "EcoFoot";
+
+                  if(document.getElementById("chart").length != 0){
+
+                    document.getElementById("chart").remove();
+                    countries_EcoFoot();
+                  }else{
+                    countries_EcoFoot();
+
+                  }
+
+          }else if(this.value == "montheb" && appendTo == "#countries_graph"){
+
             variableToShow = "Biocapacity";
-            countries_Biocapacity();
+
+            if(document.getElementById("chart").length != 0){
+              document.getElementById("chart").remove();
+              countries_Biocapacity();
+            }else{
+              countries_Biocapacity();
+
+
+            }
 
           }else if(this.value == "montheb"  && appendTo == "#world_graph"){
             variableToShow = "Biocapacity";
-            continents_Biocapacity();
+            if(document.getElementById("chart").length){
+              document.getElementById("chart").remove();
+              continents_Biocapacity();
+            }else{
+              continents_Biocapacity();
+
+            }
 
           }else if(this.value == "weekeb"  && appendTo == "#world_graph"){
             variableToShow = "EcoFoot";
-            continents_EcoFoot();
+            if(document.getElementById("chart").length){
+              document.getElementById("chart").remove();
+              continents_EcoFoot();
+            }else{
+              continents_EcoFoot();
+
+            }
 
           }
 
       });
 
+      //document.getElementById('submitSearch').onclick(light_up_search());
+      var myButtonSearch = document.getElementById('submitSearch');
 
-
+      myButtonSearch.addEventListener('click', function(event) {
+        light_up_search();
+      });
 ////////////////////D3//////////////////
 
       //Width and height
@@ -118,8 +170,10 @@ $( document ).ready(function() {
 
                   // grab country name
                   var dataCountry = data[i].country_region;
-                  countries_list.push(dataCountry);
+                  if(countries_list.indexOf(dataCountry) == -1){
+                    countries_list.push(dataCountry);
 
+                  }
 
                   //find the corresponding state inside the GeoJSON
                   for(var n = 0; n < datageo.features.length; n++){
@@ -174,16 +228,10 @@ $( document ).ready(function() {
               }
 
 
+              minValColorCouFT = d3.min(dataArray)
+              maxValColorCouFT = d3.max(dataArray)
 
-              var minVal = d3.min(dataArray)
-              var maxVal = d3.max(dataArray)
-
-              var ramp = d3.scaleLinear().domain([minVal,10]).range([lowColorEF, highColorEF])
-
-
-              console.log(dataArray)
-              console.log(minVal)
-              console.log(maxVal)
+//              var ramp = d3.scaleLinear().domain([minVal,10]).range([lowColorEF, highColorEF])
 
               //var color_scalee = d3.scaleLinear.quantize().domain([minVal, maxVal]).range(['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet']);
             //  var color = d3.scaleQuantile().domain([0, maxVal]).range(["rgb(237, 248, 233)", "rgb(186, 228, 179)", "rgb(116,196,118)", "rgb(49,163,84)", "rgb(0,109,44)"]);
@@ -209,11 +257,13 @@ $( document ).ready(function() {
                 .enter()
                 .append("path")
                 .attr("d", path)
+                .attr("id", function(d) {return d.properties.NAME;})
                 .style("fill", function(d){
                   var value = d.properties.totalEcoFootCons;
 
                       if(value){
-                        return ramp(value);
+                        return ramp(minValColorCouFT,lowColorEF, highColorEF, value)
+;
                       } else {
                         return "#bfbfbf"
                       }
@@ -227,7 +277,8 @@ $( document ).ready(function() {
                               var value = d.properties.totalEcoFootCons;
 
                                   if(value){
-                                    return ramp(value+2);
+                                    return ramp(minValColorCouFT,lowColorEF, highColorEF, value+2)
+;
                                   } else {
                                     return "#bfbfbf"
                                   }
@@ -240,7 +291,7 @@ $( document ).ready(function() {
                                 var value = d.properties.totalEcoFootCons;
 
                                     if(value){
-                                      return ramp(value);
+                                      return ramp(minValColorCouFT,lowColorEF, highColorEF, value)
                                     } else {
                                       return "#bfbfbf"
                                     }
@@ -287,9 +338,10 @@ $( document ).ready(function() {
 
                         // grab country name
                         var dataCountry = data[i].country_region;
-                        countries_list.push(dataCountry);
+                        if(countries_list.indexOf(dataCountry) == -1){
+                          countries_list.push(dataCountry);
 
-                        console.log(countries_list)
+                        }
 
                         autocomplete(document.getElementById("myInput"), countries_list);
 
@@ -347,11 +399,10 @@ $( document ).ready(function() {
                     }
 
 
+                    minValColorCouB = d3.min(dataArray)
+                    maxValColorCouB = d3.max(dataArray)
 
-                    var minVal = d3.min(dataArray)
-                    var maxVal = d3.max(dataArray)
-
-                    var ramp = d3.scaleLinear().domain([minVal,10]).range([lowColorB, highColorB])
+                    //var ramp = d3.scaleLinear().domain([minVal,10]).range([lowColorB, highColorB])
 
 
                     //var color_scalee = d3.scaleLinear.quantize().domain([minVal, maxVal]).range(['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet']);
@@ -378,11 +429,12 @@ $( document ).ready(function() {
                       .enter()
                       .append("path")
                       .attr("d", path)
+                      .attr("id", function(d) {return d.properties.NAME;})
                       .style("fill", function(d){
                         var value = d.properties.totalBiocapacity;
 
                             if(value){
-                              return ramp(value);
+                              return ramp(minValColorCouB,lowColorB, highColorB, value);
                             } else {
                               return "#bfbfbf"
                             }
@@ -396,7 +448,7 @@ $( document ).ready(function() {
                                     var value = d.properties.totalBiocapacity;
 
                                         if(value){
-                                          return ramp(value+2);
+                                          return ramp(minValColorCouB,lowColorB, highColorB, value+2)
                                         } else {
                                           return "#bfbfbf"
                                         }
@@ -409,7 +461,7 @@ $( document ).ready(function() {
                                       var value = d.properties.totalBiocapacity;
 
                                           if(value){
-                                            return ramp(value);
+                                            return ramp(minValColorCouB,lowColorB, highColorB, value)
                                           } else {
                                             return "#bfbfbf"
                                           }
@@ -422,7 +474,6 @@ $( document ).ready(function() {
                         //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity));
                         //
                         // });
-
                 });
 
               });
@@ -435,9 +486,40 @@ $( document ).ready(function() {
 
       ////////////////////SEARCH//////////////////
 
+      function light_up_search(){
+        var valueinput = document.getElementById("myInput").value;
+        var tryout = document.getElementById(valueinput);
+        var country_to_light = d3.select("path[title=\'"+valueinput+"\']");
+
+        var colorvalue = tryout.style.color;
+
+        console.log(colorvalue)
+
+            country_to_light.style("fill", function(valueinput){
+
+                if(variableToShow=="EcoFoot"){
+                    var value = valueinput.properties.totalEcoFootCons;
+                    if(value){
+                      return ramp(minValColorCouFT,lowColorEF, highColorEF, value+2)
+                    } else {
+                      return "#bfbfbf"
+                    }
+                }else if(variableToShow=="Biocapacity"){
+                    var value = valueinput.properties.totalBiocapacity;
+
+                    if(value){
+                      return ramp(minValColorCouB,lowColorB, highColorB, value+2)
+                    } else {
+                      return "#bfbfbf"
+                    }
+                }
+
+            })
+      };
+
+
       function autocomplete(inp, arr) {
 
-        console.log("entrei")
         /*the autocomplete function takes two arguments,
         the text field element and an array of possible autocompleted values:*/
         var currentFocus;

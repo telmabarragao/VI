@@ -28,11 +28,11 @@
     <div class="second-header" id="search-var">
 
         <div class="search-container" id="search_bar">
-              <form autocomplete="off" action="../js/script.js">
+              <form id="searchform" autocomplete="off" action="#" >
                   <div class="autocomplete">
                     <input id="myInput" type="text" name="myCountry" placeholder="Country">
                   </div>
-                  <input type="submit">
+                  <input type="submit" onsubmit="light_up_search()" id="submitSearch" form="searchform">
               </form>
         </div>
 
