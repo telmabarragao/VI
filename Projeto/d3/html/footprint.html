@@ -10,7 +10,6 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://d3js.org/topojson.v1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
     <script src="../js/script.js"></script>
   </head>
 
@@ -27,12 +26,16 @@
     </div>
 
     <div class="second-header" id="search-var">
-        <div class="search-container" id="continents_view">
-          <form action="/action_page.php">
-            <input type="text" placeholder="Search.." name="search">
-            <button type="submit"><i class="fa fa-search"></i></button>
-          </form>
+
+        <div class="search-container" id="search_bar">
+              <form autocomplete="off" action="../js/script.js">
+                  <div class="autocomplete">
+                    <input id="myInput" type="text" name="myCountry" placeholder="Country">
+                  </div>
+                  <input type="submit">
+              </form>
         </div>
+
         <div id="container_eb">
           <div id="switch_eb">
             <input type="radio" class="switchebinput" name="vieweb" value="weekeb" id="weekeb" checked>
