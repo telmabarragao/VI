@@ -28,14 +28,14 @@ $( document ).ready(function() {
         }
       }
 
-      continents_EcoFoot();
+      continents_EcoFootGha();
 
       $(".switch-input").on("click", function(){
 
           if(this.value == "week"){
                 if(variableToShow == "EcoFoot"){
                   appendTo = "#world_graph";
-                  continents_EcoFoot();
+                  continents_EcoFootGha();
 
                   document.getElementById('continents_view').style.visibility = "visible" ;
                   document.getElementById('countries_view').style.visibility = "hidden" ;
@@ -109,9 +109,9 @@ $( document ).ready(function() {
             variableToShow = "EcoFoot";
             if(document.getElementById("chart").length != 0){
               document.getElementById("chart").remove();
-              continents_EcoFoot();
+              continents_EcoFootGha();
             }else{
-              continents_EcoFoot();
+              continents_EcoFootGha();
 
             }
 
@@ -147,16 +147,668 @@ $( document ).ready(function() {
       var path = d3.geoPath().projection(projection);
 
 
-      function continents_EcoFoot(){
+
+      ////////////////////CONTINENTS FUNCTIONS//////////////////
+
+
+      function continents_EcoFootEarths(){
+            var svg = d3.select("#world_graph")
+              .append("svg")
+              .attr("id", "chart")
+              .attr("width", w)
+              .attr("height", h)
+              .attr("tranform", "translate(" + 0 + "," + 0 + ")");
+
+
+            d3.json("../data/ContinentsOutput.json").then(function(json){
+
+              data = json.data;
+              console.log(data)
+              var dataArray = new Array();
+              var dataYear = [];
+
+              d3.json("../data/continents.json").then(function(geojson){
+
+                  datageo = geojson;
+                  console.log(datageo)
+
+                  for(var i = 0; i < data.length; i++){
+
+                      var dataContinent = data[i].country_name;
+
+                      if(dataContinent == "Central America"){
+                        data[i].country_name = "North America";
+
+                        dataContinent = data[i].country_name;
+                      }
+
+                      if(continents_list.indexOf(dataContinent) == -1){
+                        continents_list.push(dataContinent);
+                      }
+
+                      for(var n = 0; n < datageo.features.length; n++){
+
+                          var jsonState = datageo.features[n].properties.CONTINENT;
+
+
+                          if(dataContinent == jsonState){
+
+                            var year = parseFloat(data[i].year);
+                            var record = parseFloat(data[i].Record);
+
+                            if(record == "Earths"){
+                              //footprint consumo em earths
+                              var built_up_land_efearths = parseFloat(data[i].built_up_land);
+                              var carbon_efearths = parseFloat(data[i].Carbon);
+                              var cropland_efearths = parseFloat(data[i].Cropland);
+                              var fishing_grounds_efearths = parseFloat(data[i].fishing_grounds);
+                              var forest_products_efearths = parseFloat(data[i].forest_products);
+                              var grazing_land_efearths = parseFloat(data[i].grazing_land);
+                              var total_efearths = parseFloat(data[i].Total);
+
+
+                            }
+
+                            dataArray.push(total_efearths);
+
+
+
+
+                              dataYear.push({key:"year",value:year});
+                              dataYear.push({key:"total_efearths",value:total_efearths});
+                              dataYear.push({key:"grazing_land_efearths",value:grazing_land_efearths});
+                              dataYear.push({key:"forest_products_efearths",value:forest_products_efearths});
+                              dataYear.push({key:"fishing_grounds_efearths",value:fishing_grounds_efearths});
+                              dataYear.push({key:"cropland_efearths",value:cropland_efearths});
+                              dataYear.push({key:"carbon_efearths",value:carbon_efearths});
+                              dataYear.push({key:"built_up_land_efearths",value:built_up_land_efearths});
+                              datageo.feautures[n].properties.efearths = ({key : dataYear.year, value: dataYear});
+                              console.log(datageo)
+                              break;
+
+
+
+                            // datageo.features[n].properties.total_efearths = total_efearths;
+                            // datageo.features[n].properties.grazing_land_efearths = grazing_land_efearths;
+                            // datageo.features[n].properties.forest_products_efearths = forest_products_efearths;
+                            // datageo.features[n].properties.fishing_grounds_efearths = fishing_grounds_efearths;
+                            // datageo.features[n].properties.cropland_efearths = cropland_efearths;
+                            // datageo.features[n].properties.carbon_efearths = carbon_efearths;
+                            // datageo.features[n].properties.built_up_land_efearths = built_up_land_efearths;
+                            //
+                            // datageo.features[n].properties.year = year;
+
+
+
+                          }else{
+                          }
+                      }
+                  }
+
+
+                  minValColorContFT = d3.min(dataArray)
+                  maxValColorContFT = d3.max(dataArray)
+
+
+                  svg.selectAll("path")
+                    .data(datageo.features)
+                    .enter()
+                    .append("path")
+                    .attr("d", path)
+                    .attr("id", function(d) {return d.properties.NAME.replace(/\s/g, "_").replace(".", "_").replace("(", "").replace(")", "");})
+                    .style("fill", function(d){
+                      var value = d.properties.totalEcoFootCons;
+
+                          if(value){
+                            return ramp(minValColorContFT,lowColorEF, highColorEF, value)
+            ;
+                          } else {
+                            return "#bfbfbf"
+                          }
+                    })
+                    .style("stroke", "#333333")
+                    .style("stroke-width", "0.2px" )
+                    .attr("title", function(d) {return d.properties.NAME;})
+                    .on("mouseover", function(d){
+
+                        var mouse = d3.mouse(this);
+                        var countryMouseOver = d.properties.NAME.replace(/\s/g, "_").replace(".", "_").replace("(", "").replace(")", "");
+
+                        d3.select("path[title=\'"+d.properties.NAME+"\']")
+                          .style("fill", function(d){
+                                      var value = d.properties.totalEcoFootCons;
+
+                                      if(value){
+                                        return ramp(minValColorCouFT,lowColorEF, highColorEF, "mouseEF")
+                                      } else {
+                                        return "#bfbfbf"
+                                      }
+                          })
+                          .attr("title", function(d) {return d.properties.NAME;});
+
+                          if(lastCountryOn==countryMouseOver){
+                            d3.select("#"+countryMouseOver+"mover").attr("transform","translate("+ mouse[0]+event.clientX+", "+mouse[1]+event.clientY+") ");
+                            lastCountryOn = countryMouseOver;
+                          }else if(lastCountryOn==null){
+                            d3.select("body")
+                                  .append("div")
+                                  .attr("id", function(){
+                                      lastCountryOn = countryMouseOver;
+                                      console.log()
+                                      return lastCountryOn+"mover";
+
+                                  })
+                                  .style("position", "absolute")
+                                  .style("z-index", "10")
+                                  .style("visibility", "visible")
+                                  .style("background", "#000")
+                                  .attr("x", mouse[0]+event.clientX)
+                                  .attr("y", mouse[1]+event.clientY)
+                                  .text(countryMouseOver);
+                          }
+
+
+                      })
+                      .on("mouseout", function(d){
+                          d3.select("path[title=\'"+d.properties.NAME+"\']")
+                            .style("fill", function(d){
+                                    var value = d.properties.totalEcoFootCons;
+
+                                        if(value){
+                                          return ramp(minValColorCouFT,lowColorEF, highColorEF, value)
+                                        } else {
+                                          return "#bfbfbf"
+                                        }
+                            });
+
+                            if(lastCountryOn.indexOf(" ") != -1 || lastCountryOn.indexOf(".") != -1 || lastCountryOn.indexOf("(") != -1 || lastCountryOn.indexOf(")") != -1){
+                              d3.select("#"+lastCountryOn.replace(/\s/g, "_").replace(".", "_").replace("(", "_").replace(")", "_")+"mover").remove();
+                              lastCountryOn = null;
+
+                            }else{
+                              d3.select("#"+lastCountryOn+"mover").remove();
+                              lastCountryOn = null;
+                            }
+
+                      });
+                      // .on("mouseenter", function(d){
+                      //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity+20)).text(d.properties.NAME);
+                      // })
+                      // .on("mouseleave", function(d){
+                      //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity));
+                      //
+                      // });
+
+              });
+
+            });
+
+            autocomplete(document.getElementById("myInput"), countries_list);
 
 
       }
 
 
-      function continents_Biocapacity(){
+      function continents_EcoFootGha(){
+            var svg = d3.select("#world_graph")
+              .append("svg")
+              .attr("id", "chart")
+              .attr("width", w)
+              .attr("height", h)
+              .attr("tranform", "translate(" + 0 + "," + 0 + ")");
+
+
+            d3.json("../data/ContinentsOutput.json").then(function(json){
+
+              data = json.data;
+              console.log(data)
+              var dataArray_efgha = new Array();
+              var lastContinentViewed = data[0].country_name;
+              var dataContYearsAsia = {};
+              var dataContYearsAfrica = {};
+              var dataContYearsEurope = {};
+              var dataContYearsNorthAmerica = {};
+              var dataContYearsSouthAmerica = {};
+              var dataContYearsOceania = {};
+
+              var allEmpty = {};
+
+              d3.json("../data/continents.json").then(function(geojson){
+
+                  datageo = geojson;
+                  var lastjsonState = datageo.features[0].properties.CONTINENT;
+
+
+                  for(var n = 0; n < datageo.features.length; n++){
+
+                      var jsonState = datageo.features[n].properties.CONTINENT;
+
+
+                      for(var i = 0; i < data.length; i++){
+
+                            var dataContinent = data[i].country_name;
+                            var dataYear = {};
+                            var dataRecord = data[i].Record;
+
+                            if(dataContinent == "Central America"){
+                              data[i].country_name = "North America";
+                              dataContinent = data[i].country_name;
+                            }
+
+                            if(continents_list.indexOf(dataContinent) == -1){
+                              continents_list.push(dataContinent);
+                            }
+
+
+                            if(lastContinentViewed.replace(" ", "") != dataContinent.replace(" ", "") && lastContinentViewed.replace(" ", "") == lastjsonState.replace(" ", "")){
+
+                                  console.log("last continent " + lastContinentViewed)
+                                  console.log("data continent " + dataContinent)
+                                  console.log("last state " + lastjsonState)
+
+                                  if(lastjsonState == "North America"){
+                                      datageo.features[1].properties.efgha = dataContYearsNorthAmerica;
+                                  }else if(lastjsonState == "South America"){
+                                      datageo.features[4].properties.efgha = dataContYearsSouthAmerica;
+                                  }else if(lastjsonState == "Asia"){
+                                      datageo.features[0].properties.efgha = dataContYearsAsia;
+                                  }else if(lastjsonState == "Europe"){
+                                      datageo.features[2].properties.efgha = dataContYearsEurope;
+                                  }else if(lastjsonState == "Africa"){
+                                      datageo.features[3].properties.efgha = dataContYearsAfrica;
+                                  }else if(lastjsonState == "Oceania"){
+                                      datageo.features[5].properties.efgha = dataContYearsOceania;
+                                  }
+
+                                    //faz push e update do continent
+                                    lastContinentViewed = dataContinent;
+
+                                    //dataContYears = allEmpty;
+                                    //dataContYears = {};
+
+                                    dataYear = allEmpty;
+                                    dataYear = {};
+
+                                    console.log(datageo);
+
+
+
+                            }
+
+                            if(dataContinent.replace(" ", "") == jsonState.replace(" ", "") && dataRecord == "EFConsTotGHA"){
+
+
+                                  var year = parseFloat(data[i].year);
+
+                                  //footprint consumo em GHA
+                                  var built_up_land_efgha = parseFloat(data[i].built_up_land);
+                                  var carbon_efgha = parseFloat(data[i].Carbon);
+                                  var cropland_efgha = parseFloat(data[i].Cropland);
+                                  var fishing_grounds_efgha = parseFloat(data[i].fishing_grounds);
+                                  var forest_products_efgha = parseFloat(data[i].forest_products);
+                                  var grazing_land_efgha = parseFloat(data[i].grazing_land);
+                                  var total_efgha = parseFloat(data[i].Total);
+                                  var continent_name = data[i].country_name;
+
+                                  dataArray_efgha.push(total_efgha);
+
+                                  dataYear["year"] = year;
+                                  dataYear["continent_name"] = continent_name;
+                                  dataYear["total_efgha"] = total_efgha;
+                                  dataYear["grazing_land_efgha"] = grazing_land_efgha;
+                                  dataYear["forest_products_efgha"] = forest_products_efgha;
+                                  dataYear["fishing_grounds_efgha"] = fishing_grounds_efgha;
+                                  dataYear["cropland_efgha"] = cropland_efgha;
+                                  dataYear["carbon_efgha"] = carbon_efgha;
+                                  dataYear["built_up_land_efgha"] = built_up_land_efgha;
+
+
+                                  if(continent_name == "Asia"){
+                                    dataContYearsAsia["_"+year]=dataYear;
+
+                                  }else if(continent_name == "Europe"){
+                                    dataContYearsEurope["_"+year]=dataYear;
+
+                                  }else if(continent_name == "Africa"){
+                                    dataContYearsAfrica["_"+year]=dataYear;
+
+                                  }else if(continent_name == "North America"){
+                                    dataContYearsNorthAmerica["_"+year]=dataYear;
+
+                                  }else if(continent_name == "South America"){
+                                    dataContYearsSouthAmerica["_"+year]=dataYear;
+
+                                  }else if(continent_name == "Oceania"){
+                                    dataContYearsOceania["_"+year]=dataYear;
+
+                                  }
+
+                                  dataYear = allEmpty;
+                                  dataYear = {};
+
+
+                            }else{
+                                  lastContinentViewed = dataContinent;
+                            }
+
+
+
+                      }
+
+                      lastjsonState = jsonState;
+                      datageo.features[5].properties.efgha = dataContYearsOceania;
+
+                  }
+
+
+
+
+                  console.log(datageo)
+                  minValColorContFT = d3.min(dataArray_efgha)
+                  maxValColorContFT = d3.max(dataArray_efgha)
+
+
+                  svg.selectAll("path")
+                    .data(datageo.features)
+                    .enter()
+                    .append("path")
+                    .attr("d", path)
+                    .attr("id", function(d) {return d.properties.CONTINENT.replace(/\s/g, "_");})
+                    .style("fill", function(d){
+                          var value = d.properties.efgha._2014.total_efgha;
+
+                          if(value){
+                            return ramp(minValColorCouFT,lowColorEF, highColorEF, value);
+                          } else {
+                            return "#bfbfbf"
+                          }
+                    })
+                    .style("stroke", "#333333")
+                    .style("stroke-width", "0.2px" )
+                    .attr("title", function(d) {return d.properties.CONTINENT;})
+                    .on("mouseover", function(d){
+
+                        var mouse = d3.mouse(this);
+                        console.log(d.properties.CONTINENT)
+                        var countryMouseOver = d.properties.CONTINENT.replace(/\s/g, "_");
+
+                        d3.select("path[title=\'"+d.properties.CONTINENT+"\']")
+                          .style("fill", function(d){
+
+                                      var value = d.properties.efgha._2014.total_efgha;
+
+                                      if(value){
+                                        return ramp(minValColorContFT,lowColorEF, highColorEF, "mouseEF")
+                                      } else {
+                                        return "#bfbfbf"
+                                      }
+                          })
+                          .attr("title", function(d) {return d.properties.CONTINENT;});
+
+                          if(lastCountryOn==countryMouseOver){
+                            d3.select("#"+countryMouseOver+"mover").attr("transform","translate("+ mouse[0]+event.clientX+", "+mouse[1]+event.clientY+") ");
+                            lastCountryOn = countryMouseOver;
+                          }else if(lastCountryOn==null){
+                            d3.select("body")
+                                  .append("div")
+                                  .attr("id", function(){
+                                      lastCountryOn = countryMouseOver;
+                                      console.log()
+                                      return lastCountryOn+"mover";
+
+                                  })
+                                  .style("position", "absolute")
+                                  .style("z-index", "10")
+                                  .style("visibility", "visible")
+                                  .style("background", "#000")
+                                  .attr("x", mouse[0]+event.clientX)
+                                  .attr("y", mouse[1]+event.clientY)
+                                  .text(countryMouseOver);
+                          }
+
+
+                      })
+                      .on("mouseout", function(d){
+                          d3.select("path[title=\'"+d.properties.CONTINENT+"\']")
+                            .style("fill", function(d){
+                              var value = d.properties.efgha._2014.total_efgha;
+
+                                        if(value){
+                                          return ramp(minValColorCouFT,lowColorEF, highColorEF, value)
+                                        } else {
+                                          return "#bfbfbf"
+                                        }
+                            });
+
+                            if(lastCountryOn.indexOf(" ") != -1 || lastCountryOn.indexOf(".") != -1 || lastCountryOn.indexOf("(") != -1 || lastCountryOn.indexOf(")") != -1){
+                              d3.select("#"+lastCountryOn.replace(/\s/g, "_").replace(".", "_").replace("(", "_").replace(")", "_")+"mover").remove();
+                              lastCountryOn = null;
+
+                            }else{
+                              d3.select("#"+lastCountryOn+"mover").remove();
+                              lastCountryOn = null;
+                            }
+
+                      });
+                      // .on("mouseenter", function(d){
+                      //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity+20)).text(d.properties.NAME);
+                      // })
+                      // .on("mouseleave", function(d){
+                      //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity));
+                      //
+                      // });
+
+              });
+
+            });
+
+            autocomplete(document.getElementById("myInput"), countries_list);
 
 
       }
+
+
+      function continents_BiocapacityGha(){
+        var svg = d3.select("#world_graph")
+          .append("svg")
+          .attr("id", "chart")
+          .attr("width", w)
+          .attr("height", h)
+          .attr("tranform", "translate(" + 0 + "," + 0 + ")");
+
+
+        d3.json("../data/ContinentsOutput.json").then(function(json){
+
+          data = json.data;
+          console.log(data)
+          var dataArray = new Array();
+          var dataYear = [];
+
+          d3.json("../data/continents.json").then(function(geojson){
+
+              datageo = geojson;
+              console.log(datageo)
+
+              for(var i = 0; i < data.length; i++){
+
+                  var dataContinent = data[i].country_name;
+
+                  if(dataContinent == "Central America"){
+                    data[i].country_name = "North America";
+
+                    dataContinent = data[i].country_name;
+                  }
+
+                  if(continents_list.indexOf(dataContinent) == -1){
+                    continents_list.push(dataContinent);
+                  }
+
+                  for(var n = 0; n < datageo.features.length; n++){
+
+                      var jsonState = datageo.features[n].properties.CONTINENT;
+
+
+                      if(dataContinent == jsonState){
+
+                        var year = parseFloat(data[i].year);
+                        var record = parseFloat(data[i].Record);
+
+                        if(record == "BiocapTotGHA"){
+                          //biocapacity em earths
+                          var built_up_land_biogha = parseFloat(data[i].built_up_land);
+                          var carbon_biogha = parseFloat(data[i].Carbon);
+                          var cropland_biogha = parseFloat(data[i].Cropland);
+                          var fishing_grounds_biogha = parseFloat(data[i].fishing_grounds);
+                          var forest_products_biogha = parseFloat(data[i].forest_products);
+                          var grazing_land_biogha = parseFloat(data[i].grazing_land);
+                          var total_biogha = parseFloat(data[i].Total);
+
+                        }
+
+                        // datageo.features[n].properties.total_biogha = total_biogha;
+                        // datageo.features[n].properties.grazing_land_biogha = grazing_land_biogha;
+                        // datageo.features[n].properties.forest_products_biogha = forest_products_biogha;
+                        // datageo.features[n].properties.fishing_grounds_biogha = fishing_grounds_biogha;
+                        // datageo.features[n].properties.cropland_biogha = cropland_biogha;
+                        // datageo.features[n].properties.carbon_biogha = carbon_biogha;
+                        // datageo.features[n].properties.built_up_land_biogha = built_up_land_biogha;
+                        //
+                        // datageo.features[n].properties.year = year;
+                        // datageo.features[n].properties.record = record;
+
+
+                        dataArray.push(total_biogha);
+
+
+
+
+                          dataYear.push({key:"year",value:year});
+                          dataYear.push({key:"total_biogha",value:total_biogha});
+                          dataYear.push({key:"grazing_land_biogha",value:grazing_land_biogha});
+                          dataYear.push({key:"forest_products_biogha",value:forest_products_biogha});
+                          dataYear.push({key:"fishing_grounds_biogha",value:fishing_grounds_biogha});
+                          dataYear.push({key:"cropland_biogha",value:cropland_biogha});
+                          dataYear.push({key:"carbon_biogha",value:carbon_biogha});
+                          dataYear.push({key:"built_up_land_biogha",value:built_up_land_biogha});
+                          datageo.feautures[n].properties.biogha = ({key : dataYear.year, value: dataYear});
+
+                        console.log(datageo)
+                        break;
+
+
+                      }else{
+                      }
+                  }
+              }
+
+
+              minValColorCouFT = d3.min(dataArray)
+              maxValColorCouFT = d3.max(dataArray)
+
+
+              svg.selectAll("path")
+                .data(datageo.features)
+                .enter()
+                .append("path")
+                .attr("d", path)
+                .attr("id", function(d) {return d.properties.NAME.replace(/\s/g, "_").replace(".", "_").replace("(", "").replace(")", "");})
+                .style("fill", function(d){
+                  var value = d.properties.totalEcoFootCons;
+
+                      if(value){
+                        return ramp(minValColorCouFT,lowColorEF, highColorEF, value)
+        ;
+                      } else {
+                        return "#bfbfbf"
+                      }
+                })
+                .style("stroke", "#333333")
+                .style("stroke-width", "0.2px" )
+                .attr("title", function(d) {return d.properties.NAME;})
+                .on("mouseover", function(d){
+
+                    var mouse = d3.mouse(this);
+                    var countryMouseOver = d.properties.NAME.replace(/\s/g, "_").replace(".", "_").replace("(", "").replace(")", "");
+
+                    d3.select("path[title=\'"+d.properties.NAME+"\']")
+                      .style("fill", function(d){
+                                  var value = d.properties.totalEcoFootCons;
+
+                                  if(value){
+                                    return ramp(minValColorCouFT,lowColorEF, highColorEF, "mouseEF")
+                                  } else {
+                                    return "#bfbfbf"
+                                  }
+                      })
+                      .attr("title", function(d) {return d.properties.NAME;});
+
+                      if(lastCountryOn==countryMouseOver){
+                        d3.select("#"+countryMouseOver+"mover").attr("transform","translate("+ mouse[0]+event.clientX+", "+mouse[1]+event.clientY+") ");
+                        lastCountryOn = countryMouseOver;
+                      }else if(lastCountryOn==null){
+                        d3.select("body")
+                              .append("div")
+                              .attr("id", function(){
+                                  lastCountryOn = countryMouseOver;
+                                  console.log()
+                                  return lastCountryOn+"mover";
+
+                              })
+                              .style("position", "absolute")
+                              .style("z-index", "10")
+                              .style("visibility", "visible")
+                              .style("background", "#000")
+                              .attr("x", mouse[0]+event.clientX)
+                              .attr("y", mouse[1]+event.clientY)
+                              .text(countryMouseOver);
+                      }
+
+
+                  })
+                  .on("mouseout", function(d){
+                      d3.select("path[title=\'"+d.properties.NAME+"\']")
+                        .style("fill", function(d){
+                                var value = d.properties.totalEcoFootCons;
+
+                                    if(value){
+                                      return ramp(minValColorCouFT,lowColorEF, highColorEF, value)
+                                    } else {
+                                      return "#bfbfbf"
+                                    }
+                        });
+
+                        if(lastCountryOn.indexOf(" ") != -1 || lastCountryOn.indexOf(".") != -1 || lastCountryOn.indexOf("(") != -1 || lastCountryOn.indexOf(")") != -1){
+                          d3.select("#"+lastCountryOn.replace(/\s/g, "_").replace(".", "_").replace("(", "_").replace(")", "_")+"mover").remove();
+                          lastCountryOn = null;
+
+                        }else{
+                          d3.select("#"+lastCountryOn+"mover").remove();
+                          lastCountryOn = null;
+                        }
+
+                  });
+                  // .on("mouseenter", function(d){
+                  //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity+20)).text(d.properties.NAME);
+                  // })
+                  // .on("mouseleave", function(d){
+                  //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity));
+                  //
+                  // });
+
+          });
+
+        });
+
+        autocomplete(document.getElementById("myInput"), countries_list);
+
+
+
+      }
+
+
+
+
+      ////////////////////COUNTRIES FUNCTIONS//////////////////
 
 
       function countries_EcoFoot(){
@@ -278,7 +930,7 @@ $( document ).ready(function() {
                 .enter()
                 .append("path")
                 .attr("d", path)
-                .attr("id", function(d) {return d.properties.NAME.replace(/\s/g, "_");})
+                .attr("id", function(d) {return d.properties.NAME.replace(/\s/g, "_").replace(".", "_").replace("(", "").replace(")", "");})
                 .style("fill", function(d){
                   var value = d.properties.totalEcoFootCons;
 
@@ -295,8 +947,7 @@ $( document ).ready(function() {
                 .on("mouseover", function(d){
 
                     var mouse = d3.mouse(this);
-                    console.log(mouse)
-                    var countryMouseOver = d.properties.NAME.replace(/\s/g, "_");
+                    var countryMouseOver = d.properties.NAME.replace(/\s/g, "_").replace(".", "_").replace("(", "").replace(")", "");
 
                     d3.select("path[title=\'"+d.properties.NAME+"\']")
                       .style("fill", function(d){
@@ -312,11 +963,12 @@ $( document ).ready(function() {
 
                       if(lastCountryOn==countryMouseOver){
                         d3.select("#"+countryMouseOver+"mover").attr("transform","translate("+ mouse[0]+event.clientX+", "+mouse[1]+event.clientY+") ");
+                        lastCountryOn = countryMouseOver;
                       }else if(lastCountryOn==null){
                         d3.select("body")
                               .append("div")
                               .attr("id", function(){
-                                  lastCountryOn= ""+countryMouseOver;
+                                  lastCountryOn = countryMouseOver;
                                   console.log()
                                   return lastCountryOn+"mover";
 
@@ -344,10 +996,15 @@ $( document ).ready(function() {
                                     }
                         });
 
+                        if(lastCountryOn.indexOf(" ") != -1 || lastCountryOn.indexOf(".") != -1 || lastCountryOn.indexOf("(") != -1 || lastCountryOn.indexOf(")") != -1){
+                          d3.select("#"+lastCountryOn.replace(/\s/g, "_").replace(".", "_").replace("(", "_").replace(")", "_")+"mover").remove();
+                          lastCountryOn = null;
 
-                        d3.select("#"+lastCountryOn+"mover")
-                              .remove();
-                        lastCountryOn = null;
+                        }else{
+                          d3.select("#"+lastCountryOn+"mover").remove();
+                          lastCountryOn = null;
+                        }
+
                   });
                   // .on("mouseenter", function(d){
                   //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity+20)).text(d.properties.NAME);
@@ -482,7 +1139,7 @@ $( document ).ready(function() {
                       .enter()
                       .append("path")
                       .attr("d", path)
-                      .attr("id", function(d) {return d.properties.NAME.replace(/\s/g, "_");})
+                      .attr("id", function(d) {return d.properties.NAME.replace(/\s/g, "_").replace(".", "_").replace("(", "").replace(")", "");})
                       .style("fill", function(d){
                         var value = d.properties.totalBiocapacity;
 
@@ -498,7 +1155,7 @@ $( document ).ready(function() {
                       .on("mouseover", function(d){
 
 
-                        var countryMouseOver = d.properties.NAME.replace(/\s/g, "_");
+                        var countryMouseOver = d.properties.NAME.replace(/\s/g, "_").replace(".", "_").replace("(", "").replace(")", "");
 
                           d3.select("path[title=\'"+d.properties.NAME+"\']")
                             .style("fill", function(d){
@@ -543,9 +1200,14 @@ $( document ).ready(function() {
                                           }
                               });
 
-                              d3.select("#"+lastCountryOn+"mover")
-                                    .remove();
-                              lastCountryOn = null;
+                              if(lastCountryOn.indexOf(" ") != -1 || lastCountryOn.indexOf(".") != -1 || lastCountryOn.indexOf("(") != -1 || lastCountryOn.indexOf(")") != -1){
+                                d3.select("#"+lastCountryOn.replace(/\s/g, "_").replace(".", "_").replace("(", "_").replace(")", "_")+"mover").remove();
+                                lastCountryOn = null;
+
+                              }else{
+                                d3.select("#"+lastCountryOn+"mover").remove();
+                                lastCountryOn = null;
+                              }
 
                         });
                         // .on("mouseenter", function(d){
