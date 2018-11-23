@@ -29,6 +29,11 @@ $( document ).ready(function() {
       }
 
       continents_EcoFootGha();
+      document.getElementById('search_bar-continent').style.visibility = "visible";
+      document.getElementById('search_bar-continent').style.display = "inline-grid";
+      document.getElementById('search_bar').style.visibility = "hidden";
+      document.getElementById('search_bar').style.display = "none";
+      autocomplete(document.getElementById("myInput-continent"), continents_list);
 
       $(".switch-input").on("click", function(){
 
@@ -37,6 +42,11 @@ $( document ).ready(function() {
                   appendTo = "#world_graph";
                   continents_EcoFootGha();
 
+                  document.getElementById('search_bar-continent').style.visibility = "visible";
+                  document.getElementById('search_bar').style.visibility = "hidden";
+                  document.getElementById('search_bar-continent').style.display = "inline-grid";
+                  document.getElementById('search_bar').style.display = "none";
+
                   document.getElementById('continents_view').style.visibility = "visible" ;
                   document.getElementById('countries_view').style.visibility = "hidden" ;
 
@@ -44,6 +54,10 @@ $( document ).ready(function() {
                   appendTo = "#world_graph";
                   continents_Biocapacity();
 
+                  document.getElementById('search_bar-continent').style.visibility = "visible";
+                  document.getElementById('search_bar').style.visibility = "hidden";
+                  document.getElementById('search_bar-continent').style.display = "inline-grid";
+                  document.getElementById('search_bar').style.display = "none";
                   document.getElementById('continents_view').style.visibility = "visible" ;
                   document.getElementById('countries_view').style.visibility = "hidden" ;
 
@@ -53,6 +67,10 @@ $( document ).ready(function() {
                   appendTo = "#countries_graph"
                   countries_EcoFoot();
 
+                  document.getElementById('search_bar-continent').style.visibility = "hidden";
+                  document.getElementById('search_bar').style.visibility = "visible";
+                  document.getElementById('search_bar-continent').style.display = "none";
+                  document.getElementById('search_bar').style.display = "inline-grid";
                   document.getElementById('continents_view').style.visibility = "hidden" ;
                   document.getElementById('countries_view').style.visibility = "visible" ;
 
@@ -61,6 +79,10 @@ $( document ).ready(function() {
                   appendTo = "#countries_graph"
                   countries_Biocapacity();
 
+                  document.getElementById('search_bar-continent').style.visibility = "hidden";
+                  document.getElementById('search_bar').style.visibility = "visible";
+                  document.getElementById('search_bar-continent').style.display = "none";
+                  document.getElementById('search_bar').style.display = "inline-grid";
                   document.getElementById('continents_view').style.visibility = "hidden" ;
                   document.getElementById('countries_view').style.visibility = "visible" ;
               }
@@ -84,16 +106,16 @@ $( document ).ready(function() {
 
           }else if(this.value == "montheb" && appendTo == "#countries_graph"){
 
-            variableToShow = "Biocapacity";
+                  variableToShow = "Biocapacity";
 
-            if(document.getElementById("chart").length != 0){
-              document.getElementById("chart").remove();
-              countries_Biocapacity();
-            }else{
-              countries_Biocapacity();
+                  if(document.getElementById("chart").length != 0){
+                    document.getElementById("chart").remove();
+                    countries_Biocapacity();
+                  }else{
+                    countries_Biocapacity();
 
 
-            }
+                  }
 
           }else if(this.value == "montheb"  && appendTo == "#world_graph"){
             variableToShow = "Biocapacity";
@@ -118,6 +140,13 @@ $( document ).ready(function() {
           }
 
       });
+
+      var myButtonSearchContinent = document.getElementById('submitSearch-continent');
+
+      myButtonSearchContinent.addEventListener('click', function(event) {
+        light_up_search_continent();
+      });
+
 
       var myButtonSearch = document.getElementById('submitSearch');
 
@@ -180,6 +209,10 @@ $( document ).ready(function() {
                         data[i].country_name = "North America";
 
                         dataContinent = data[i].country_name;
+                      }else if(dataContinent == "Australia"){
+                        data[i].country_name = "Oceania";
+
+                        dataContinent = data[i].country_name;
                       }
 
                       if(continents_list.indexOf(dataContinent) == -1){
@@ -227,19 +260,6 @@ $( document ).ready(function() {
                               break;
 
 
-
-                            // datageo.features[n].properties.total_efearths = total_efearths;
-                            // datageo.features[n].properties.grazing_land_efearths = grazing_land_efearths;
-                            // datageo.features[n].properties.forest_products_efearths = forest_products_efearths;
-                            // datageo.features[n].properties.fishing_grounds_efearths = fishing_grounds_efearths;
-                            // datageo.features[n].properties.cropland_efearths = cropland_efearths;
-                            // datageo.features[n].properties.carbon_efearths = carbon_efearths;
-                            // datageo.features[n].properties.built_up_land_efearths = built_up_land_efearths;
-                            //
-                            // datageo.features[n].properties.year = year;
-
-
-
                           }else{
                           }
                       }
@@ -260,8 +280,7 @@ $( document ).ready(function() {
                       var value = d.properties.totalEcoFootCons;
 
                           if(value){
-                            return ramp(minValColorContFT,lowColorEF, highColorEF, value)
-            ;
+                            return ramp(minValColorContFT,lowColorEF, highColorEF, value);
                           } else {
                             return "#bfbfbf"
                           }
@@ -343,7 +362,7 @@ $( document ).ready(function() {
 
             });
 
-            autocomplete(document.getElementById("myInput"), countries_list);
+            autocomplete(document.getElementById("myInput-continent"), continents_list);
 
 
       }
@@ -392,6 +411,10 @@ $( document ).ready(function() {
 
                             if(dataContinent == "Central America"){
                               data[i].country_name = "North America";
+                              dataContinent = data[i].country_name;
+                            }else if(dataContinent == "Australia"){
+                              data[i].country_name = "Oceania";
+
                               dataContinent = data[i].country_name;
                             }
 
@@ -602,7 +625,7 @@ $( document ).ready(function() {
 
             });
 
-            autocomplete(document.getElementById("myInput"), countries_list);
+            autocomplete(document.getElementById("myInput-continent"), continents_list);
 
 
       }
@@ -635,6 +658,10 @@ $( document ).ready(function() {
 
                   if(dataContinent == "Central America"){
                     data[i].country_name = "North America";
+
+                    dataContinent = data[i].country_name;
+                  }else if(dataContinent == "Australia"){
+                    data[i].country_name = "Oceania";
 
                     dataContinent = data[i].country_name;
                   }
@@ -799,7 +826,7 @@ $( document ).ready(function() {
 
         });
 
-        autocomplete(document.getElementById("myInput"), countries_list);
+        autocomplete(document.getElementById("myInput-continent"), continents_list);
 
 
 
@@ -1221,7 +1248,7 @@ $( document ).ready(function() {
 
               });
 
-
+              autocomplete(document.getElementById("myInput"), countries_list);
 
       }
 
@@ -1257,6 +1284,38 @@ $( document ).ready(function() {
 
             })
       };
+
+
+
+      function light_up_search_continent(){
+        var valueinput_continent = document.getElementById("myInput-continent").value;
+        var tryout_continent = document.getElementById(valueinput_continent);
+        var continent_to_light = d3.select("path[title=\'"+valueinput_continent+"\']");
+
+
+
+            continent_to_light.style("fill", function(valueinput_continent){
+
+                if(variableToShow=="EcoFoot"){
+                    var value = valueinput_continent.properties.totalEcoFootCons;
+                    if(value){
+                      return ramp(minValColorContFT,lowColorEF, highColorEF, "mouseEF")
+                    } else {
+                      return "#bfbfbf"
+                    }
+                }else if(variableToShow=="Biocapacity"){
+                    var value = valueinput_continent.properties.totalBiocapacity;
+
+                    if(value){
+                      return ramp(minValColorContB,lowColorB, highColorB, "mouseB")
+                    } else {
+                      return "#bfbfbf"
+                    }
+                }
+
+            })
+      };
+
 
 
       function autocomplete(inp, arr) {
@@ -1360,3 +1419,9 @@ $( document ).ready(function() {
 
 
 });
+
+
+function myFunction() {
+
+    return false;
+}

@@ -57,7 +57,7 @@ body{
 /************ SEARCH **********/
 
 
-.search-container {
+.search-container, .search-container-continent {
   position: relative;
   display: inline-grid;
   margin-left: 3%;
@@ -66,7 +66,7 @@ body{
   grid-column-end: 1;
 }
 
-.autocomplete {
+.autocomplete, .autocomplete-continent {
   position: relative;
   display: inline-block;
   width: 40%;
@@ -88,12 +88,53 @@ body{
   margin-right: 0%;
 
 }
+.search-container-continent input {
+  position: relative;
+  border: 1px solid #b9b992;
+  -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+  background-color: #ebebe0;
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+  height: 30%;
+  top:20%;
+  margin-right: 0%;
+
+}
 .search-container input[type=text] {
   background-color: #ebebe0;
   border-radius: 3px;
 
 }
+.search-container-continent input[type=text] {
+  background-color: #ebebe0;
+  border-radius: 3px;
+
+}
 .search-container input[type=submit] {
+  position: relative;
+  border-radius: 3px;
+  background-color: white;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #9dd993), color-stop(100%, #65bd63));
+  background-image: -webkit-linear-gradient(top, #b9b992, #ffdf80);
+  background-image: -moz-linear-gradient(top, #b9b992, #ffdf80);
+  background-image: -ms-linear-gradient(top, #b9b992, #ffdf80);
+  background-image: -o-linear-gradient(top, #b9b992, #ffdf80);
+  background-image: linear-gradient(top, #b9b992, #ffdf80);
+  -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+  color:white;
+  width: 20%;
+  height: 80%;
+  top:20%;
+  text-align: center;
+  align-content: center;
+  padding: 5px;
+  margin-left: 5%;
+
+}
+.search-container-continent input[type=submit] {
   position: relative;
   border-radius: 3px;
   background-color: white;

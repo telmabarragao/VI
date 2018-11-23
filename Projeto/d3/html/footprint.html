@@ -28,13 +28,36 @@
     <div class="second-header" id="search-var">
 
         <div class="search-container" id="search_bar">
-              <form id="searchform" autocomplete="off" action="#" >
+              <form id="searchform" autocomplete="off" onsubmit="return myFunction();" >
                   <div class="autocomplete">
                     <input id="myInput" type="text" name="myCountry" placeholder="Country">
                   </div>
-                  <input type="submit" onsubmit="light_up_search()" id="submitSearch" form="searchform">
+                  <input type="submit" onsubmit="light_up_search()" id="submitSearch" form="searchform" value="Search">
               </form>
         </div>
+
+        <script language="JavaScript">
+        function myFunction() {
+
+            return false;
+        }
+        </script>
+
+        <div class="search-container-continent" id="search_bar-continent" style="visibility: hidden; display:none;">
+              <form id="searchform-continent" autocomplete="off" onsubmit="return myFunction();" >
+                  <div class="autocomplete-continent">
+                    <input id="myInput-continent" type="text" name="myContinent" placeholder="Continent">
+                  </div>
+                  <input type="submit" onsubmit="light_up_search_continent()" id="submitSearch-continent" form="searchform-continent" value="Search">
+              </form>
+        </div>
+
+        <script language="JavaScript">
+              function myFunction() {
+
+                  return false;
+              }
+              </script>
 
         <div id="container_eb">
           <div id="switch_eb">
