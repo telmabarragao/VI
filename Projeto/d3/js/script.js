@@ -246,7 +246,7 @@ $( document ).ready(function() {
 ////////////////////D3//////////////////
 
       //Width and height
-      var w = 700;
+      var w = 600;
       var h = 450;
 
       var highColorEF = '#00751b'
@@ -266,13 +266,14 @@ $( document ).ready(function() {
 
       ////////////////////CONTINENTS FUNCTIONS//////////////////
 
+      //////////CONTINENTS MAP///////////
 
       function continents_EcoFootEarths(){
             var svg = d3.select("#world_graph")
               .append("svg")
               .attr("id", "chart")
-              .attr("width", 800)
-              .attr("height", 500)
+              .attr("width", 600)
+              .attr("height", 480)
               .attr("tranform", "translate(" + 0 + "," + 0 + ")");
 
 
@@ -529,8 +530,8 @@ $( document ).ready(function() {
             var svg = d3.select("#world_graph")
               .append("svg")
               .attr("id", "chart")
-              .attr("width", 800)
-              .attr("height", 500)
+              .attr("width", 600)
+              .attr("height", 480)
               .attr("tranform", "translate(" + 0 + "," + 0 + ")");
 
 
@@ -766,14 +767,12 @@ $( document ).ready(function() {
                               lastCountryOn = null;
                             }
 
+                      })
+                      .on("click", function(d){
+
+                          stackedAreaChartContinent(d.properties);
+
                       });
-                      // .on("mouseenter", function(d){
-                      //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity+20)).text(d.properties.NAME);
-                      // })
-                      // .on("mouseleave", function(d){
-                      //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity));
-                      //
-                      // });
 
               });
 
@@ -788,8 +787,8 @@ $( document ).ready(function() {
             var svg = d3.select("#world_graph")
               .append("svg")
               .attr("id", "chart")
-              .attr("width", 800)
-              .attr("height", 500)
+              .attr("width", 600)
+              .attr("height", 480)
               .attr("tranform", "translate(" + 0 + "," + 0 + ")");
 
 
@@ -1050,10 +1049,142 @@ $( document ).ready(function() {
       }
 
 
+      //////////CONTINETES STACKED AREA CHART///////////
+
+      function stackedAreaChartContinent(data){
+
+            console.log(data)
+
+            var svg = d3.select("svg");
+
+            var container = d3_container.container();
+
+            container
+              .height(500)
+              .width(960)
+              .margin(50, 0, 30, 50);
+
+            var width = container.contentWidth(),
+                height = container.contentHeight();
+
+            svg.call(container);
+
+            var content = container.content();
+
+            var dateParse = d3.timeParse("%Y-%m-%d");
+
+            var statusArray = ["1961", "1962", "1963", "1964", "1965", "1966", "1967", "1968", "1969", "1970", "1971", "1972", "1973", "1974", "1975", "1976", "1977", "1978", "1979", "1980", "1981", "1982", "1983", "1984", "1985", "1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014"];
+
+            var yearData = data.efgha;
+
+            // for(var year in yearData){
+            //
+            //   console.log(yearData[year])
+            //   yearData[year]
+            //     // var dataObject = {"country": yearData[year].country_region};
+            //     //
+            //     // statusArray.forEach(function (s) {
+            //     //     dataObject[s] = yearData[year][s];
+            //     // })
+            //     //
+            //     // console.log(dataObject)
+            //     // return dataObject;
+            // }
+
+
+            // var parsedData = d.map(function (d) {
+            //     var dataObject = {
+            //       date: dateParse(d.efgha.year)
+            //     };
+            //     statusArray.forEach(function (s) {
+            //       dataObject[s] = +d[s];
+            //     })
+            //     return dataObject;
+            //   });
+            //
+            //
+              var stack = d3.stack().keys(statusArray).offset(d3.stackOffsetNone);
+
+              var layers = stack(yearData);
+
+              function getDate(d) {
+                return d.year;
+              }
+
+              var x = d3.scaleTime()
+                .domain(["1961", "2014"])
+                .range([0, width]);
+
+              var y = d3.scaleLinear()
+                .domain([0, d3.max(layers, stackMax)])
+                .range([height, 0]);
+
+              var xAxis = d3.axisBottom(x),
+                yAxis = d3.axisLeft(y);
+
+              var gX = content.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .attr("class", "axis axis--x")
+                .call(xAxis)
+                .select(".domain")
+                .remove();
+
+              var gY = content.append("g")
+                .attr("class", "axis axis--y")
+                .call(yAxis);
+
+              var colors = statusArray.map(function (d, i) {
+                return d3.interpolateWarm(i / statusArray.length);
+              });
+
+              var colorScale = d3.scaleOrdinal()
+                .domain(statusArray)
+                .range(colors);
+
+              var legendOffset = container.margin().left() + width - 32 * statusArray.length;
+
+              var legend = d3.legendColor()
+                .shapeWidth(30)
+                .cells(statusArray.length)
+                .orient("horizontal")
+                .scale(colorScale)
+
+              var area = d3.area()
+                .x(function (d, i) { return x(d.data.date) })
+                .y0(function (d) { return y(d[0]); })
+                .y1(function (d) { return y(d[1]); })
+                .curve(d3.curveBasis);
+
+              var layerGroups = content.selectAll(".layer")
+                .data(layers)
+                .enter().append("g")
+                .attr("class", "layer");
+
+              svg.append("g")
+                .attr("class", "legend")
+                .attr("transform", "translate(" + legendOffset.toString() + ",0)");
+
+              svg.select(".legend")
+                .call(legend);
+
+              layerGroups.append("path")
+                .attr("d", area)
+                .attr("fill", function (d, i) {
+                  return colors[i];
+                });
+
+              function stackMax(layer) {
+                return d3.max(layer, function (d) { return d[1]; });
+              }
+
+            
+      }
+
 
 
       ////////////////////COUNTRIES FUNCTIONS//////////////////
 
+      //////////COUNTRIES MAP///////////
 
       function countries_EcoFoot(){
         var svg = d3.select("#countries_graph")
@@ -1228,7 +1359,7 @@ $( document ).ready(function() {
 
 
                   })
-                  .on("mouseout", function(d){
+                .on("mouseout", function(d){
                       d3.select("path[title=\'"+d.properties.NAME+"\']")
                         .style("fill", function(d){
                                 var value = d.properties.totalEcoFootCons;
@@ -1249,14 +1380,10 @@ $( document ).ready(function() {
                           lastCountryOn = null;
                         }
 
-                  });
-                  // .on("mouseenter", function(d){
-                  //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity+20)).text(d.properties.NAME);
-                  // })
-                  // .on("mouseleave", function(d){
-                  //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity));
-                  //
-                  // });
+                  })
+                .on("click", function(d){
+                    singlecountry_floatingBar(d.properties.NAME);
+                });
 
           });
 
@@ -1265,7 +1392,6 @@ $( document ).ready(function() {
         autocomplete(document.getElementById("myInput"), countries_list);
 
       }
-
 
       function countries_Biocapacity(){
               var svg = d3.select("#countries_graph")
@@ -1470,6 +1596,82 @@ $( document ).ready(function() {
       }
 
 
+      //////////COUNTRIES FLOATING BAR (ONE COUNTRY)///////////
+
+      function singlecountry_floatingBar(country){
+
+          var dataValues;
+          var minVal;
+          var maxVal;
+
+          d3.json("../data/CountryOutput.json").then(function(json){
+
+            for(var c = 0; c < json.data.length; c++){
+
+                if(json.data[c].country_region == country){
+
+                  dataValues = json.data[c];
+
+                  delete dataValues.region;
+                  delete dataValues.hdi;
+                  delete dataValues.population_millions;
+                  delete dataValues.per_capita_gdp;
+                  delete dataValues.number_of_earths_required;
+                  delete dataValues.number_of_countries_required;
+                  delete dataValues.ecological_deficit_or_reserve;
+                  delete dataValues.country_region;
+
+                  minVal = d3.min(dataValues)
+                  maxVal = d3.max(dataValues)
+
+                  break;
+
+                }
+
+            }
+
+
+            var stack = d3.stack();
+            var categories = ["Built Up", "Carbon", "Cropland", "Fishing Ground", "Forest Land", "Grazing Land", "Total"];
+
+
+            var n = 2;
+            var m = 7;
+
+            var margin = {top: 50, right: 50, bottom: 50, left: 100},
+                  width = 900 - margin.left - margin.right,
+                  height = 500 - margin.top - margin.bottom;
+
+            var y = d3.scale.ordinal().domain(categories).rangeRoundBands([0, height], .08);
+            var x = d3.scale.linear().domain([0, maxVal]).range([width, 0]);
+
+
+            var svg = d3.select("#countries_graph")
+              .append("svg")
+              .attr("id", "chart1")
+              .attr("width", width + margin.left + margin.right)
+              .attr("height", height + margin.top + margin.bottom)
+              .attr("tranform", "translate(" + 0 + "," + 0 + ")");
+
+
+            var xAxis = d3.axisBottom()
+                          .scale(x)
+                          .tickSize(5)
+                          .tickPadding(6);
+
+            var yAxis = d3.axisLeft().scale(y);
+
+
+          });
+
+
+      }
+
+
+      //////////COUNTRIES FLOATING BAR (COMPARISON COUNTRIES)///////////
+
+
+
 
       ////////////////////SEARCH//////////////////
 
@@ -1501,8 +1703,6 @@ $( document ).ready(function() {
 
             })
       };
-
-
 
       function light_up_search_continent(){
         var valueinput_continent = document.getElementById("myInput-continent").value;
@@ -1553,8 +1753,6 @@ $( document ).ready(function() {
         }
 
       };
-
-
 
       function autocomplete(inp, arr) {
 
@@ -1653,8 +1851,6 @@ $( document ).ready(function() {
           closeAllLists(e.target);
       });
       }
-
-
 
 });
 

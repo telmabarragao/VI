@@ -15,8 +15,8 @@ body{
   display: block;
   width: 100%;
   margin: 0%;
-  height: 80%;
-  top: 10%;
+  height: 90%;
+  top: 4%;
   left: 0%;
 }
 
@@ -385,4 +385,23 @@ body{
   background-image: -ms-linear-gradient(top, #4fc9ee, #3aa2d0);
   background-image: -o-linear-gradient(top, #4fc9ee, #3aa2d0);
   background-image: linear-gradient(top, #4fc9ee, #3aa2d0);
+}
+
+
+
+
+/********** TIMELINE ********/
+#onlyTimeline{
+  position: absolute;
+  display: block;
+  bottom: 0%;
+  margin-bottom: 0%;
+  width: 100%;
+  top: 80%;
+}
+
+/********** GRAPHS WORLD ********/
+#graphs{
+  position: relative;
+  display: block;
 }
