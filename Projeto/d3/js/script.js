@@ -98,6 +98,8 @@ $( document ).ready(function() {
           if(this.value == "week"){
                 if(variableToShow == "EcoFoot"){
                   appendTo = "#world_graph";
+                  $("#chart").remove();
+
                   continents_EcoFootGha();
 
                   document.getElementById('search_bar-continent').style.visibility = "visible";
@@ -110,6 +112,8 @@ $( document ).ready(function() {
 
                 }else{
                   appendTo = "#world_graph";
+                  $("#chart").remove();
+
                   continents_Biocapacity();
 
                   document.getElementById('search_bar-continent').style.visibility = "visible";
@@ -123,6 +127,8 @@ $( document ).ready(function() {
           }else{
               if(variableToShow == "EcoFoot"){
                   appendTo = "#countries_graph"
+                  $("#chart").remove();
+
                   countries_EcoFoot();
 
                   document.getElementById('search_bar-continent').style.visibility = "hidden";
@@ -135,6 +141,8 @@ $( document ).ready(function() {
 
               }else{
                   appendTo = "#countries_graph"
+                  $("#chart").remove();
+
                   countries_Biocapacity();
 
                   document.getElementById('search_bar-continent').style.visibility = "hidden";
