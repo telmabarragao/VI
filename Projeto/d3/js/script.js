@@ -114,7 +114,7 @@ $( document ).ready(function() {
                   appendTo = "#world_graph";
                   $("#chart").remove();
 
-                  continents_Biocapacity();
+                  continents_BiocapacityGha();
 
                   document.getElementById('search_bar-continent').style.visibility = "visible";
                   document.getElementById('search_bar').style.visibility = "hidden";
@@ -1508,11 +1508,11 @@ $( document ).ready(function() {
         var valueinput_continent = document.getElementById("myInput-continent").value;
 
         if(valueinput_continent=="north america" || valueinput_continent=="North america" || valueinput_continent=="north America" || valueinput_continent=="North America" || valueinput_continent=="south america" || valueinput_continent=="South america" || valueinput_continent=="south America" || valueinput_continent=="South America"){
-          var splitted = valueinput_continent.split(" ");
-          valueinput_continent = splitted[0].charAt(0).toUpperCase() + splitted[0].slice(1) + " " + splitted[1].charAt(0).toUpperCase() + splitted[1].slice(1);
+              var splitted = valueinput_continent.split(" ");
+              valueinput_continent = splitted[0].charAt(0).toUpperCase() + splitted[0].slice(1) + " " + splitted[1].charAt(0).toUpperCase() + splitted[1].slice(1);
 
         }else{
-          valueinput_continent = document.getElementById("myInput-continent").value.charAt(0).toUpperCase() + document.getElementById("myInput-continent").value.slice(1);
+              valueinput_continent = document.getElementById("myInput-continent").value.charAt(0).toUpperCase() + document.getElementById("myInput-continent").value.slice(1);
 
         }
 
@@ -1540,7 +1540,7 @@ $( document ).ready(function() {
                           }
                   }else if(variableToShow=="Biocapacity"){
                       var yeartoshow = "_"+yearTimeline+"";
-                      var value = valueinput_continent.properties.efgha[yeartoshow].total_biogha;
+                      var value = valueinput_continent.properties.biogha[yeartoshow].total_biogha;
 
                       if(value){
                         return ramp(minValColorContB,lowColorB, highColorB, "mouseB")
