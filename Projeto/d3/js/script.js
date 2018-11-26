@@ -234,7 +234,7 @@ $( document ).ready(function() {
           }else{
             $("#world_graph #chart").remove();
 
-            continents_Biocapacity();
+            continents_BiocapacityGha();
 
           }
         }
@@ -537,6 +537,7 @@ $( document ).ready(function() {
             d3.json("../data/ContinentsOutput.json").then(function(json){
 
               data = json.data;
+              console.log(data)
               var dataArray_efgha = new Array();
               var lastContinentViewed = data[0].country_name;
               var dataContYearsAsia = {};
