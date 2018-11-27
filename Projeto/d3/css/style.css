@@ -16,8 +16,9 @@ body{
   width: 100%;
   margin: 0%;
   height: 90%;
-  top: 4%;
+  top: 9%;
   left: 0%;
+  z-index: -1;
 }
 
 #continents_view{
@@ -63,6 +64,12 @@ body{
 }
 
 
+#chart{
+  position: relative;
+  display: block;
+  top:-50%;
+
+}
 
 
 

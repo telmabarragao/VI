@@ -259,8 +259,8 @@ $( document ).ready(function() {
 
       // define map projection      d3.geoNaturalEarth()
       var projection = d3.geoEquirectangular()
-                          .translate([w/2, h/2])
-                          .scale(w / 2 / Math.PI);
+                          .translate([w/2, h-70])
+                          .scale(w/2/Math.PI);
 
       //Define default path generator
       var path = d3.geoPath().projection(projection);
@@ -1290,8 +1290,6 @@ $( document ).ready(function() {
               .attr("transform", "translate(" + margin.left + "," + margin.top + ")");   //.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
-
-
           /* Data in strings like it would be if imported from a csv */
           var parse = d3.time.format("%Y").parse;
 
@@ -1349,8 +1347,50 @@ $( document ).ready(function() {
         .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); })
         .attr("width", x.rangeBand())
         .attr("id", function(d) { console.log(d.x); return d.x; })
-        .on("mouseover", function() { tooltip.style("display", null); })
-        .on("mouseout", function() { tooltip.style("display", "none"); })
+        .on("mouseover", function(d) {
+
+            tooltip.style("display", null);
+
+            var svg = d3.select("#continents_view #graphs").select("svg");
+
+            //Container for the gradients
+            var defs = svg.append("defs");
+
+            //Filter for the outside glow
+            var filter = defs.append("filter")
+                .attr("id","glow");
+            filter.append("feGaussianBlur")
+                .attr("stdDeviation","3.5")
+                .attr("result","coloredBlur");
+            var feMerge = filter.append("feMerge");
+            feMerge.append("feMergeNode")
+                .attr("in","coloredBlur");
+            feMerge.append("feMergeNode")
+                .attr("in","SourceGraphic");
+
+            d3.selectAll("rect[id=\'"+d.x+"\']")
+            .style("stroke", "#FFFFFF")
+            .style("stroke-width", "1px")
+            .style("filter", "url(#glow)");
+
+            highlightContinent("stackedBar",d.x);
+
+
+
+        })
+        .on("mouseout", function(d) {
+
+            tooltip.style("display", "none");
+
+            d3.selectAll("rect[id=\'"+d.x+"\']")
+            .style("stroke", "#333333")
+            .style("stroke-width", "0px")
+            .style("filter", "");
+
+            unhighlightContinent("stackedBar",d.x);
+
+
+        })
         .on("mousemove", function(d) {
           var xPosition = d3.mouse(this)[0] - 15;
           var yPosition = d3.mouse(this)[1] - 25;
@@ -1412,8 +1452,6 @@ $( document ).ready(function() {
       }
 
 
-
-
       //////////CONTINENTES SMALL FUNCTIONS///////////
 
       function continentsDataForYear(datageo, year){
@@ -1468,33 +1506,50 @@ $( document ).ready(function() {
 
       function highlightContinent(where, continent){
 
-        var svg = d3.select("#continents_view #graphs").select("svg");
-
-        //Container for the gradients
-        var defs = svg.append("defs");
-
-        //Filter for the outside glow
-        var filter = defs.append("filter")
-            .attr("id","glow");
-        filter.append("feGaussianBlur")
-            .attr("stdDeviation","3.5")
-            .attr("result","coloredBlur");
-        var feMerge = filter.append("feMerge");
-        feMerge.append("feMergeNode")
-            .attr("in","coloredBlur");
-        feMerge.append("feMergeNode")
-            .attr("in","SourceGraphic");
-
-
-
-
           if(where == "map"){
                 //highlight do resto
+
+                ///////////// HIGHLIGH STACKED BAR /////////////
+
+                var svg = d3.select("#continents_view #graphs").select("svg");
+
+                //Container for the gradients
+                var defs = svg.append("defs");
+
+                //Filter for the outside glow
+                var filter = defs.append("filter")
+                    .attr("id","glow");
+                filter.append("feGaussianBlur")
+                    .attr("stdDeviation","3.5")
+                    .attr("result","coloredBlur");
+                var feMerge = filter.append("feMerge");
+                feMerge.append("feMergeNode")
+                    .attr("in","coloredBlur");
+                feMerge.append("feMergeNode")
+                    .attr("in","SourceGraphic");
 
                 d3.selectAll("rect[id=\'"+continent+"\']")
                 .style("stroke", "#FFFFFF")
                 .style("stroke-width", "1px")
                 .style("filter", "url(#glow)");
+
+          }else if(where=="stackedBar"){
+
+            ///////////// HIGHLIGH MAP /////////////
+
+
+            d3.selectAll("path[title=\'"+continent+"\']")
+              .style("fill", function(d){
+                    var yeartoshow = "_"+yearTimeline+"";
+                    var value = d.properties.efgha[yeartoshow].total_efgha;
+
+                    if(value){
+                        return ramp(minValColorContFT,lowColorEF, highColorEF, "mouseEF")
+                    } else {
+                        return "#bfbfbf"
+                    }
+              });
+
           }
 
       }
@@ -1507,6 +1562,21 @@ $( document ).ready(function() {
                   .style("stroke", "#333333")
                   .style("stroke-width", "0px")
                   .style("filter", "");
+
+            }else if(where=="stackedBar"){
+
+              d3.selectAll("path[title=\'"+continent+"\']")
+                .style("fill", function(d){
+                          var yeartoshow = "_"+yearTimeline+"";
+                          var value = d.properties.efgha[yeartoshow].total_efgha;
+
+                            if(value){
+                              return ramp(minValColorContFT,lowColorEF, highColorEF, value)
+                            } else {
+                              return "#bfbfbf"
+                            }
+                });
+
             }
 
       }
