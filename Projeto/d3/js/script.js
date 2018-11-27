@@ -4,6 +4,7 @@ $( document ).ready(function() {
       var yearTimeline = 2014;
       var variableToShow = "EcoFoot";
       var appendTo = "#world_graph";
+      var lastContinentSearched = "";
       var countries_list = [];
       var continents_list = [];
       var minValColorCouFT, maxValColorCouFT;
@@ -1328,7 +1329,7 @@ $( document ).ready(function() {
                       .scale(y)
                       .ticks(6)
                       .tickSize(-width, 0, 0)
-                      .tickFormat( function(d) { return d/1000000000+ ".000 M" } );
+                      .tickFormat( function(d) { return d/1000000000+ "000 M" } );
 
         var xAxis = d3.axisBottom()
                       .scale(x);
@@ -1407,7 +1408,8 @@ $( document ).ready(function() {
           var xPosition = d3.mouse(this)[0] - 15;
           var yPosition = d3.mouse(this)[1] - 25;
           tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-          tooltip.select("text").text(d.y);
+          var value = round(d.y/1000000, 6);
+          tooltip.select("text").text(value + " M");
         });
 
 
@@ -1606,13 +1608,37 @@ $( document ).ready(function() {
                     }
               });
 
+          }else if(where=="search"){
+              ///////////// HIGHLIGH STACKED BAR /////////////
+
+              var svg = d3.select("#continents_view #graphs").select("svg");
+
+              //Container for the gradients
+              var defs = svg.append("defs");
+
+              //Filter for the outside glow
+              var filter = defs.append("filter")
+                  .attr("id","glow");
+              filter.append("feGaussianBlur")
+                  .attr("stdDeviation","3.5")
+                  .attr("result","coloredBlur");
+              var feMerge = filter.append("feMerge");
+              feMerge.append("feMergeNode")
+                  .attr("in","coloredBlur");
+              feMerge.append("feMergeNode")
+                  .attr("in","SourceGraphic");
+
+              d3.selectAll("rect[id=\'"+continent+"\']")
+              .style("stroke", "#FFFFFF")
+              .style("stroke-width", "1px")
+              .style("filter", "url(#glow)");
           }
 
       }
 
       function unhighlightContinent(where, continent){
             if(where == "map"){
-                  //highlight do resto
+                  //unhighlight do resto
 
                   d3.selectAll("rect[id=\'"+continent+"\']")
                   .style("stroke", "#333333")
@@ -1633,7 +1659,29 @@ $( document ).ready(function() {
                             }
                 });
 
+
+            }else if(where=="search"){
+
+
+                  d3.selectAll("rect[id=\'"+continent+"\']")
+                  .style("stroke", "#333333")
+                  .style("stroke-width", "0px")
+                  .style("filter", "");
+
+                  d3.selectAll("path[title=\'"+continent+"\']")
+                    .style("fill", function(d){
+                              var yeartoshow = "_"+yearTimeline+"";
+                              var value = d.properties.efgha[yeartoshow].total_efgha;
+
+                                if(value){
+                                  return ramp(minValColorContFT,lowColorEF, highColorEF, value)
+                                } else {
+                                  return "#bfbfbf"
+                                }
+                    });
+
             }
+
 
       }
 
@@ -2176,37 +2224,71 @@ $( document ).ready(function() {
         var tryout_continent = document.getElementById(valueinput_continent);
         var continent_to_light = d3.selectAll("path[title=\'"+valueinput_continent+"\']");
 
-        console.log(continent_to_light)
-
         if(continent_to_light=="Antarctica"){
           return "#bfbfbf"
 
 
         }else{
 
-              continent_to_light.style("fill", function(valueinput_continent){
+              if(lastContinentSearched == valueinput_continent){
+                highlightContinent("search", valueinput_continent );
 
-                  if(variableToShow=="EcoFoot"){
+                continent_to_light.style("fill", function(valueinput_continent){
+
+                    if(variableToShow=="EcoFoot"){
+                          var yeartoshow = "_"+yearTimeline+"";
+                          var value = valueinput_continent.properties.efgha[yeartoshow].total_efgha;
+
+                          if(value){
+                              return ramp(minValColorContFT,lowColorEF, highColorEF, "mouseEF")
+                            } else {
+                              return "#bfbfbf"
+                            }
+                    }else if(variableToShow=="Biocapacity"){
                         var yeartoshow = "_"+yearTimeline+"";
-                        var value = valueinput_continent.properties.efgha[yeartoshow].total_efgha;
+                        var value = valueinput_continent.properties.biogha[yeartoshow].total_biogha;
 
                         if(value){
-                            return ramp(minValColorContFT,lowColorEF, highColorEF, "mouseEF")
-                          } else {
-                            return "#bfbfbf"
-                          }
-                  }else if(variableToShow=="Biocapacity"){
-                      var yeartoshow = "_"+yearTimeline+"";
-                      var value = valueinput_continent.properties.biogha[yeartoshow].total_biogha;
+                          return ramp(minValColorContB,lowColorB, highColorB, "mouseB")
+                        } else {
+                          return "#bfbfbf"
+                        }
+                    }
 
-                      if(value){
-                        return ramp(minValColorContB,lowColorB, highColorB, "mouseB")
-                      } else {
-                        return "#bfbfbf"
-                      }
-                  }
+                })
 
-              })
+              }else{
+
+                highlightContinent("search", valueinput_continent);
+                unhighlightContinent("search", lastContinentSearched);
+
+                continent_to_light.style("fill", function(valueinput_continent){
+
+                    if(variableToShow=="EcoFoot"){
+                          var yeartoshow = "_"+yearTimeline+"";
+                          var value = valueinput_continent.properties.efgha[yeartoshow].total_efgha;
+
+                          if(value){
+                              return ramp(minValColorContFT,lowColorEF, highColorEF, "mouseEF")
+                            } else {
+                              return "#bfbfbf"
+                            }
+                    }else if(variableToShow=="Biocapacity"){
+                        var yeartoshow = "_"+yearTimeline+"";
+                        var value = valueinput_continent.properties.biogha[yeartoshow].total_biogha;
+
+                        if(value){
+                          return ramp(minValColorContB,lowColorB, highColorB, "mouseB")
+                        } else {
+                          return "#bfbfbf"
+                        }
+                    }
+
+                })
+
+              }
+
+              lastContinentSearched = valueinput_continent;
         }
 
       };
@@ -2314,4 +2396,11 @@ $( document ).ready(function() {
 
 function myFunction() {
     return false;
+}
+
+
+function round(value, precision){
+
+    var multiplier = Math.pow(10, precision || 0);
+    return Math.round(value*multiplier)/multiplier;
 }
