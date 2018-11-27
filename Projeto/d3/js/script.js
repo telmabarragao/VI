@@ -230,9 +230,12 @@ $( document ).ready(function() {
 
           if(variableToShow=="EcoFoot"){
             $("#world_graph #chart").remove();
+            $("#graphs #stackBarChartCont").remove();
+
             continents_EcoFootGha();
           }else{
             $("#world_graph #chart").remove();
+            $("#graphs #stackBarChartCont").remove();
 
             continents_BiocapacityGha();
 
@@ -249,8 +252,8 @@ $( document ).ready(function() {
       var w = 600;
       var h = 450;
 
-      var highColorEF = '#00751b'
-      var lowColorEF = '#e4e4e4'
+      var highColorEF = '#497740'
+      var lowColorEF = '#B4AC95'
       var highColorB = '#994d00'
       var lowColorB = '#fff2e6'
 
@@ -414,6 +417,8 @@ $( document ).ready(function() {
                   minValColorContFT = d3.min(dataArray_efgha)
                   maxValColorContFT = d3.max(dataArray_efgha)
 
+                  stackedBarChartContinent(continentsDataForYear(datageo, yearTimeline), yearTimeline);
+
                   svg.selectAll("path")
                     .data(datageo.features)
                     .enter()
@@ -442,8 +447,9 @@ $( document ).ready(function() {
                     .on("mouseover", function(d){
 
                         var mouse = d3.mouse(this);
-                        console.log(d.properties.CONTINENT)
                         var countryMouseOver = d.properties.CONTINENT.replace(/\s/g, "_");
+
+                        highlightContinent("map",d.properties.CONTINENT);
 
                         d3.selectAll("path[title=\'"+d.properties.CONTINENT+"\']")
                           .style("fill", function(d){
@@ -485,6 +491,7 @@ $( document ).ready(function() {
 
                       })
                       .on("mouseout", function(d){
+
                           d3.selectAll("path[title=\'"+d.properties.CONTINENT+"\']")
                             .style("fill", function(d){
                                       var yeartoshow = "_"+yearTimeline+"";
@@ -674,8 +681,6 @@ $( document ).ready(function() {
                   maxValColorContFT = d3.max(dataArray_efgha)
 
 
-
-
                   stackedBarChartContinent(continentsDataForYear(datageo, yearTimeline), yearTimeline);
 
                   svg.selectAll("path")
@@ -708,6 +713,8 @@ $( document ).ready(function() {
                         var mouse = d3.mouse(this);
                         console.log(d.properties.CONTINENT)
                         var countryMouseOver = d.properties.CONTINENT.replace(/\s/g, "_");
+
+                        highlightContinent("map",d.properties.CONTINENT);
 
                         d3.selectAll("path[title=\'"+d.properties.CONTINENT+"\']")
                           .style("fill", function(d){
@@ -748,7 +755,10 @@ $( document ).ready(function() {
 
 
                       })
-                      .on("mouseout", function(d){
+                    .on("mouseout", function(d){
+
+                          unhighlightContinent("map", d.properties.CONTINENT);
+
                           d3.selectAll("path[title=\'"+d.properties.CONTINENT+"\']")
                             .style("fill", function(d){
                                       var yeartoshow = "_"+yearTimeline+"";
@@ -773,11 +783,11 @@ $( document ).ready(function() {
                             }
 
                       })
-                      .on("click", function(d){
+                    .on("click", function(d){
 
                           //stackedAreaChartContinent(d.properties);
 
-                      });
+                    });
 
               });
 
@@ -1288,7 +1298,6 @@ $( document ).ready(function() {
           // Transpose the data into layers
           var dataset = d3.layout.stack()(["Built Up Land", "Carbon", "Cropland", "Fishing Ground", "Forest Land", "Grazing Land"].map(function(landtype) {
             return dataToShow.map(function(d) {
-              console.log(d.Continent)
               return {x: d.Continent, y: +d[landtype]};
             });
           }));
@@ -1304,13 +1313,12 @@ $( document ).ready(function() {
 
           var colors = ["#9C8443", "#686736", "#CDBE90", "#8C9A86", "#C1A95E", "#845E36"];
 
-
         // Define and draw axes
         var yAxis = d3.axisLeft()
                       .scale(y)
                       .ticks(6)
                       .tickSize(-width, 0, 0)
-                      .tickFormat( function(d) { return d } );
+                      .tickFormat( function(d) { return d/1000000000+ ".000 M" } );
 
         var xAxis = d3.axisBottom()
                       .scale(x);
@@ -1340,6 +1348,7 @@ $( document ).ready(function() {
         .attr("y", function(d) { return y(d.y0 + d.y); })
         .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); })
         .attr("width", x.rangeBand())
+        .attr("id", function(d) { console.log(d.x); return d.x; })
         .on("mouseover", function() { tooltip.style("display", null); })
         .on("mouseout", function() { tooltip.style("display", "none"); })
         .on("mousemove", function(d) {
@@ -1403,6 +1412,10 @@ $( document ).ready(function() {
       }
 
 
+
+
+      //////////CONTINENTES SMALL FUNCTIONS///////////
+
       function continentsDataForYear(datageo, year){
 
             var dataToShow = new Array();
@@ -1452,6 +1465,53 @@ $( document ).ready(function() {
             return dataToShow;
 
       }
+
+      function highlightContinent(where, continent){
+
+        var svg = d3.select("#continents_view #graphs").select("svg");
+
+        //Container for the gradients
+        var defs = svg.append("defs");
+
+        //Filter for the outside glow
+        var filter = defs.append("filter")
+            .attr("id","glow");
+        filter.append("feGaussianBlur")
+            .attr("stdDeviation","3.5")
+            .attr("result","coloredBlur");
+        var feMerge = filter.append("feMerge");
+        feMerge.append("feMergeNode")
+            .attr("in","coloredBlur");
+        feMerge.append("feMergeNode")
+            .attr("in","SourceGraphic");
+
+
+
+
+          if(where == "map"){
+                //highlight do resto
+
+                d3.selectAll("rect[id=\'"+continent+"\']")
+                .style("stroke", "#FFFFFF")
+                .style("stroke-width", "1px")
+                .style("filter", "url(#glow)");
+          }
+
+      }
+
+      function unhighlightContinent(where, continent){
+            if(where == "map"){
+                  //highlight do resto
+
+                  d3.selectAll("rect[id=\'"+continent+"\']")
+                  .style("stroke", "#333333")
+                  .style("stroke-width", "0px")
+                  .style("filter", "");
+            }
+
+      }
+
+
 
       ////////////////////COUNTRIES FUNCTIONS//////////////////
 
