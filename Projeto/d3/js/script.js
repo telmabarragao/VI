@@ -1329,19 +1329,26 @@ $( document ).ready(function() {
                       .scale(y)
                       .ticks(6)
                       .tickSize(-width, 0, 0)
-                      .tickFormat( function(d) { return d/1000000000+ "000 M" } );
+                      .tickFormat( function(d) { return d/1000000+ " M" } );
 
         var xAxis = d3.axisBottom()
                       .scale(x);
 
         svg.append("g")
           .attr("class", "y axis")
-          .call(yAxis);
+          .call(yAxis)
+          .selectAll("ticks")
+            .attr("y", 20)
+            .attr("x", 20);
 
         svg.append("g")
           .attr("class", "x axis")
           .attr("transform", "translate(0," + height + ")")
-          .call(xAxis);
+          .call(xAxis)
+          .selectAll("text")
+            .attr("y", 6)
+            .attr("x", 20)
+            .style("text-anchor", "start");
 
 
       // Create groups for each series, rects for each segment
