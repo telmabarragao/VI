@@ -1315,7 +1315,9 @@ $( document ).ready(function() {
 
           // Set x, y and colors
           var x = d3.scale.ordinal()
-            .domain(dataset[0].map(function(d) { return d.x; }))
+            .domain(dataset[0].map(function(d) {
+                return d.x;
+            }))
             .rangeRoundBands([10, width-10], 0.02);
 
           var y = d3.scale.linear()
@@ -1336,10 +1338,7 @@ $( document ).ready(function() {
 
         svg.append("g")
           .attr("class", "y axis")
-          .call(yAxis)
-          .selectAll("ticks")
-            .attr("y", 20)
-            .attr("x", 20);
+          .call(yAxis);
 
         svg.append("g")
           .attr("class", "x axis")
@@ -1348,7 +1347,20 @@ $( document ).ready(function() {
           .selectAll("text")
             .attr("y", 6)
             .attr("x", 20)
-            .style("text-anchor", "start");
+            .style("text-anchor", "start")
+            .text(function(d){
+
+                  var splitted = d.split(" ");
+                  console.log(d)
+                  if(splitted.length == 2){
+
+                    var stringss = ""+splitted[0]+"\n"+splitted[1]+"";
+                    return d;
+                  }else{
+                    return d;
+
+                  }
+            });
 
 
       // Create groups for each series, rects for each segment
