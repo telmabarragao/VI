@@ -22,7 +22,7 @@ $( document ).ready(function() {
                   var colorup = d3.scaleLinear().domain([minVal,11000000000]).range([lowColor, highColor]);
 
                   if(value == "mouseEF"){
-                    return "#004d12";
+                    return "#315631";
 
                   }else if(value == "mouseB"){
 
@@ -39,7 +39,7 @@ $( document ).ready(function() {
               var colorup = d3.scaleLinear().domain([minVal,3400000000]).range([lowColor, highColor]);
 
               if(value == "mouseEF"){
-                return "#004d12";
+                return "#315631";
 
               }else if(value == "mouseB"){
 
@@ -98,7 +98,9 @@ $( document ).ready(function() {
           if(this.value == "week"){
                 if(variableToShow == "EcoFoot"){
                   appendTo = "#world_graph";
-                  $("#chart").remove();
+
+                  $("#world_graph #chart").remove();
+                  $("#graphs #stackBarChartCont").remove();
 
                   continents_EcoFootGha();
 
@@ -112,7 +114,8 @@ $( document ).ready(function() {
 
                 }else{
                   appendTo = "#world_graph";
-                  $("#chart").remove();
+                  $("#world_graph #chart").remove();
+                  $("#graphs #stackBarChartCont").remove();
 
                   continents_BiocapacityGha();
 
@@ -163,7 +166,8 @@ $( document ).ready(function() {
 
                   if(document.getElementById("chart").length != 0){
 
-                    document.getElementById("chart").remove();
+                    $("#chart").remove();
+                    $("#stackBarChartCont").remove();
                     countries_EcoFoot();
                   }else{
                     countries_EcoFoot();
@@ -175,7 +179,8 @@ $( document ).ready(function() {
                   variableToShow = "Biocapacity";
 
                   if(document.getElementById("chart").length != 0){
-                    document.getElementById("chart").remove();
+                    $("#chart").remove();
+                    $("#stackBarChartCont").remove();
                     countries_Biocapacity();
                   }else{
                     countries_Biocapacity();
@@ -186,7 +191,8 @@ $( document ).ready(function() {
           }else if(this.value == "montheb"  && appendTo == "#world_graph"){
             variableToShow = "Biocapacity";
             if(document.getElementById("chart").length != 0){
-              document.getElementById("chart").remove();
+              $("#chart").remove();
+              $("#stackBarChartCont").remove();
               continents_BiocapacityGha();
             }else{
               continents_BiocapacityGha();
@@ -196,7 +202,8 @@ $( document ).ready(function() {
           }else if(this.value == "weekeb"  && appendTo == "#world_graph"){
             variableToShow = "EcoFoot";
             if(document.getElementById("chart").length != 0){
-              document.getElementById("chart").remove();
+              $("#chart").remove();
+              $("#stackBarChartCont").remove();
               continents_EcoFootGha();
             }else{
               continents_EcoFootGha();
@@ -252,8 +259,8 @@ $( document ).ready(function() {
       var w = 600;
       var h = 450;
 
-      var highColorEF = '#497740'
-      var lowColorEF = '#B4AC95'
+      var highColorEF = '#607744'
+      var lowColorEF = '#DFF4C6'
       var highColorB = '#994d00'
       var lowColorB = '#fff2e6'
 
@@ -492,6 +499,9 @@ $( document ).ready(function() {
                       })
                       .on("mouseout", function(d){
 
+                          unhighlightContinent("map",d.properties.CONTINENT);
+
+
                           d3.selectAll("path[title=\'"+d.properties.CONTINENT+"\']")
                             .style("fill", function(d){
                                       var yeartoshow = "_"+yearTimeline+"";
@@ -680,7 +690,6 @@ $( document ).ready(function() {
                   minValColorContFT = d3.min(dataArray_efgha)
                   maxValColorContFT = d3.max(dataArray_efgha)
 
-
                   stackedBarChartContinent(continentsDataForYear(datageo, yearTimeline), yearTimeline);
 
                   svg.selectAll("path")
@@ -722,8 +731,6 @@ $( document ).ready(function() {
                                       var yeartoshow = "_"+yearTimeline+"";
                                       var value = d.properties.efgha[yeartoshow].total_efgha;
 
-                                      console.log(yeartoshow)
-
                                       if(value){
                                         return ramp(minValColorContFT,lowColorEF, highColorEF, "mouseEF")
                                       } else {
@@ -740,7 +747,6 @@ $( document ).ready(function() {
                                   .append("div")
                                   .attr("id", function(){
                                       lastCountryOn = countryMouseOver;
-                                      console.log()
                                       return lastCountryOn+"mover";
 
                                   })
@@ -763,8 +769,6 @@ $( document ).ready(function() {
                             .style("fill", function(d){
                                       var yeartoshow = "_"+yearTimeline+"";
                                       var value = d.properties.efgha[yeartoshow].total_efgha;
-
-                                      console.log(yeartoshow)
 
                                         if(value){
                                           return ramp(minValColorContFT,lowColorEF, highColorEF, value)
@@ -949,6 +953,9 @@ $( document ).ready(function() {
                   minValColorContB = d3.min(dataArray_biogha)
                   maxValColorContB = d3.max(dataArray_biogha)
 
+                  stackedBarChartContinent(continentsDataForYear(datageo, yearTimeline), yearTimeline);
+
+
                   svg.selectAll("path")
                     .data(datageo.features)
                     .enter()
@@ -985,6 +992,8 @@ $( document ).ready(function() {
                         var mouse = d3.mouse(this);
                         console.log(d.properties.CONTINENT)
                         var countryMouseOver = d.properties.CONTINENT.replace(/\s/g, "_");
+
+                        highlightContinent("map",d.properties.CONTINENT);
 
                         d3.selectAll("path[title=\'"+d.properties.CONTINENT+"\']")
                           .style("fill", function(d){
@@ -1024,6 +1033,9 @@ $( document ).ready(function() {
 
                       })
                       .on("mouseout", function(d){
+
+                          unhighlightContinent("map",d.properties.CONTINENT);
+
                           d3.selectAll("path[title=\'"+d.properties.CONTINENT+"\']")
                             .style("fill", function(d){
                                       var yeartoshow = "_"+yearTimeline+"";
@@ -1460,46 +1472,90 @@ $( document ).ready(function() {
 
             var conts = datageo.features;
 
-            console.log(conts)
+            if(variableToShow=="Biocapacity"){
 
-            for(cont in conts){
+              for(cont in conts){
 
-                if(conts[cont].properties.CONTINENT == "Antarctica"){
+                  if(conts[cont].properties.CONTINENT == "Antarctica"){
 
+                  }else{
+                    var rightOne = conts[cont].properties.biogha["_"+year];
 
-                }else{
-                  var rightOne = conts[cont].properties.efgha["_"+year];
+                    var valores = {};
 
-                  var valores = {};
+                    theYear = rightOne;
 
-                  theYear = rightOne;
+                    for(valor in theYear){
 
-                  for(valor in theYear){
+                      if(valor=="built_up_land_biogha"){
+                        valores["Built Up Land"] = theYear[valor];
+                      }else if(valor == "carbon_biogha"){
+                        valores["Carbon"] = theYear[valor];
+                      }else if(valor == "continent_name"){
+                        valores["Continent"] = theYear[valor];
+                      }else if(valor == "cropland_biogha"){
+                        valores["Cropland"] = theYear[valor];
+                      }else if(valor == "fishing_grounds_biogha"){
+                        valores["Fishing Ground"] = theYear[valor];
+                      }else if(valor == "forest_products_biogha"){
+                        valores["Forest Land"] = theYear[valor];
+                      }else if(valor == "grazing_land_biogha"){
+                        valores["Grazing Land"] = theYear[valor];
+                      }
 
-                    if(valor=="built_up_land_efgha"){
-                      valores["Built Up Land"] = theYear[valor];
-                    }else if(valor == "carbon_efgha"){
-                      valores["Carbon"] = theYear[valor];
-                    }else if(valor == "continent_name"){
-                      valores["Continent"] = theYear[valor];
-                    }else if(valor == "cropland_efgha"){
-                      valores["Cropland"] = theYear[valor];
-                    }else if(valor == "fishing_grounds_efgha"){
-                      valores["Fishing Ground"] = theYear[valor];
-                    }else if(valor == "forest_products_efgha"){
-                      valores["Forest Land"] = theYear[valor];
-                    }else if(valor == "grazing_land_efgha"){
-                      valores["Grazing Land"] = theYear[valor];
                     }
+
+                    dataToShow.push(valores);
 
                   }
 
-                  dataToShow.push(valores);
 
-                }
+              }
 
+            }else{
+
+
+              for(cont in conts){
+
+                  if(conts[cont].properties.CONTINENT == "Antarctica"){
+
+                  }else{
+                    var rightOne = conts[cont].properties.efgha["_"+year];
+
+                    var valores = {};
+
+                    theYear = rightOne;
+
+                    for(valor in theYear){
+
+                      if(valor=="built_up_land_efgha"){
+                        valores["Built Up Land"] = theYear[valor];
+                      }else if(valor == "carbon_efgha"){
+                        valores["Carbon"] = theYear[valor];
+                      }else if(valor == "continent_name"){
+                        valores["Continent"] = theYear[valor];
+                      }else if(valor == "cropland_efgha"){
+                        valores["Cropland"] = theYear[valor];
+                      }else if(valor == "fishing_grounds_efgha"){
+                        valores["Fishing Ground"] = theYear[valor];
+                      }else if(valor == "forest_products_efgha"){
+                        valores["Forest Land"] = theYear[valor];
+                      }else if(valor == "grazing_land_efgha"){
+                        valores["Grazing Land"] = theYear[valor];
+                      }
+
+                    }
+
+                    dataToShow.push(valores);
+
+                  }
+
+
+              }
 
             }
+
+
             return dataToShow;
 
       }
@@ -1591,8 +1647,8 @@ $( document ).ready(function() {
         var svg = d3.select("#countries_graph")
           .append("svg")
           .attr("id", "chart")
-          .attr("width", w)
-          .attr("height", h)
+          .attr("width", 600)
+          .attr("height", 480)
           .attr("tranform", "translate(" + 0 + "," + 0 + ")");
 
 
@@ -1798,8 +1854,8 @@ $( document ).ready(function() {
               var svg = d3.select("#countries_graph")
                 .append("svg")
                 .attr("id", "chart")
-                .attr("width", w)
-                .attr("height", h);
+                .attr("width", 600)
+                .attr("height", 480);
 
               d3.json("../data/CountryOutput.json").then(function(json){
 
