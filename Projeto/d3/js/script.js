@@ -11,7 +11,21 @@ $( document ).ready(function() {
       var minValColorCouB, maxValColorCouB;
       var minValColorContFT, maxValColorContFT;
       var minValColorContB, maxValColorContB;
+      var measureToSee ="gha";
 
+
+      $("#selectEarthsGha").on("change", function(){
+        measureToSee = document.getElementById("selectEarthsGha").value;
+        $("#chart").remove();
+        $("#stackBarChartCont").remove();
+        if(measureToSee=="gha"){
+          continents_EcoFootGha();
+
+        }else if(measureToSee == "earths"){
+          continents_EcoFootEarths();
+
+        }
+      });
 
       function ramp(minVal, lowColor, highColor, value){
 
@@ -20,19 +34,35 @@ $( document ).ready(function() {
 
             if(variableToShow=="EcoFoot"){
 
-                  var colorup = d3.scaleLinear().domain([minVal,11000000000]).range([lowColor, highColor]);
+              if(measureToSee=="earths"){
+                var colorup = d3.scaleLinear().domain([minVal,6]).range([lowColor, highColor]);
 
-                  if(value == "mouseEF"){
-                    return "#315631";
+                if(value == "mouseEF"){
+                  return "#315631";
 
-                  }else if(value == "mouseB"){
+                }else if(value == "mouseB"){
 
-                    return "#663300";
+                  return "#663300";
 
-                  }else{
-                    return colorup(value);
+                }else{
+                  return colorup(value);
 
-                  }
+                }
+              }else{
+                var colorup = d3.scaleLinear().domain([minVal,11000000000]).range([lowColor, highColor]);
+
+                if(value == "mouseEF"){
+                  return "#315631";
+
+                }else if(value == "mouseB"){
+
+                  return "#663300";
+
+                }else{
+                  return colorup(value);
+
+                }
+              }
 
 
             }else{
@@ -102,8 +132,15 @@ $( document ).ready(function() {
 
                   $("#world_graph #chart").remove();
                   $("#graphs #stackBarChartCont").remove();
+                  document.getElementById("selectMeasure").style.visibility="visible";
 
-                  continents_EcoFootGha();
+                  if(measureToSee=="gha"){
+                    continents_EcoFootGha();
+
+                  }else if(measureToSee == "earths"){
+                    continents_EcoFootEarths();
+
+                  }
 
                   document.getElementById('search_bar-continent').style.visibility = "visible";
                   document.getElementById('search_bar').style.visibility = "hidden";
@@ -118,6 +155,9 @@ $( document ).ready(function() {
                   $("#world_graph #chart").remove();
                   $("#graphs #stackBarChartCont").remove();
 
+                  document.getElementById("selectEarthsGha").value = "gha";
+                  measureToSee="gha";
+                  document.getElementById("selectMeasure").style.visibility="hidden";
                   continents_BiocapacityGha();
 
                   document.getElementById('search_bar-continent').style.visibility = "visible";
@@ -194,8 +234,14 @@ $( document ).ready(function() {
             if(document.getElementById("chart").length != 0){
               $("#chart").remove();
               $("#stackBarChartCont").remove();
+              document.getElementById("selectEarthsGha").value = "gha";
+              measureToSee="gha";
+              document.getElementById("selectMeasure").style.visibility="hidden";
               continents_BiocapacityGha();
             }else{
+              document.getElementById("selectEarthsGha").value = "gha";
+              measureToSee="gha";
+              document.getElementById("selectMeasure").style.visibility="hidden";
               continents_BiocapacityGha();
 
             }
@@ -205,10 +251,27 @@ $( document ).ready(function() {
             if(document.getElementById("chart").length != 0){
               $("#chart").remove();
               $("#stackBarChartCont").remove();
-              continents_EcoFootGha();
-            }else{
-              continents_EcoFootGha();
+              document.getElementById("selectMeasure").style.visibility="visible";
 
+              if(measureToSee=="gha"){
+
+                continents_EcoFootGha();
+
+              }else if(measureToSee == "earths"){
+                continents_EcoFootEarths();
+
+              }
+            }else{
+              $("#stackBarChartCont").remove();
+              document.getElementById("selectMeasure").style.visibility="visible";
+
+              if(measureToSee=="gha"){
+                continents_EcoFootGha();
+
+              }else if(measureToSee == "earths"){
+                continents_EcoFootEarths();
+
+              }
             }
 
           }
@@ -240,7 +303,13 @@ $( document ).ready(function() {
             $("#world_graph #chart").remove();
             $("#graphs #stackBarChartCont").remove();
 
-            continents_EcoFootGha();
+            if(measureToSee=="earths"){
+              continents_EcoFootEarths();
+
+            }else{
+              continents_EcoFootGha();
+
+            }
           }else{
             $("#world_graph #chart").remove();
             $("#graphs #stackBarChartCont").remove();
@@ -258,7 +327,7 @@ $( document ).ready(function() {
 
       //Width and height
       var w = 600;
-      var h = 450;
+      var h = 100;
 
       var highColorEF = '#607744'
       var lowColorEF = '#DFF4C6'
@@ -267,7 +336,7 @@ $( document ).ready(function() {
 
       // define map projection      d3.geoNaturalEarth()
       var projection = d3.geoEquirectangular()
-                          .translate([w/2, h-70])
+                          .translate([w/2, h+60])
                           .scale(w/2/Math.PI);
 
       //Define default path generator
@@ -280,271 +349,277 @@ $( document ).ready(function() {
       //////////CONTINENTS MAP///////////
 
       function continents_EcoFootEarths(){
-            var svg = d3.select("#world_graph")
-              .append("svg")
-              .attr("id", "chart")
-              .attr("width", 600)
-              .attr("height", 480)
-              .attr("tranform", "translate(" + 0 + "," + 0 + ")");
+        console.log("E FOOT PRINT EARTHS")
+        var svg = d3.select("#world_graph")
+          .append("svg")
+          .attr("id", "chart")
+          .attr("width", 600)
+          .attr("height", 480)
+          .attr("tranform", "translate(" + 0 + "," + 0 + ")");
+
+        var div = d3.select("body").append("div")
+              .attr("class", "tooltip")
+              .style("opacity", 0);
+
+        d3.json("../data/ContinentsOutput.json").then(function(json){
+
+          data = json.data;
+          var dataArray_efearths = new Array();
+          var lastContinentViewed = data[0].country_name;
+          var dataContYearsAsia = {};
+          var dataContYearsAfrica = {};
+          var dataContYearsEurope = {};
+          var dataContYearsNorthAmerica = {};
+          var dataContYearsSouthAmerica = {};
+          var dataContYearsOceania = {};
+
+          var allEmpty = {};
+
+          d3.json("../data/continents.json").then(function(geojson){
+
+              datageo = geojson;
+              var lastjsonState = datageo.features[0].properties.CONTINENT;
+
+              for(var n = 0; n < datageo.features.length; n++){
+
+                  var jsonState = datageo.features[n].properties.CONTINENT;
 
 
-            d3.json("../data/ContinentsOutput.json").then(function(json){
+                  for(var i = 0; i < data.length; i++){
 
-              data = json.data;
-              var dataArray_efgha = new Array();
-              var lastContinentViewed = data[0].country_name;
-              var dataContYearsAsia = {};
-              var dataContYearsAfrica = {};
-              var dataContYearsEurope = {};
-              var dataContYearsNorthAmerica = {};
-              var dataContYearsSouthAmerica = {};
-              var dataContYearsOceania = {};
-
-              var allEmpty = {};
-
-              d3.json("../data/continents.json").then(function(geojson){
-
-                  datageo = geojson;
-                  var lastjsonState = datageo.features[0].properties.CONTINENT;
+                        var dataContinent = data[i].country_name;
+                        var dataYear = {};
+                        var dataRecord = data[i].Record;
 
 
-                  for(var n = 0; n < datageo.features.length; n++){
-
-                      var jsonState = datageo.features[n].properties.CONTINENT;
-
-
-                      for(var i = 0; i < data.length; i++){
-
-                            var dataContinent = data[i].country_name;
-                            var dataYear = {};
-                            var dataRecord = data[i].Record;
+                        if(dataContinent == "Central America"){
+                          data[i].country_name = "North America";
+                          dataContinent = data[i].country_name;
+                        }
 
 
-                            if(dataContinent == "Central America"){
-                              data[i].country_name = "North America";
-                              dataContinent = data[i].country_name;
-                            }
+                        if(continents_list.indexOf(dataContinent) == -1){
+                          continents_list.push(dataContinent);
+                        }
 
 
-                            if(continents_list.indexOf(dataContinent) == -1){
-                              continents_list.push(dataContinent);
-                            }
+                        if(lastContinentViewed.replace(" ", "") != dataContinent.replace(" ", "") && lastContinentViewed.replace(" ", "") == lastjsonState.replace(" ", "")){
+
+                              if(lastjsonState == "North America"){
+                                  datageo.features[1].properties.efearths = dataContYearsNorthAmerica;
+                              }else if(lastjsonState == "South America"){
+                                  datageo.features[4].properties.efearths = dataContYearsSouthAmerica;
+                              }else if(lastjsonState == "Asia"){
+                                  datageo.features[0].properties.efearths = dataContYearsAsia;
+                              }else if(lastjsonState == "Europe"){
+                                  datageo.features[2].properties.efearths = dataContYearsEurope;
+                              }else if(lastjsonState == "Africa"){
+                                  datageo.features[3].properties.efearths = dataContYearsAfrica;
+                              }else if(lastjsonState == "Oceania"){
+                                  datageo.features[5].properties.efearths = dataContYearsOceania;
+                                  datageo.features[6].properties.efearths = dataContYearsOceania;
+                                  datageo.features[6].properties.CONTINENT = "Oceania";
+                              }
+                                //faz push e update do continent
+                                lastContinentViewed = dataContinent;
+
+                                dataYear = allEmpty;
+                                dataYear = {};
+
+                                console.log(datageo);
+
+                        }
+
+                        if(dataContinent.replace(" ", "") == jsonState.replace(" ", "") && dataRecord == "Earths"){
 
 
-                            if(lastContinentViewed.replace(" ", "") != dataContinent.replace(" ", "") && lastContinentViewed.replace(" ", "") == lastjsonState.replace(" ", "")){
+                              var year = parseFloat(data[i].year);
 
-                                  if(lastjsonState == "North America"){
-                                      datageo.features[1].properties.efgha = dataContYearsNorthAmerica;
-                                  }else if(lastjsonState == "South America"){
-                                      datageo.features[4].properties.efgha = dataContYearsSouthAmerica;
-                                  }else if(lastjsonState == "Asia"){
-                                      datageo.features[0].properties.efgha = dataContYearsAsia;
-                                  }else if(lastjsonState == "Europe"){
-                                      datageo.features[2].properties.efgha = dataContYearsEurope;
-                                  }else if(lastjsonState == "Africa"){
-                                      datageo.features[3].properties.efgha = dataContYearsAfrica;
-                                  }else if(lastjsonState == "Oceania"){
-                                      datageo.features[5].properties.efgha = dataContYearsOceania;
-                                      datageo.features[6].properties.efgha = dataContYearsOceania;
-                                      datageo.features[6].properties.CONTINENT = "Oceania";
-                                  }
-                                    //faz push e update do continent
-                                    lastContinentViewed = dataContinent;
+                              //footprint consumo em GHA
+                              var built_up_land_efearths = parseFloat(data[i].built_up_land);
+                              var carbon_efearths = parseFloat(data[i].Carbon);
+                              var cropland_efearths = parseFloat(data[i].Cropland);
+                              var fishing_grounds_efearths = parseFloat(data[i].fishing_grounds);
+                              var forest_products_efearths = parseFloat(data[i].forest_products);
+                              var grazing_land_efearths = parseFloat(data[i].grazing_land);
+                              var total_efearths = parseFloat(data[i].Total);
+                              var continent_name = data[i].country_name;
 
-                                    dataYear = allEmpty;
-                                    dataYear = {};
+                              dataArray_efearths.push(total_efearths);
 
-                                    console.log(datageo);
-
-                            }
-
-                            if(dataContinent.replace(" ", "") == jsonState.replace(" ", "") && dataRecord == "EFConsTotGHA"){
+                              dataYear["year"] = year;
+                              dataYear["continent_name"] = continent_name;
+                              dataYear["total_efearths"] = total_efearths;
+                              dataYear["grazing_land_efearths"] = grazing_land_efearths;
+                              dataYear["forest_products_efearths"] = forest_products_efearths;
+                              dataYear["fishing_grounds_efearths"] = fishing_grounds_efearths;
+                              dataYear["cropland_efearths"] = cropland_efearths;
+                              dataYear["carbon_efearths"] = carbon_efearths;
+                              dataYear["built_up_land_efearths"] = built_up_land_efearths;
 
 
-                                  var year = parseFloat(data[i].year);
+                              if(continent_name == "Asia"){
+                                dataContYearsAsia["_"+year]=dataYear;
 
-                                  //footprint consumo em GHA
-                                  var built_up_land_efgha = parseFloat(data[i].built_up_land);
-                                  var carbon_efgha = parseFloat(data[i].Carbon);
-                                  var cropland_efgha = parseFloat(data[i].Cropland);
-                                  var fishing_grounds_efgha = parseFloat(data[i].fishing_grounds);
-                                  var forest_products_efgha = parseFloat(data[i].forest_products);
-                                  var grazing_land_efgha = parseFloat(data[i].grazing_land);
-                                  var total_efgha = parseFloat(data[i].Total);
-                                  var continent_name = data[i].country_name;
+                              }else if(continent_name == "Europe"){
+                                dataContYearsEurope["_"+year]=dataYear;
 
-                                  dataArray_efgha.push(total_efgha);
+                              }else if(continent_name == "Africa"){
+                                dataContYearsAfrica["_"+year]=dataYear;
 
-                                  dataYear["year"] = year;
-                                  dataYear["continent_name"] = continent_name;
-                                  dataYear["total_efgha"] = total_efgha;
-                                  dataYear["grazing_land_efgha"] = grazing_land_efgha;
-                                  dataYear["forest_products_efgha"] = forest_products_efgha;
-                                  dataYear["fishing_grounds_efgha"] = fishing_grounds_efgha;
-                                  dataYear["cropland_efgha"] = cropland_efgha;
-                                  dataYear["carbon_efgha"] = carbon_efgha;
-                                  dataYear["built_up_land_efgha"] = built_up_land_efgha;
+                              }else if(continent_name == "North America"){
+                                dataContYearsNorthAmerica["_"+year]=dataYear;
 
+                              }else if(continent_name == "South America"){
+                                dataContYearsSouthAmerica["_"+year]=dataYear;
 
-                                  if(continent_name == "Asia"){
-                                    dataContYearsAsia["_"+year]=dataYear;
+                              }else if(continent_name == "Oceania"){
+                                dataContYearsOceania["_"+year]=dataYear;
 
-                                  }else if(continent_name == "Europe"){
-                                    dataContYearsEurope["_"+year]=dataYear;
+                              }
 
-                                  }else if(continent_name == "Africa"){
-                                    dataContYearsAfrica["_"+year]=dataYear;
+                              dataYear = allEmpty;
+                              dataYear = {};
 
-                                  }else if(continent_name == "North America"){
-                                    dataContYearsNorthAmerica["_"+year]=dataYear;
-
-                                  }else if(continent_name == "South America"){
-                                    dataContYearsSouthAmerica["_"+year]=dataYear;
-
-                                  }else if(continent_name == "Oceania"){
-                                    dataContYearsOceania["_"+year]=dataYear;
-
-                                  }
-
-                                  dataYear = allEmpty;
-                                  dataYear = {};
-
-                            }else{
-                                  lastContinentViewed = dataContinent;
-                            }
-
-                      }
-
-                      lastjsonState = jsonState;
-                      datageo.features[5].properties.efgha = dataContYearsOceania;
-                      datageo.features[6].properties.efgha = dataContYearsOceania;
+                        }else{
+                              lastContinentViewed = dataContinent;
+                        }
 
                   }
 
-                  console.log(datageo)
-                  minValColorContFT = d3.min(dataArray_efgha)
-                  maxValColorContFT = d3.max(dataArray_efgha)
+                  lastjsonState = jsonState;
+                  datageo.features[5].properties.efearths = dataContYearsOceania;
+                  datageo.features[6].properties.efearths = dataContYearsOceania;
 
-                  stackedBarChartContinent(continentsDataForYear(datageo, yearTimeline), yearTimeline);
+              }
 
-                  svg.selectAll("path")
-                    .data(datageo.features)
-                    .enter()
-                    .append("path")
-                    .attr("d", path)
-                    .attr("id", function(d) {return d.properties.CONTINENT.replace(/\s/g, "_");})
-                    .style("fill", function(d){
-                          if(d.properties.CONTINENT == "Antarctica"){
-                                return "#bfbfbf"
-                          }else{
-                                var yeartoshow = "_"+yearTimeline+"";
-                                var value = d.properties.efgha[yeartoshow].total_efgha;
-                                console.log(yeartoshow)
+              minValColorContFT = d3.min(dataArray_efearths)
+              maxValColorContFT = d3.max(dataArray_efearths)
 
-                                if(value){
-                                  return ramp(minValColorContFT,lowColorEF, highColorEF, value);
-                                } else {
-                                  return "#bfbfbf"
-                                }
-                          }
+              stackedBarChartContinent(continentsDataForYear(datageo, yearTimeline), yearTimeline);
 
-                    })
-                    .style("stroke", "#333333")
-                    .style("stroke-width", "0.2px" )
-                    .attr("title", function(d) {return d.properties.CONTINENT;})
-                    .on("mouseover", function(d){
+              svg.selectAll("path")
+                .data(datageo.features)
+                .enter()
+                .append("path")
+                .attr("d", path)
+                .attr("x", (d, i) => i * 30)
+                .attr("y", (d, i) => h - 3 * d)
+                .attr("id", function(d) {return d.properties.CONTINENT.replace(/\s/g, "_");})
+                .style("fill", function(d){
+                      if(d.properties.CONTINENT == "Antarctica"){
+                            return "#bfbfbf"
+                      }else{
+                            var yeartoshow = "_"+yearTimeline+"";
+                            var value = d.properties.efearths[yeartoshow].total_efearths;
+                            console.log(yeartoshow)
 
-                        var mouse = d3.mouse(this);
-                        var countryMouseOver = d.properties.CONTINENT.replace(/\s/g, "_");
-
-                        highlightContinent("map",d.properties.CONTINENT);
-
-                        d3.selectAll("path[title=\'"+d.properties.CONTINENT+"\']")
-                          .style("fill", function(d){
-
-                                      var yeartoshow = "_"+yearTimeline+"";
-                                      var value = d.properties.efgha[yeartoshow].total_efgha;
-
-                                      console.log(yeartoshow)
-
-                                      if(value){
-                                        return ramp(minValColorContFT,lowColorEF, highColorEF, "mouseEF")
-                                      } else {
-                                        return "#bfbfbf"
-                                      }
-                          })
-                          .attr("title", function(d) {return d.properties.CONTINENT;});
-
-                          if(lastCountryOn==countryMouseOver){
-                            d3.select("#"+countryMouseOver+"mover").attr("transform","translate("+ mouse[0]+event.clientX+", "+mouse[1]+event.clientY+") ");
-                            lastCountryOn = countryMouseOver;
-                          }else if(lastCountryOn==null){
-                            d3.select("body")
-                                  .append("div")
-                                  .attr("id", function(){
-                                      lastCountryOn = countryMouseOver;
-                                      console.log()
-                                      return lastCountryOn+"mover";
-
-                                  })
-                                  .style("position", "absolute")
-                                  .style("z-index", "10")
-                                  .style("visibility", "visible")
-                                  .style("background", "#000")
-                                  .attr("x", mouse[0]+event.clientX)
-                                  .attr("y", mouse[1]+event.clientY)
-                                  .text(countryMouseOver);
-                          }
-
-
-                      })
-                      .on("mouseout", function(d){
-
-                          unhighlightContinent("map",d.properties.CONTINENT);
-
-
-                          d3.selectAll("path[title=\'"+d.properties.CONTINENT+"\']")
-                            .style("fill", function(d){
-                                      var yeartoshow = "_"+yearTimeline+"";
-                                      var value = d.properties.efgha[yeartoshow].total_efgha;
-
-                                      console.log(yeartoshow)
-
-                                        if(value){
-                                          return ramp(minValColorContFT,lowColorEF, highColorEF, value)
-                                        } else {
-                                          return "#bfbfbf"
-                                        }
-                            });
-
-                            if(lastCountryOn.indexOf(" ") != -1 || lastCountryOn.indexOf(".") != -1 || lastCountryOn.indexOf("(") != -1 || lastCountryOn.indexOf(")") != -1){
-                              d3.select("#"+lastCountryOn.replace(/\s/g, "_").replace(".", "_").replace("(", "_").replace(")", "_")+"mover").remove();
-                              lastCountryOn = null;
-
-                            }else{
-                              d3.select("#"+lastCountryOn+"mover").remove();
-                              lastCountryOn = null;
+                            if(value){
+                              return ramp(minValColorContFT,lowColorEF, highColorEF, value);
+                            } else {
+                              return "#bfbfbf"
                             }
+                      }
 
-                      });
-                      // .on("mouseenter", function(d){
-                      //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity+20)).text(d.properties.NAME);
-                      // })
-                      // .on("mouseleave", function(d){
-                      //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity));
-                      //
-                      // });
+                })
+                .style("stroke", "#333333")
+                .style("stroke-width", "0.2px" )
+                .attr("title", function(d) {return d.properties.CONTINENT;})
+                .on("mouseover", function(d){
 
-              });
 
-            });
+                  var img = "../img/icons/earth.png";
 
-            autocomplete(document.getElementById("myInput-continent"), continents_list);
 
+                    var countryMouseOver = d.properties.CONTINENT.replace(/\s/g, "_");
+
+                    var xPosition = d3.mouse(this)[0] - 15;
+                    var yPosition = d3.mouse(this)[1] - 25;
+
+                    var yeartoshow = "_"+yearTimeline+"";
+                    var value = d.properties.efearths[yeartoshow].total_efearths;
+
+                    div.transition()
+                          .duration(200)
+                          .style("opacity", .9);
+                    div.html(d.properties.CONTINENT+  "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + value.toFixed(2)+ " Earths" )
+                          .style("left", (d3.event.pageX) + "px")
+                          .style("top", (d3.event.pageY - 28) + "px");
+
+
+                    highlightContinent("map",d.properties.CONTINENT);
+
+                    d3.selectAll("path[title=\'"+d.properties.CONTINENT+"\']")
+                      .style("fill", function(d){
+
+                                  var yeartoshow = "_"+yearTimeline+"";
+                                  var value = d.properties.efearths[yeartoshow].total_efearths;
+
+                                  if(value){
+                                    return ramp(minValColorContFT,lowColorEF, highColorEF, "mouseEF")
+                                  } else {
+                                    return "#bfbfbf"
+                                  }
+                      })
+                      .attr("title", function(d) {return d.properties.CONTINENT;});
+
+                      if(lastCountryOn==countryMouseOver){
+                        d3.select("#"+countryMouseOver+"mover").attr("transform","translate("+ xPosition +", "+yPosition+") ");
+                        lastCountryOn = countryMouseOver;
+                      }else if(lastCountryOn==null){
+
+                      }
+
+
+
+                  })
+                .on("mouseout", function(d){
+
+                      div.transition()
+                          .duration(500)
+                          .style("opacity", 0);
+
+                      unhighlightContinent("map", d.properties.CONTINENT);
+
+                      d3.selectAll("path[title=\'"+d.properties.CONTINENT+"\']")
+                        .style("fill", function(d){
+                                  var yeartoshow = "_"+yearTimeline+"";
+                                  var value = d.properties.efearths[yeartoshow].total_efearths;
+
+                                    if(value){
+                                      return ramp(minValColorContFT,lowColorEF, highColorEF, value)
+                                    } else {
+                                      return "#bfbfbf"
+                                    }
+                        });
+
+                        if(lastCountryOn.indexOf(" ") != -1 || lastCountryOn.indexOf(".") != -1 || lastCountryOn.indexOf("(") != -1 || lastCountryOn.indexOf(")") != -1){
+                          d3.select("#"+lastCountryOn.replace(/\s/g, "_").replace(".", "_").replace("(", "_").replace(")", "_")+"mover").remove();
+                          lastCountryOn = null;
+
+                        }else{
+                          d3.select("#"+lastCountryOn+"mover").remove();
+                          lastCountryOn = null;
+                        }
+
+                  })
+                .on("click", function(d){
+
+                      //stackedAreaChartContinent(d.properties);
+
+                });
+
+          });
+
+        });
+
+        autocomplete(document.getElementById("myInput-continent"), continents_list);
 
       }
 
       function continents_EcoFootGha(){
+        console.log("E FOOT PRINT GHA")
+
             var svg = d3.select("#world_graph")
               .append("svg")
               .attr("id", "chart")
@@ -552,11 +627,13 @@ $( document ).ready(function() {
               .attr("height", 480)
               .attr("tranform", "translate(" + 0 + "," + 0 + ")");
 
+            var div = d3.select("body").append("div")
+                  .attr("class", "tooltip")
+                  .style("opacity", 0);
 
             d3.json("../data/ContinentsOutput.json").then(function(json){
 
               data = json.data;
-              console.log(data)
               var dataArray_efgha = new Array();
               var lastContinentViewed = data[0].country_name;
               var dataContYearsAsia = {};
@@ -572,7 +649,6 @@ $( document ).ready(function() {
 
                   datageo = geojson;
                   var lastjsonState = datageo.features[0].properties.CONTINENT;
-
 
                   for(var n = 0; n < datageo.features.length; n++){
 
@@ -687,7 +763,6 @@ $( document ).ready(function() {
 
                   }
 
-                  console.log(datageo)
                   minValColorContFT = d3.min(dataArray_efgha)
                   maxValColorContFT = d3.max(dataArray_efgha)
 
@@ -698,6 +773,8 @@ $( document ).ready(function() {
                     .enter()
                     .append("path")
                     .attr("d", path)
+                    .attr("x", (d, i) => i * 30)
+                    .attr("y", (d, i) => h - 3 * d)
                     .attr("id", function(d) {return d.properties.CONTINENT.replace(/\s/g, "_");})
                     .style("fill", function(d){
                           if(d.properties.CONTINENT == "Antarctica"){
@@ -720,9 +797,25 @@ $( document ).ready(function() {
                     .attr("title", function(d) {return d.properties.CONTINENT;})
                     .on("mouseover", function(d){
 
-                        var mouse = d3.mouse(this);
-                        console.log(d.properties.CONTINENT)
+
+                      var img = "../img/icons/footprint.png";
+
+
                         var countryMouseOver = d.properties.CONTINENT.replace(/\s/g, "_");
+
+                        var xPosition = d3.mouse(this)[0] - 15;
+                        var yPosition = d3.mouse(this)[1] - 25;
+
+                        var yeartoshow = "_"+yearTimeline+"";
+                        var value = d.properties.efgha[yeartoshow].total_efgha;
+
+                        div.transition()
+                              .duration(200)
+                              .style("opacity", .9);
+                        div.html(d.properties.CONTINENT+  "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  +  round(value/1000000, 6).toFixed(2)+ " M" )
+                              .style("left", (d3.event.pageX) + "px")
+                              .style("top", (d3.event.pageY - 28) + "px");
+
 
                         highlightContinent("map",d.properties.CONTINENT);
 
@@ -741,28 +834,20 @@ $( document ).ready(function() {
                           .attr("title", function(d) {return d.properties.CONTINENT;});
 
                           if(lastCountryOn==countryMouseOver){
-                            d3.select("#"+countryMouseOver+"mover").attr("transform","translate("+ mouse[0]+event.clientX+", "+mouse[1]+event.clientY+") ");
+                            d3.select("#"+countryMouseOver+"mover").attr("transform","translate("+ xPosition +", "+yPosition+") ");
                             lastCountryOn = countryMouseOver;
                           }else if(lastCountryOn==null){
-                            d3.select("body")
-                                  .append("div")
-                                  .attr("id", function(){
-                                      lastCountryOn = countryMouseOver;
-                                      return lastCountryOn+"mover";
 
-                                  })
-                                  .style("position", "absolute")
-                                  .style("z-index", "10")
-                                  .style("visibility", "visible")
-                                  .style("background", "#000")
-                                  .attr("x", mouse[0]+event.clientX)
-                                  .attr("y", mouse[1]+event.clientY)
-                                  .text(countryMouseOver);
                           }
+
 
 
                       })
                     .on("mouseout", function(d){
+
+                          div.transition()
+                              .duration(500)
+                              .style("opacity", 0);
 
                           unhighlightContinent("map", d.properties.CONTINENT);
 
@@ -811,6 +896,9 @@ $( document ).ready(function() {
               .attr("height", 480)
               .attr("tranform", "translate(" + 0 + "," + 0 + ")");
 
+              var div = d3.select("body").append("div")
+                    .attr("class", "tooltip")
+                    .style("opacity", 0);
 
             d3.json("../data/ContinentsOutput.json").then(function(json){
 
@@ -996,6 +1084,23 @@ $( document ).ready(function() {
 
                         highlightContinent("map",d.properties.CONTINENT);
 
+
+                        var yeartoshow = "_"+yearTimeline+"";
+
+                        var value = d.properties.biogha[yeartoshow].total_biogha;
+                        var img = "../img/icons/biocapacity.png";
+
+
+                        div.transition()
+                              .duration(200)
+                              .style("opacity", .9);
+                        div.html(d.properties.CONTINENT+  "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>" + round(value/1000000, 6).toFixed(2)+ " M")
+                              .style("left", (d3.event.pageX) + "px")
+                              .style("top", (d3.event.pageY - 28) + "px");
+
+
+
+
                         d3.selectAll("path[title=\'"+d.properties.CONTINENT+"\']")
                           .style("fill", function(d){
 
@@ -1036,6 +1141,10 @@ $( document ).ready(function() {
                       .on("mouseout", function(d){
 
                           unhighlightContinent("map",d.properties.CONTINENT);
+
+                          div.transition()
+                              .duration(500)
+                              .style("opacity", 0);
 
                           d3.selectAll("path[title=\'"+d.properties.CONTINENT+"\']")
                             .style("fill", function(d){
@@ -1302,7 +1411,12 @@ $( document ).ready(function() {
               .append("g")
               .attr("transform", "translate(" + margin.left + "," + margin.top + ")");   //.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+          var tooltip = d3.select("body").append("g")
+                      .attr("class", "tooltipstackedbar")
+                      .style("opacity", 0);
 
+
+          var landtypes = ["Built Up Land", "Carbon", "Cropland", "Fishing Ground", "Forest Land", "Grazing Land"];
           /* Data in strings like it would be if imported from a csv */
           var parse = d3.time.format("%Y").parse;
 
@@ -1321,17 +1435,30 @@ $( document ).ready(function() {
             .rangeRoundBands([10, width-10], 0.02);
 
           var y = d3.scale.linear()
-            .domain([0, d3.max(dataset, function(d) {  return d3.max(d, function(d) { return d.y0 + d.y; });  })])
+            .domain([0, d3.max(dataset, function(d) {
+                return d3.max(d, function(d) {
+                    return d.y0 + d.y; });
+            })])
             .range([height, 0]);
 
           var colors = ["#9C8443", "#686736", "#CDBE90", "#8C9A86", "#C1A95E", "#845E36"];
 
         // Define and draw axes
-        var yAxis = d3.axisLeft()
-                      .scale(y)
-                      .ticks(6)
-                      .tickSize(-width, 0, 0)
-                      .tickFormat( function(d) { return d/1000000+ " M" } );
+        if(measureToSee=="earths"){
+          var yAxis = d3.axisLeft()
+                        .scale(y)
+                        .ticks(6)
+                        .tickSize(-width, 0, 0)
+                        .tickFormat( function(d) { return d.toFixed(2)+ " Earths" } );
+
+        }else{
+          var yAxis = d3.axisLeft()
+                        .scale(y)
+                        .ticks(6)
+                        .tickSize(-width, 0, 0)
+                        .tickFormat( function(d) { return (d/1000000).toFixed(2)+ " M" } );
+        }
+
 
         var xAxis = d3.axisBottom()
                       .scale(x);
@@ -1347,27 +1474,43 @@ $( document ).ready(function() {
           .selectAll("text")
             .attr("y", 6)
             .attr("x", 20)
-            .style("text-anchor", "start")
+            .style("text-anchor", "Start")
             .text(function(d){
 
-                  var splitted = d.split(" ");
-                  console.log(d)
-                  if(splitted.length == 2){
-
-                    var stringss = ""+splitted[0]+"\n"+splitted[1]+"";
-                    return d;
-                  }else{
-                    return d;
-
-                  }
-            });
+                  return d;
+            })
+            .call(wrap, x.rangeBand());
 
 
+      function wrap(text, width) {
+        text.each(function() {
+          var text = d3.select(this),
+              words = text.text().split(/\s+/).reverse(),
+              word,
+              line = [],
+              lineNumber = 0,
+              lineHeight = 1.1, // ems
+              y = text.attr("y"),
+              dy = parseFloat(text.attr("dy")),
+              tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+          while (word = words.pop()) {
+            line.push(word);
+            tspan.text(line.join(" "));
+            if (tspan.node().getComputedTextLength() > width) {
+              line.pop();
+              tspan.text(line.join(" "));
+              line = [word];
+              tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+            }
+          }
+        });
+      }
       // Create groups for each series, rects for each segment
       var groups = svg.selectAll("g.cost")
         .data(dataset)
         .enter().append("g")
         .attr("class", "cost")
+        .attr("id", function(d, i) { return landtypes[i]; })
         .style("fill", function(d, i) { return colors[i]; });
 
       var rect = groups.selectAll("rect")
@@ -1378,10 +1521,8 @@ $( document ).ready(function() {
         .attr("y", function(d) { return y(d.y0 + d.y); })
         .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); })
         .attr("width", x.rangeBand())
-        .attr("id", function(d) { console.log(d.x); return d.x; })
+        .attr("id", function(d) { return d.x; })
         .on("mouseover", function(d) {
-
-            tooltip.style("display", null);
 
             var svg = d3.select("#continents_view #graphs").select("svg");
 
@@ -1405,6 +1546,8 @@ $( document ).ready(function() {
             .style("stroke-width", "1px")
             .style("filter", "url(#glow)");
 
+            console.log(d.x);
+            console.log(d);
             highlightContinent("stackedBar",d.x);
 
 
@@ -1412,7 +1555,9 @@ $( document ).ready(function() {
         })
         .on("mouseout", function(d) {
 
-            tooltip.style("display", "none");
+          tooltip.transition()
+              .duration(500)
+              .style("opacity", 0);
 
             d3.selectAll("rect[id=\'"+d.x+"\']")
             .style("stroke", "#333333")
@@ -1424,11 +1569,54 @@ $( document ).ready(function() {
 
         })
         .on("mousemove", function(d) {
+          tooltip.transition()
+                .duration(200)
+              .style("opacity", .9);
+
           var xPosition = d3.mouse(this)[0] - 15;
           var yPosition = d3.mouse(this)[1] - 25;
+
+          var parent = d3.select(this)._groups[0][0].parentNode.id;
+
+          var img = "";
+
+          switch (parent) {
+            case "Cropland":
+              img = "../img/icons/crop-land.png"
+              break;
+            case "Carbon":
+              img = "../img/icons/carbon.png"
+              break;
+            case "Fishing Ground":
+              img = "../img/icons/fishing-ground.png"
+              break;
+            case "Forest Land":
+              img = "../img/icons/forest-land.png"
+              break;
+            case "Grazing Land":
+              img = "../img/icons/grazing-land.png"
+              break;
+            case "Built Up Land":
+              img = "../img/icons/built-up-land.png"
+              break;
+
+            default:
+              img = "../img/icons/footprint.png"
+          }
+
+          if(measureToSee=="earths"){
+            tooltip.html(d.x + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + d.y.toFixed(2)+ " Earths" )
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 28) + "px");
+          }else{
+            tooltip.html(d.x + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + round(d.y/1000000, 6).toFixed(2)+ " M" )
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 28) + "px");
+          }
+
+
           tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-          var value = round(d.y/1000000, 6);
-          tooltip.select("text").text(value + " M");
+
         });
 
 
@@ -1464,22 +1652,6 @@ $( document ).ready(function() {
 
 
         // Prep the tooltip bits, initial display is hidden
-        var tooltip = svg.append("g")
-          .attr("class", "tooltip")
-          .style("display", "none");
-
-        tooltip.append("rect")
-          .attr("width", 30)
-          .attr("height", 20)
-          .attr("fill", "white")
-          .style("opacity", 0.5);
-
-        tooltip.append("text")
-          .attr("x", 15)
-          .attr("dy", "1.2em")
-          .style("text-anchor", "middle")
-          .attr("font-size", "12px")
-          .attr("font-weight", "bold");
 
 
       }
@@ -1541,33 +1713,68 @@ $( document ).ready(function() {
                   if(conts[cont].properties.CONTINENT == "Antarctica"){
 
                   }else{
-                    var rightOne = conts[cont].properties.efgha["_"+year];
 
-                    var valores = {};
+                    if(measureToSee == "gha"){
+                      var rightOne = conts[cont].properties.efgha["_"+year];
 
-                    theYear = rightOne;
+                      var valores = {};
 
-                    for(valor in theYear){
+                      theYear = rightOne;
 
-                      if(valor=="built_up_land_efgha"){
-                        valores["Built Up Land"] = theYear[valor];
-                      }else if(valor == "carbon_efgha"){
-                        valores["Carbon"] = theYear[valor];
-                      }else if(valor == "continent_name"){
-                        valores["Continent"] = theYear[valor];
-                      }else if(valor == "cropland_efgha"){
-                        valores["Cropland"] = theYear[valor];
-                      }else if(valor == "fishing_grounds_efgha"){
-                        valores["Fishing Ground"] = theYear[valor];
-                      }else if(valor == "forest_products_efgha"){
-                        valores["Forest Land"] = theYear[valor];
-                      }else if(valor == "grazing_land_efgha"){
-                        valores["Grazing Land"] = theYear[valor];
+                      for(valor in theYear){
+
+                        if(valor=="built_up_land_efgha"){
+                          valores["Built Up Land"] = theYear[valor];
+                        }else if(valor == "carbon_efgha"){
+                          valores["Carbon"] = theYear[valor];
+                        }else if(valor == "continent_name"){
+                          valores["Continent"] = theYear[valor];
+                        }else if(valor == "cropland_efgha"){
+                          valores["Cropland"] = theYear[valor];
+                        }else if(valor == "fishing_grounds_efgha"){
+                          valores["Fishing Ground"] = theYear[valor];
+                        }else if(valor == "forest_products_efgha"){
+                          valores["Forest Land"] = theYear[valor];
+                        }else if(valor == "grazing_land_efgha"){
+                          valores["Grazing Land"] = theYear[valor];
+                        }
+
                       }
 
+                      dataToShow.push(valores);
+
+                    }else if(measureToSee == "earths"){
+
+
+                      var rightOne = conts[cont].properties.efearths["_"+year];
+
+                      var valores = {};
+
+                      theYear = rightOne;
+
+                      for(valor in theYear){
+
+                        if(valor=="built_up_land_efearths"){
+                          valores["Built Up Land"] = theYear[valor];
+                        }else if(valor == "carbon_efearths"){
+                          valores["Carbon"] = theYear[valor];
+                        }else if(valor == "continent_name"){
+                          valores["Continent"] = theYear[valor];
+                        }else if(valor == "cropland_efearths"){
+                          valores["Cropland"] = theYear[valor];
+                        }else if(valor == "fishing_grounds_efearths"){
+                          valores["Fishing Ground"] = theYear[valor];
+                        }else if(valor == "forest_products_efearths"){
+                          valores["Forest Land"] = theYear[valor];
+                        }else if(valor == "grazing_land_efearths"){
+                          valores["Grazing Land"] = theYear[valor];
+                        }
+
+                      }
+
+                      dataToShow.push(valores);
                     }
 
-                    dataToShow.push(valores);
 
                   }
 
