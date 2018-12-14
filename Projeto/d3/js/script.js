@@ -1377,6 +1377,8 @@ $( document ).ready(function() {
           // svg.select(".legend")
           //      .call(legend);
 
+          var img = "";
+
           layerGroups.append("path")
                .attr("d", area)
                .on("mousemove", function(d){
@@ -1385,7 +1387,6 @@ $( document ).ready(function() {
 
                  var parent = d3.select(this)._groups[0][0].parentNode.id;
                  var landtype = parent;
-                 var img = "";
 
                  switch (parent) {
                    case "Cropland":
