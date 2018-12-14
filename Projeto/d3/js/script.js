@@ -18,6 +18,8 @@ $( document ).ready(function() {
         measureToSee = document.getElementById("selectEarthsGha").value;
         $("#chart").remove();
         $("#stackBarChartCont").remove();
+        $("#stackAreaChartCont g").remove();
+
         if(measureToSee=="gha"){
           continents_EcoFootGha();
 
@@ -132,6 +134,8 @@ $( document ).ready(function() {
 
                   $("#world_graph #chart").remove();
                   $("#graphs #stackBarChartCont").remove();
+                  $("#stackAreaChartCont g").remove();
+
                   document.getElementById("selectMeasure").style.visibility="visible";
 
                   if(measureToSee=="gha"){
@@ -154,6 +158,8 @@ $( document ).ready(function() {
                   appendTo = "#world_graph";
                   $("#world_graph #chart").remove();
                   $("#graphs #stackBarChartCont").remove();
+                  $("#stackAreaChartCont g").remove();
+
 
                   document.getElementById("selectEarthsGha").value = "gha";
                   measureToSee="gha";
@@ -209,6 +215,8 @@ $( document ).ready(function() {
 
                     $("#chart").remove();
                     $("#stackBarChartCont").remove();
+                    $("#stackAreaChartCont g").remove();
+
                     countries_EcoFoot();
                   }else{
                     countries_EcoFoot();
@@ -222,6 +230,8 @@ $( document ).ready(function() {
                   if(document.getElementById("chart").length != 0){
                     $("#chart").remove();
                     $("#stackBarChartCont").remove();
+                    $("#stackAreaChartCont g").remove();
+
                     countries_Biocapacity();
                   }else{
                     countries_Biocapacity();
@@ -234,6 +244,8 @@ $( document ).ready(function() {
             if(document.getElementById("chart").length != 0){
               $("#chart").remove();
               $("#stackBarChartCont").remove();
+              $("#stackAreaChartCont g").remove();
+
               document.getElementById("selectEarthsGha").value = "gha";
               measureToSee="gha";
               document.getElementById("selectMeasure").style.visibility="hidden";
@@ -251,6 +263,8 @@ $( document ).ready(function() {
             if(document.getElementById("chart").length != 0){
               $("#chart").remove();
               $("#stackBarChartCont").remove();
+              $("#stackAreaChartCont g").remove();
+
               document.getElementById("selectMeasure").style.visibility="visible";
 
               if(measureToSee=="gha"){
@@ -263,6 +277,8 @@ $( document ).ready(function() {
               }
             }else{
               $("#stackBarChartCont").remove();
+              $("#stackAreaChartCont g").remove();
+
               document.getElementById("selectMeasure").style.visibility="visible";
 
               if(measureToSee=="gha"){
@@ -527,6 +543,7 @@ $( document ).ready(function() {
                 .attr("title", function(d) {return d.properties.CONTINENT;})
                 .on("mouseover", function(d){
 
+                  var mouse = d3.mouse(this);
 
                   var img = "../img/icons/earth.png";
 
@@ -567,7 +584,8 @@ $( document ).ready(function() {
                         d3.select("#"+countryMouseOver+"mover").attr("transform","translate("+ xPosition +", "+yPosition+") ");
                         lastCountryOn = countryMouseOver;
                       }else if(lastCountryOn==null){
-
+                        lastCountryOn = countryMouseOver;
+                                //return lastCountryOn+"mover";
                       }
 
 
@@ -605,7 +623,9 @@ $( document ).ready(function() {
                   })
                 .on("click", function(d){
 
-                      //stackedAreaChartContinent(d.properties);
+                  stackedAreaChartContinent(d.properties);
+                  d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalEcoFootCons+20)).text(d.properties.NAME);
+
 
                 });
 
@@ -618,7 +638,6 @@ $( document ).ready(function() {
       }
 
       function continents_EcoFootGha(){
-        console.log("E FOOT PRINT GHA")
 
             var svg = d3.select("#world_graph")
               .append("svg")
@@ -799,6 +818,7 @@ $( document ).ready(function() {
 
 
                       var img = "../img/icons/footprint.png";
+                      var mouse = d3.mouse(this);
 
 
                         var countryMouseOver = d.properties.CONTINENT.replace(/\s/g, "_");
@@ -839,11 +859,9 @@ $( document ).ready(function() {
                             d3.select("#"+countryMouseOver+"mover").attr("transform","translate("+ xPosition +", "+yPosition+") ");
                             lastCountryOn = countryMouseOver;
                           }else if(lastCountryOn==null){
-
+                            lastCountryOn = countryMouseOver;
+                                    //return lastCountryOn+"mover";
                           }
-
-
-
                       })
                     .on("mouseout", function(d){
 
@@ -865,19 +883,23 @@ $( document ).ready(function() {
                                         }
                             });
 
-                            // if(lastCountryOn.indexOf(" ") != -1 || lastCountryOn.indexOf(".") != -1 || lastCountryOn.indexOf("(") != -1 || lastCountryOn.indexOf(")") != -1){
-                            //   d3.select("#"+lastCountryOn.replace(/\s/g, "_").replace(".", "_").replace("(", "_").replace(")", "_")+"mover").remove();
-                            //   lastCountryOn = null;
-                            //
-                            // }else{
-                            //   d3.select("#"+lastCountryOn+"mover").remove();
-                            //   lastCountryOn = null;
-                            // }
+                            if(lastCountryOn.indexOf(" ") != -1 || lastCountryOn.indexOf(".") != -1 || lastCountryOn.indexOf("(") != -1 || lastCountryOn.indexOf(")") != -1){
+                              d3.select("#"+lastCountryOn.replace(/\s/g, "_").replace(".", "_").replace("(", "_").replace(")", "_")+"mover").remove();
+                              lastCountryOn = null;
+
+                            }else{
+                              d3.select("#"+lastCountryOn+"mover").remove();
+                              lastCountryOn = null;
+                            }
+
 
                       })
                     .on("click", function(d){
 
                           stackedAreaChartContinent(d.properties);
+
+                          d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalEcoFootCons+20)).text(d.properties.NAME);
+
 
                     });
 
@@ -922,7 +944,6 @@ $( document ).ready(function() {
 
                   datageo = geojson;
                   var lastjsonState = datageo.features[0].properties.CONTINENT;
-
 
                   for(var n = 0; n < datageo.features.length; n++){
 
@@ -1039,13 +1060,10 @@ $( document ).ready(function() {
 
                   }
 
-                  console.log(datageo)
-
                   minValColorContB = d3.min(dataArray_biogha)
                   maxValColorContB = d3.max(dataArray_biogha)
 
                   stackedBarChartContinent(continentsDataForYear(datageo, yearTimeline), yearTimeline);
-
 
                   svg.selectAll("path")
                     .data(datageo.features)
@@ -1081,7 +1099,6 @@ $( document ).ready(function() {
                     .on("mouseover", function(d){
 
                         var mouse = d3.mouse(this);
-                        console.log(d.properties.CONTINENT)
                         var countryMouseOver = d.properties.CONTINENT.replace(/\s/g, "_");
 
                         highlightContinent("map",d.properties.CONTINENT);
@@ -1099,8 +1116,6 @@ $( document ).ready(function() {
                         div.html(d.properties.CONTINENT+  "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>" + round(value/1000000, 6).toFixed(2)+ " M")
                               .style("left", (d3.event.pageX) + "px")
                               .style("top", (d3.event.pageY - 28) + "px");
-
-
 
 
                         d3.selectAll("path[title=\'"+d.properties.CONTINENT+"\']")
@@ -1121,26 +1136,13 @@ $( document ).ready(function() {
                             d3.select("#"+countryMouseOver+"mover").attr("transform","translate("+ mouse[0]+event.clientX+", "+mouse[1]+event.clientY+") ");
                             lastCountryOn = countryMouseOver;
                           }else if(lastCountryOn==null){
-                            d3.select("body")
-                                  .append("div")
-                                  .attr("id", function(){
-                                      lastCountryOn = countryMouseOver;
-                                      console.log()
-                                      return lastCountryOn+"mover";
-
-                                  })
-                                  .style("position", "absolute")
-                                  .style("z-index", "10")
-                                  .style("visibility", "visible")
-                                  .style("background", "#000")
-                                  .attr("x", mouse[0]+event.clientX)
-                                  .attr("y", mouse[1]+event.clientY)
-                                  .text(countryMouseOver);
+                              lastCountryOn = countryMouseOver;
+                                      //return lastCountryOn+"mover";
                           }
 
 
-                      })
-                      .on("mouseout", function(d){
+                    })
+                    .on("mouseout", function(d){
 
                           unhighlightContinent("map",d.properties.CONTINENT);
 
@@ -1169,14 +1171,17 @@ $( document ).ready(function() {
                               lastCountryOn = null;
                             }
 
-                      });
-                      // .on("mouseenter", function(d){
-                      //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity+20)).text(d.properties.NAME);
-                      // })
-                      // .on("mouseleave", function(d){
-                      //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity));
-                      //
-                      // });
+                      })
+                    .on("click", function(d){
+
+                        stackedAreaChartContinent(d.properties);
+
+                        d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity+20)).text(d.properties.NAME);
+                      })
+                    .on("mouseleave", function(d){
+                        d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity));
+
+                    });
 
               });
 
@@ -1190,216 +1195,24 @@ $( document ).ready(function() {
 
       //////////CONTINENTES SMALL CHARTS///////////
 
-      // function stackedAreaChartContinent(data){
-      //       console.log(data)
-      //
-      //       var campos = new Array();
-      //       var valores = new Array();
-      //       var anos = new Array()
-      //
-      //       var efghaCont = data.efgha;
-      //
-      //       for( year in efghaCont){
-      //
-      //             theYear = efghaCont[year];
-      //
-      //             for(valor in theYear){
-      //
-      //               if(valor=="continent_name" ){
-      //
-      //               }else if(valor == "year"){
-      //                 anos.push(theYear[valor]);
-      //
-      //               }else{
-      //                 campos.push(valor)
-      //                 valores.push(theYear[valor])
-      //               }
-      //
-      //             }
-      //       }
-      //       console.log(anos);
-      //       console.log(campos);
-      //       console.log(valores)
-      //
-      //
-      //       function get_colors(n) {
-      //               var colors = ["#a6cee3","#1f78b4","#b2df8a","#33a02c",
-      //               "#fb9a99","#e31a1c","#fdbf6f","#ff7f00","#cab2d6",
-      //               "#6a3d9a"];
-      //
-      //                return colors[ n % colors.length];
-      //       }
-      //
-      //       var margin = {top: 61, right: 140, bottom: 101, left: 50},
-      //           width = 960 - margin.left - margin.right,
-      //           height = 500 - margin.top - margin.bottom;
-      //
-      //       // var  times = ["12am","1a", "2a", "3a", "4a", "5a", "6a",
-      //       //            "7a", "8a", "9a", "10a", "11a", "12pm", "1p",
-      //       //            "2p", "3p", "4p", "5p", "6p", "7p", "8p",
-      //       //            "9p", "10p", "11p"];
-      //
-      //       var x = d3.scale.linear()
-      //           .range([0, width]);
-      //
-      //       var y = d3.scale.linear()
-      //           .range([height, 0]);
-      //
-      //       var color = d3.scale.category10();
-      //
-      //       var xAxis = d3.axisBottom()
-      //           .scale(x)
-      //           .orient("bottom")
-      //       		.ticks(53, "s");
-      //
-      //       var yAxis = d3.axisLeft()
-      //           .scale(y)
-      //           .orient("left")
-      //           .ticks(7, "s");
-      //
-      //       var area = d3.area()
-      //           .x(function(d) { return x(d.hour); })
-      //           .y0(function(d) { return y(d.y0); })
-      //           .y1(function(d) { return y(d.y0 + d.y); });
-      //
-      //
-      //       var stack = d3.layout.stack()
-      //           .values(function(d) { return d.values; });
-      //
-      //       var svg = d3.select("#graphs").append("svg")
-      //           .attr("width", width + margin.left + margin.right)
-      //           .attr("height", height + margin.top + margin.bottom)
-      //         .append("g")
-      //           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      //
-      //
-      //
-      //            color.domain(d3.keys(campos).filter(function(key) {return key !== "year"; }));
-      //
-      //            // data.forEach(function(d) {
-      //         		// d.hour = +d.hour;
-      //            //  d.burglary = +d.burglary;
-      //            //  d.assault= +d.assault;
-      //            //  d.larceny_theft= +d.larceny_theft;
-      //            //  d.vehicle_related = +d.vehicle_related;
-      //            //  d.missing_person = +d.missing_person;
-      //            //  d.non_criminal = +d.non_criminal;
-      //            //  d.other_offenses = +d.other_offenses;
-      //            //  d.suspicious_occ = +d.suspicious_occ;
-      //            //  d.warrants = +d.warrants;
-      //            //   });
-      //
-      //
-      //
-      //         var browsers = stack(color.domain().map(function(name) {
-      //           return {
-      //             name: data.efgha.year,
-      //             values: data.efgha.map(function(d) {
-      //               return {year: d.hour, y: d[name] * 1};
-      //             })
-      //           };
-      //         }));
-      //
-      //
-      //       //   // Find the value of the hour with highest total value
-      //         var maxHourVal = d3.max(data, function(d){
-      //           var vals = d3.keys(d).map(
-      //             function(key){
-      //               return key !== "hour" ? d[key] : 0 });
-      //           return d3.sum(vals);
-      //         });
-      //
-      //       //   // Set domains for axes
-      //         x.domain(d3.extent(data, function(d) { return d.hour; }));
-      //         y.domain([0, 800])
-      //
-      //         var browser = svg.selectAll(".browser")
-      //             .data(browsers)
-      //           	.enter().append("g")
-      //             .attr("class", "browser");
-      //
-      //         browser.append("path")
-      //             .attr("class", "area")
-      //             .attr("d", function(d) { return area(d.values); })
-      //             .style("fill", function(d,i) {
-      //           		return get_colors(i); });
-      //
-      //
-      //             browser.append("text")
-      //             .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-      //             .attr("transform", function(d) { return "translate(" + x(d.value.hour) + "," + y(d.value.y0 + d.value.y / 2) + ")"; })
-      //             .attr("x", -6)
-      //             .attr("dy", "-0.882em")
-      //             .text(function(d) {
-      //           			if(d.name == "larceny_theft"){
-      //                   return "larceny/theft";
-      //                 }
-      //            			if(d.name == "non_criminal"){
-      //                   return "non-criminal";
-      //                 }
-      //              		if(d.name == "assault"){
-      //                   return d.name;
-      //                 }})
-      //             .style("font", "15px avenir")
-      //         		.attr("transform", function(d) { return "translate(500," + y(d.value.y0 + d.value.y / 2) + ")"; })
-      //
-      //          svg.append("g")
-      //             .attr("class", "x axis")
-      //             .attr("transform", "translate(0," + height + ")")
-      //             .call(xAxis).append("text")
-      //          		.attr("x", 350)
-      //             .attr("y", 36)
-      //             .attr("fill", "#000")
-      //             .text("Hour of Time")
-      //           	.style("font-weight", "bold");
-      //
-      //         svg.append("g")
-      //             .attr("class", "y axis")
-      //             .call(yAxis)
-      //             .append("text")
-      //             .attr("transform", "rotate(-90)")
-      //         		.attr("x", -250)
-      //             .attr("y", -40)
-      //             .attr("dy", "0.3408em")
-      //             .attr("fill", "#000")
-      //             .text("Number of Incidents")
-      //          		.style("font-weight", "bold");
-      //
-      //          var legend = svg.selectAll(".legend")
-      //            	.data(color.domain()).enter()
-      //          		.append("g")
-      //           	.attr("class","legend")
-      //            .attr("transform", "translate(" + (width +20) + "," + 0+ ")");
-      //
-      //          legend.append("rect")
-      //            .attr("x", 0)
-      //            .attr("y", function(d, i) { return 20 * i; })
-      //            .attr("width", 10)
-      //            .attr("height", 10)
-      //            .style("fill", function(d, i) {
-      //            	return get_colors(i);});
-      //
-      //           legend.append("text")
-      //            .attr("x", 20)
-      //            .attr("dy", "0.75em")
-      //            .attr("y", function(d, i) { return 20 * i; })
-      //            .text(function(d) {return d});
-      //
-      //           legend.append("text")
-      //            .attr("x",0)
-      //       //      .attr("dy", "0.75em")
-      //            .attr("y",-10)
-      //            .text("Categories");
-      //
-      //
-      // }
-
-
       function stackedAreaChartContinent(data){
-            var continent = data.CONTINENT;
-            data = data.efgha;
 
-            console.log(data)
+        $("#stackAreaChartCont g").remove();
+
+            var continent = data.CONTINENT;
+            if(measureToSee=="gha")
+            {
+              if(variableToShow=="Biocapacity"){
+                data = data.biogha;
+
+              }else{
+                data = data.efgha;
+
+              }
+            } else if(measureToSee=="earths"){
+              data = data.efearths;
+              console.log(data)
+            }
 
             var svg = d3.select("#bottomgraphs svg")
 
@@ -1408,7 +1221,7 @@ $( document ).ready(function() {
             container
               .height(170)
               .width(400)
-              .margin(0, 0, 0, 50);
+              .margin(0, 0, 0, 65);
 
             var width = container.contentWidth(),
               height = container.contentHeight();
@@ -1494,7 +1307,6 @@ $( document ).ready(function() {
              return d.year;
           }
 
-
             var x = d3.scaleTime()
                  .domain([parsedData[0].year, parsedData[parsedData.length - 1].year])
                  .range([0, width]);
@@ -1506,9 +1318,14 @@ $( document ).ready(function() {
 
 
             var xAxis = d3.axisBottom(x);
-            var yAxis = d3.axisLeft(y)
-                            .tickFormat( function(d) { return (d/1000000).toFixed()+ " M" } );
 
+            if(measureToSee=="earths"){
+              var yAxis = d3.axisLeft(y)
+                              .tickFormat( function(d) { return (d).toFixed(2)+ " Earths" } );
+            }else{
+              var yAxis = d3.axisLeft(y)
+                              .tickFormat( function(d) { return (d/1000000).toFixed()+ " M" } );
+            }
 
 
           var gX = content.append("g")
@@ -1562,9 +1379,70 @@ $( document ).ready(function() {
 
           layerGroups.append("path")
                .attr("d", area)
-               .on("mousemove", function(d) {
+               .on("mousemove", function(d){
+                 var xPosition = d3.mouse(this)[0] - 15;
+                 var yPosition = d3.mouse(this)[1] - 25;
 
-                 console.log(d)
+                 var parent = d3.select(this)._groups[0][0].parentNode.id;
+                 var landtype = parent;
+                 var img = "";
+
+                 switch (parent) {
+                   case "Cropland":
+                     img = "../img/icons/crop-land.png"
+                     break;
+                   case "Carbon":
+                     img = "../img/icons/carbon.png"
+                     break;
+                   case "Fishing Ground":
+                     img = "../img/icons/fishing-ground.png"
+                     break;
+                   case "Forest Land":
+                     img = "../img/icons/forest-land.png"
+                     break;
+                   case "Grazing Land":
+                     img = "../img/icons/grazing-land.png"
+                     break;
+                   case "Built Up Land":
+                     img = "../img/icons/built-up-land.png"
+                     break;
+
+                   default:
+                     img = "../img/icons/footprint.png"
+                 }
+
+                 var x0 = x.invert(d3.mouse(this)[0]),
+                         i = bisectDate(parsedData, x0, 1),
+                         d0 = parsedData[i - 1],
+                         d1 = parsedData[i],
+                         d = x0 - d0.year > d1.year - x0 ? d1 : d0;
+
+                  function valueWeWant(data, d)
+                  {
+                    for (var i = 0; i < data.length; i++)
+                    {
+                      if (data[i].year == d.year)
+                      {
+                        return data[i][parent];
+                      }
+                    }
+                  }
+                 if(measureToSee=="earths"){
+                   tooltip.html(new Date(d.year).getFullYear() + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (valueWeWant(parsedData, d)).toFixed(2)+ " Earths" )
+                           .style("left", (d3.event.pageX) + "px")
+                           .style("top", (d3.event.pageY - 28) + "px");
+                 }else{
+                   tooltip.html(new Date(d.year).getFullYear() + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (valueWeWant(parsedData, d)/1000000).toFixed(2)+ " M" )
+                           .style("left", (d3.event.pageX) + "px")
+                           .style("top", (d3.event.pageY - 28) + "px");
+                 }
+
+
+                 tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+
+               })
+               .on("mouseover", function(d) {
+
                  tooltip.transition()
                        .duration(200)
                      .style("opacity", .9);
@@ -1612,13 +1490,12 @@ $( document ).ready(function() {
                     {
                       if (data[i].year == d.year)
                       {
-                        console.log(data[i][parent]);
                         return data[i][parent];
                       }
                     }
                   }
                  if(measureToSee=="earths"){
-                   tooltip.html(Date(d.year).getTime() + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (valueWeWant(parsedData, d)/1000000).toFixed(2)+ " M" )
+                   tooltip.html(new Date(d.year).getFullYear() + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (valueWeWant(parsedData, d)).toFixed(2)+ " Earths" )
                            .style("left", (d3.event.pageX) + "px")
                            .style("top", (d3.event.pageY - 28) + "px");
                  }else{
@@ -1797,8 +1674,6 @@ $( document ).ready(function() {
             .style("stroke-width", "1px")
             .style("filter", "url(#glow)");
 
-            console.log(d.x);
-            console.log(d);
             highlightContinent("stackedBar",d.x);
 
             tooltip.transition()
@@ -2729,6 +2604,8 @@ $( document ).ready(function() {
                           var yeartoshow = "_"+yearTimeline+"";
                           var value = valueinput_continent.properties.efgha[yeartoshow].total_efgha;
 
+                          stackedAreaChartContinent(valueinput_continent.properties);
+
                           if(value){
                               return ramp(minValColorContFT,lowColorEF, highColorEF, "mouseEF")
                             } else {
@@ -2737,6 +2614,7 @@ $( document ).ready(function() {
                     }else if(variableToShow=="Biocapacity"){
                         var yeartoshow = "_"+yearTimeline+"";
                         var value = valueinput_continent.properties.biogha[yeartoshow].total_biogha;
+                        stackedAreaChartContinent(valueinput_continent.properties);
 
                         if(value){
                           return ramp(minValColorContB,lowColorB, highColorB, "mouseB")
@@ -2757,6 +2635,7 @@ $( document ).ready(function() {
                     if(variableToShow=="EcoFoot"){
                           var yeartoshow = "_"+yearTimeline+"";
                           var value = valueinput_continent.properties.efgha[yeartoshow].total_efgha;
+                          stackedAreaChartContinent(valueinput_continent.properties);
 
                           if(value){
                               return ramp(minValColorContFT,lowColorEF, highColorEF, "mouseEF")
@@ -2766,6 +2645,7 @@ $( document ).ready(function() {
                     }else if(variableToShow=="Biocapacity"){
                         var yeartoshow = "_"+yearTimeline+"";
                         var value = valueinput_continent.properties.biogha[yeartoshow].total_biogha;
+                        stackedAreaChartContinent(valueinput_continent.properties);
 
                         if(value){
                           return ramp(minValColorContB,lowColorB, highColorB, "mouseB")
