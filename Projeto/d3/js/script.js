@@ -807,7 +807,9 @@ $( document ).ready(function() {
                         var yPosition = d3.mouse(this)[1] - 25;
 
                         var yeartoshow = "_"+yearTimeline+"";
+
                         var value = d.properties.efgha[yeartoshow].total_efgha;
+
 
                         div.transition()
                               .duration(200)
@@ -863,19 +865,19 @@ $( document ).ready(function() {
                                         }
                             });
 
-                            if(lastCountryOn.indexOf(" ") != -1 || lastCountryOn.indexOf(".") != -1 || lastCountryOn.indexOf("(") != -1 || lastCountryOn.indexOf(")") != -1){
-                              d3.select("#"+lastCountryOn.replace(/\s/g, "_").replace(".", "_").replace("(", "_").replace(")", "_")+"mover").remove();
-                              lastCountryOn = null;
-
-                            }else{
-                              d3.select("#"+lastCountryOn+"mover").remove();
-                              lastCountryOn = null;
-                            }
+                            // if(lastCountryOn.indexOf(" ") != -1 || lastCountryOn.indexOf(".") != -1 || lastCountryOn.indexOf("(") != -1 || lastCountryOn.indexOf(")") != -1){
+                            //   d3.select("#"+lastCountryOn.replace(/\s/g, "_").replace(".", "_").replace("(", "_").replace(")", "_")+"mover").remove();
+                            //   lastCountryOn = null;
+                            //
+                            // }else{
+                            //   d3.select("#"+lastCountryOn+"mover").remove();
+                            //   lastCountryOn = null;
+                            // }
 
                       })
                     .on("click", function(d){
 
-                          //stackedAreaChartContinent(d.properties);
+                          stackedAreaChartContinent(d.properties);
 
                     });
 
@@ -1188,207 +1190,456 @@ $( document ).ready(function() {
 
       //////////CONTINENTES SMALL CHARTS///////////
 
+      // function stackedAreaChartContinent(data){
+      //       console.log(data)
+      //
+      //       var campos = new Array();
+      //       var valores = new Array();
+      //       var anos = new Array()
+      //
+      //       var efghaCont = data.efgha;
+      //
+      //       for( year in efghaCont){
+      //
+      //             theYear = efghaCont[year];
+      //
+      //             for(valor in theYear){
+      //
+      //               if(valor=="continent_name" ){
+      //
+      //               }else if(valor == "year"){
+      //                 anos.push(theYear[valor]);
+      //
+      //               }else{
+      //                 campos.push(valor)
+      //                 valores.push(theYear[valor])
+      //               }
+      //
+      //             }
+      //       }
+      //       console.log(anos);
+      //       console.log(campos);
+      //       console.log(valores)
+      //
+      //
+      //       function get_colors(n) {
+      //               var colors = ["#a6cee3","#1f78b4","#b2df8a","#33a02c",
+      //               "#fb9a99","#e31a1c","#fdbf6f","#ff7f00","#cab2d6",
+      //               "#6a3d9a"];
+      //
+      //                return colors[ n % colors.length];
+      //       }
+      //
+      //       var margin = {top: 61, right: 140, bottom: 101, left: 50},
+      //           width = 960 - margin.left - margin.right,
+      //           height = 500 - margin.top - margin.bottom;
+      //
+      //       // var  times = ["12am","1a", "2a", "3a", "4a", "5a", "6a",
+      //       //            "7a", "8a", "9a", "10a", "11a", "12pm", "1p",
+      //       //            "2p", "3p", "4p", "5p", "6p", "7p", "8p",
+      //       //            "9p", "10p", "11p"];
+      //
+      //       var x = d3.scale.linear()
+      //           .range([0, width]);
+      //
+      //       var y = d3.scale.linear()
+      //           .range([height, 0]);
+      //
+      //       var color = d3.scale.category10();
+      //
+      //       var xAxis = d3.axisBottom()
+      //           .scale(x)
+      //           .orient("bottom")
+      //       		.ticks(53, "s");
+      //
+      //       var yAxis = d3.axisLeft()
+      //           .scale(y)
+      //           .orient("left")
+      //           .ticks(7, "s");
+      //
+      //       var area = d3.area()
+      //           .x(function(d) { return x(d.hour); })
+      //           .y0(function(d) { return y(d.y0); })
+      //           .y1(function(d) { return y(d.y0 + d.y); });
+      //
+      //
+      //       var stack = d3.layout.stack()
+      //           .values(function(d) { return d.values; });
+      //
+      //       var svg = d3.select("#graphs").append("svg")
+      //           .attr("width", width + margin.left + margin.right)
+      //           .attr("height", height + margin.top + margin.bottom)
+      //         .append("g")
+      //           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      //
+      //
+      //
+      //            color.domain(d3.keys(campos).filter(function(key) {return key !== "year"; }));
+      //
+      //            // data.forEach(function(d) {
+      //         		// d.hour = +d.hour;
+      //            //  d.burglary = +d.burglary;
+      //            //  d.assault= +d.assault;
+      //            //  d.larceny_theft= +d.larceny_theft;
+      //            //  d.vehicle_related = +d.vehicle_related;
+      //            //  d.missing_person = +d.missing_person;
+      //            //  d.non_criminal = +d.non_criminal;
+      //            //  d.other_offenses = +d.other_offenses;
+      //            //  d.suspicious_occ = +d.suspicious_occ;
+      //            //  d.warrants = +d.warrants;
+      //            //   });
+      //
+      //
+      //
+      //         var browsers = stack(color.domain().map(function(name) {
+      //           return {
+      //             name: data.efgha.year,
+      //             values: data.efgha.map(function(d) {
+      //               return {year: d.hour, y: d[name] * 1};
+      //             })
+      //           };
+      //         }));
+      //
+      //
+      //       //   // Find the value of the hour with highest total value
+      //         var maxHourVal = d3.max(data, function(d){
+      //           var vals = d3.keys(d).map(
+      //             function(key){
+      //               return key !== "hour" ? d[key] : 0 });
+      //           return d3.sum(vals);
+      //         });
+      //
+      //       //   // Set domains for axes
+      //         x.domain(d3.extent(data, function(d) { return d.hour; }));
+      //         y.domain([0, 800])
+      //
+      //         var browser = svg.selectAll(".browser")
+      //             .data(browsers)
+      //           	.enter().append("g")
+      //             .attr("class", "browser");
+      //
+      //         browser.append("path")
+      //             .attr("class", "area")
+      //             .attr("d", function(d) { return area(d.values); })
+      //             .style("fill", function(d,i) {
+      //           		return get_colors(i); });
+      //
+      //
+      //             browser.append("text")
+      //             .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
+      //             .attr("transform", function(d) { return "translate(" + x(d.value.hour) + "," + y(d.value.y0 + d.value.y / 2) + ")"; })
+      //             .attr("x", -6)
+      //             .attr("dy", "-0.882em")
+      //             .text(function(d) {
+      //           			if(d.name == "larceny_theft"){
+      //                   return "larceny/theft";
+      //                 }
+      //            			if(d.name == "non_criminal"){
+      //                   return "non-criminal";
+      //                 }
+      //              		if(d.name == "assault"){
+      //                   return d.name;
+      //                 }})
+      //             .style("font", "15px avenir")
+      //         		.attr("transform", function(d) { return "translate(500," + y(d.value.y0 + d.value.y / 2) + ")"; })
+      //
+      //          svg.append("g")
+      //             .attr("class", "x axis")
+      //             .attr("transform", "translate(0," + height + ")")
+      //             .call(xAxis).append("text")
+      //          		.attr("x", 350)
+      //             .attr("y", 36)
+      //             .attr("fill", "#000")
+      //             .text("Hour of Time")
+      //           	.style("font-weight", "bold");
+      //
+      //         svg.append("g")
+      //             .attr("class", "y axis")
+      //             .call(yAxis)
+      //             .append("text")
+      //             .attr("transform", "rotate(-90)")
+      //         		.attr("x", -250)
+      //             .attr("y", -40)
+      //             .attr("dy", "0.3408em")
+      //             .attr("fill", "#000")
+      //             .text("Number of Incidents")
+      //          		.style("font-weight", "bold");
+      //
+      //          var legend = svg.selectAll(".legend")
+      //            	.data(color.domain()).enter()
+      //          		.append("g")
+      //           	.attr("class","legend")
+      //            .attr("transform", "translate(" + (width +20) + "," + 0+ ")");
+      //
+      //          legend.append("rect")
+      //            .attr("x", 0)
+      //            .attr("y", function(d, i) { return 20 * i; })
+      //            .attr("width", 10)
+      //            .attr("height", 10)
+      //            .style("fill", function(d, i) {
+      //            	return get_colors(i);});
+      //
+      //           legend.append("text")
+      //            .attr("x", 20)
+      //            .attr("dy", "0.75em")
+      //            .attr("y", function(d, i) { return 20 * i; })
+      //            .text(function(d) {return d});
+      //
+      //           legend.append("text")
+      //            .attr("x",0)
+      //       //      .attr("dy", "0.75em")
+      //            .attr("y",-10)
+      //            .text("Categories");
+      //
+      //
+      // }
+
+
       function stackedAreaChartContinent(data){
+            var continent = data.CONTINENT;
+            data = data.efgha;
+
             console.log(data)
 
-            var campos = new Array();
-            var valores = new Array();
-            var anos = new Array()
+            var svg = d3.select("#bottomgraphs svg")
 
-            var efghaCont = data.efgha;
+            var container = d3_container.container();
 
-            for( year in efghaCont){
+            container
+              .height(170)
+              .width(400)
+              .margin(0, 0, 0, 50);
 
-                  theYear = efghaCont[year];
+            var width = container.contentWidth(),
+              height = container.contentHeight();
 
-                  for(valor in theYear){
+            svg.call(container);
 
-                    if(valor=="continent_name" ){
+            var content = container.content();
 
-                    }else if(valor == "year"){
-                      anos.push(theYear[valor]);
+            var tooltip = d3.select("body").append("g")
+                      .attr("class", "tooltipstackedarea")
+                      .style("opacity", 0);
 
-                    }else{
-                      campos.push(valor)
-                      valores.push(theYear[valor])
+
+          var statusArray = ["Built Up Land", "Carbon", "Cropland", "Fishing Ground", "Forest Land", "Grazing Land"];
+          var colors = ["#9C8443", "#686736", "#CDBE90", "#8C9A86", "#C1A95E", "#845E36"];
+
+          var dataArray = [];
+
+          var dateParse = d3.timeParse("%Y");
+
+          var bisectDate = d3.bisector(function(d) { return d.year; }).left;
+
+          for ( var year in data) {
+            var dataYearArray = [];
+            var info = data[year];
+            //dataYearArray.push(info)
+            for ( var inf in info){
+                if(inf=="continent_name"){
+
+                }else{
+                  dataYearArray.push([inf,info[inf]]);
+
+                }
+            }
+            dataArray.push(dataYearArray);
+          }
+
+          var parsedData = dataArray.map(function (d) {
+              var dataObject = {year: dateParse(d[0][1])};
+
+              statusArray.forEach(function (s) {
+                switch (s) {
+                  case "Built Up Land":
+                    dataObject[s] = +d[7][1];
+
+                    break;
+                  case "Carbon":
+                    dataObject[s] = +d[6][1];
+
+                    break;
+                  case "Cropland":
+                    dataObject[s] = +d[5][1];
+
+                    break;
+                  case "Fishing Ground":
+                    dataObject[s] = +d[4][1];
+
+                    break;
+                  case "Forest Land":
+                    dataObject[s] = +d[3][1];
+
+                    break;
+                  case "Grazing Land":
+                    dataObject[s] = +d[2][1];
+
+                    break;
+
+                  default:
+
+                }
+              })
+              return dataObject;
+          });
+
+          var stack = d3.stack()
+               .keys(statusArray)
+               .offset(d3.stackOffsetNone)
+               ;
+
+          var layers = stack(parsedData);
+
+          function getDate(d) {
+             return d.year;
+          }
+
+
+            var x = d3.scaleTime()
+                 .domain([parsedData[0].year, parsedData[parsedData.length - 1].year])
+                 .range([0, width]);
+
+            var y = d3.scaleLinear()
+                 .domain([0, d3.max(layers, stackMax)])
+                 .range([height, 0]);
+
+
+
+            var xAxis = d3.axisBottom(x);
+            var yAxis = d3.axisLeft(y)
+                            .tickFormat( function(d) { return (d/1000000).toFixed()+ " M" } );
+
+
+
+          var gX = content.append("g")
+               .attr("transform", "translate(0," + height + ")")
+               .attr("class", "axis axis--x")
+               .call(xAxis)
+               .select(".domain")
+               .remove();
+
+          var gY = content.append("g")
+               .attr("class", "axis axis--y")
+               .call(yAxis);
+
+          var colors = statusArray.map(function (d, i) {
+               return colors[i];
+          });
+
+          var colorScale = d3.scaleOrdinal()
+               .domain(statusArray)
+               .range(colors);
+
+          var legendOffset = container.margin().left() + width - 32 * statusArray.length;
+
+          var legend = d3.legendColor()
+               .shapeWidth(30)
+               .cells(statusArray.length)
+               .orient("horizontal")
+               .scale(colorScale)
+
+          var area = d3.area()
+               .x(function (d, i) {return x(d.data.year) })
+               .y0(function (d) { return y(d[0]); })
+               .y1(function (d) { return y(d[1]); })
+               .curve(d3.curveBasis);
+
+          var layerGroups = content.selectAll(".layer")
+               .data(layers)
+               .enter().append("g")
+               .attr("class", "layer")
+               .attr("id", function(d, i) { return statusArray[i]; })
+               .attr("fill", function (d, i) {
+                    return colors[i];
+               });
+
+          svg.append("g")
+               .attr("class", "legend")
+               .attr("transform", "translate(" + legendOffset.toString() + ",0)");
+
+          // svg.select(".legend")
+          //      .call(legend);
+
+          layerGroups.append("path")
+               .attr("d", area)
+               .on("mousemove", function(d) {
+
+                 console.log(d)
+                 tooltip.transition()
+                       .duration(200)
+                     .style("opacity", .9);
+
+                 var xPosition = d3.mouse(this)[0] - 15;
+                 var yPosition = d3.mouse(this)[1] - 25;
+
+                 var parent = d3.select(this)._groups[0][0].parentNode.id;
+                 var landtype = parent;
+                 var img = "";
+
+                 switch (parent) {
+                   case "Cropland":
+                     img = "../img/icons/crop-land.png"
+                     break;
+                   case "Carbon":
+                     img = "../img/icons/carbon.png"
+                     break;
+                   case "Fishing Ground":
+                     img = "../img/icons/fishing-ground.png"
+                     break;
+                   case "Forest Land":
+                     img = "../img/icons/forest-land.png"
+                     break;
+                   case "Grazing Land":
+                     img = "../img/icons/grazing-land.png"
+                     break;
+                   case "Built Up Land":
+                     img = "../img/icons/built-up-land.png"
+                     break;
+
+                   default:
+                     img = "../img/icons/footprint.png"
+                 }
+
+                 var x0 = x.invert(d3.mouse(this)[0]),
+                         i = bisectDate(parsedData, x0, 1),
+                         d0 = parsedData[i - 1],
+                         d1 = parsedData[i],
+                         d = x0 - d0.year > d1.year - x0 ? d1 : d0;
+
+                  function valueWeWant(data, d)
+                  {
+                    for (var i = 0; i < data.length; i++)
+                    {
+                      if (data[i].year == d.year)
+                      {
+                        console.log(data[i][parent]);
+                        return data[i][parent];
+                      }
                     }
-
                   }
-            }
-            console.log(anos);
-            console.log(campos);
-            console.log(valores)
+                 if(measureToSee=="earths"){
+                   tooltip.html(Date(d.year).getTime() + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (valueWeWant(parsedData, d)/1000000).toFixed(2)+ " M" )
+                           .style("left", (d3.event.pageX) + "px")
+                           .style("top", (d3.event.pageY - 28) + "px");
+                 }else{
+                   tooltip.html(new Date(d.year).getFullYear() + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (valueWeWant(parsedData, d)/1000000).toFixed(2)+ " M" )
+                           .style("left", (d3.event.pageX) + "px")
+                           .style("top", (d3.event.pageY - 28) + "px");
+                 }
 
 
-            function get_colors(n) {
-                    var colors = ["#a6cee3","#1f78b4","#b2df8a","#33a02c",
-                    "#fb9a99","#e31a1c","#fdbf6f","#ff7f00","#cab2d6",
-                    "#6a3d9a"];
+                 tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
 
-                     return colors[ n % colors.length];
-            }
+               })
+               .on("mouseout", function(d){
+                 tooltip.transition()
+                       .duration(100)
+                     .style("opacity", 0);
+               });
 
-            var margin = {top: 61, right: 140, bottom: 101, left: 50},
-                width = 960 - margin.left - margin.right,
-                height = 500 - margin.top - margin.bottom;
-
-            // var  times = ["12am","1a", "2a", "3a", "4a", "5a", "6a",
-            //            "7a", "8a", "9a", "10a", "11a", "12pm", "1p",
-            //            "2p", "3p", "4p", "5p", "6p", "7p", "8p",
-            //            "9p", "10p", "11p"];
-
-            var x = d3.scale.linear()
-                .range([0, width]);
-
-            var y = d3.scale.linear()
-                .range([height, 0]);
-
-            var color = d3.scale.category10();
-
-            var xAxis = d3.axisBottom()
-                .scale(x)
-                .orient("bottom")
-            		.ticks(53, "s");
-
-            var yAxis = d3.axisLeft()
-                .scale(y)
-                .orient("left")
-                .ticks(7, "s");
-
-            var area = d3.area()
-                .x(function(d) { return x(d.hour); })
-                .y0(function(d) { return y(d.y0); })
-                .y1(function(d) { return y(d.y0 + d.y); });
-
-
-            var stack = d3.layout.stack()
-                .values(function(d) { return d.values; });
-
-            var svg = d3.select("#graphs").append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-              .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
-
-                 color.domain(d3.keys(campos).filter(function(key) {return key !== "year"; }));
-
-                 // data.forEach(function(d) {
-              		// d.hour = +d.hour;
-                 //  d.burglary = +d.burglary;
-                 //  d.assault= +d.assault;
-                 //  d.larceny_theft= +d.larceny_theft;
-                 //  d.vehicle_related = +d.vehicle_related;
-                 //  d.missing_person = +d.missing_person;
-                 //  d.non_criminal = +d.non_criminal;
-                 //  d.other_offenses = +d.other_offenses;
-                 //  d.suspicious_occ = +d.suspicious_occ;
-                 //  d.warrants = +d.warrants;
-                 //   });
-
-
-
-              var browsers = stack(color.domain().map(function(name) {
-                return {
-                  name: data.efgha.year,
-                  values: data.efgha.map(function(d) {
-                    return {year: d.hour, y: d[name] * 1};
-                  })
-                };
-              }));
-
-
-            //   // Find the value of the hour with highest total value
-              var maxHourVal = d3.max(data, function(d){
-                var vals = d3.keys(d).map(
-                  function(key){
-                    return key !== "hour" ? d[key] : 0 });
-                return d3.sum(vals);
-              });
-
-            //   // Set domains for axes
-              x.domain(d3.extent(data, function(d) { return d.hour; }));
-              y.domain([0, 800])
-
-              var browser = svg.selectAll(".browser")
-                  .data(browsers)
-                	.enter().append("g")
-                  .attr("class", "browser");
-
-              browser.append("path")
-                  .attr("class", "area")
-                  .attr("d", function(d) { return area(d.values); })
-                  .style("fill", function(d,i) {
-                		return get_colors(i); });
-
-
-                  browser.append("text")
-                  .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-                  .attr("transform", function(d) { return "translate(" + x(d.value.hour) + "," + y(d.value.y0 + d.value.y / 2) + ")"; })
-                  .attr("x", -6)
-                  .attr("dy", "-0.882em")
-                  .text(function(d) {
-                			if(d.name == "larceny_theft"){
-                        return "larceny/theft";
-                      }
-                 			if(d.name == "non_criminal"){
-                        return "non-criminal";
-                      }
-                   		if(d.name == "assault"){
-                        return d.name;
-                      }})
-                  .style("font", "15px avenir")
-              		.attr("transform", function(d) { return "translate(500," + y(d.value.y0 + d.value.y / 2) + ")"; })
-
-               svg.append("g")
-                  .attr("class", "x axis")
-                  .attr("transform", "translate(0," + height + ")")
-                  .call(xAxis).append("text")
-               		.attr("x", 350)
-                  .attr("y", 36)
-                  .attr("fill", "#000")
-                  .text("Hour of Time")
-                	.style("font-weight", "bold");
-
-              svg.append("g")
-                  .attr("class", "y axis")
-                  .call(yAxis)
-                  .append("text")
-                  .attr("transform", "rotate(-90)")
-              		.attr("x", -250)
-                  .attr("y", -40)
-                  .attr("dy", "0.3408em")
-                  .attr("fill", "#000")
-                  .text("Number of Incidents")
-               		.style("font-weight", "bold");
-
-               var legend = svg.selectAll(".legend")
-                 	.data(color.domain()).enter()
-               		.append("g")
-                	.attr("class","legend")
-                 .attr("transform", "translate(" + (width +20) + "," + 0+ ")");
-
-               legend.append("rect")
-                 .attr("x", 0)
-                 .attr("y", function(d, i) { return 20 * i; })
-                 .attr("width", 10)
-                 .attr("height", 10)
-                 .style("fill", function(d, i) {
-                 	return get_colors(i);});
-
-                legend.append("text")
-                 .attr("x", 20)
-                 .attr("dy", "0.75em")
-                 .attr("y", function(d, i) { return 20 * i; })
-                 .text(function(d) {return d});
-
-                legend.append("text")
-                 .attr("x",0)
-            //      .attr("dy", "0.75em")
-                 .attr("y",-10)
-                 .text("Categories");
-
+          function stackMax(layer) {
+               return d3.max(layer, function (d) { return d[1]; });
+             }
 
       }
 
@@ -1550,6 +1801,53 @@ $( document ).ready(function() {
             console.log(d);
             highlightContinent("stackedBar",d.x);
 
+            tooltip.transition()
+                  .duration(200)
+                .style("opacity", .9);
+
+            var xPosition = d3.mouse(this)[0] - 15;
+            var yPosition = d3.mouse(this)[1] - 25;
+
+            var parent = d3.select(this)._groups[0][0].parentNode.id;
+
+            var img = "";
+
+            switch (parent) {
+              case "Cropland":
+                img = "../img/icons/crop-land.png"
+                break;
+              case "Carbon":
+                img = "../img/icons/carbon.png"
+                break;
+              case "Fishing Ground":
+                img = "../img/icons/fishing-ground.png"
+                break;
+              case "Forest Land":
+                img = "../img/icons/forest-land.png"
+                break;
+              case "Grazing Land":
+                img = "../img/icons/grazing-land.png"
+                break;
+              case "Built Up Land":
+                img = "../img/icons/built-up-land.png"
+                break;
+
+              default:
+                img = "../img/icons/footprint.png"
+            }
+
+            if(measureToSee=="earths"){
+              tooltip.html(d.x + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + d.y.toFixed(2)+ " Earths" )
+                      .style("left", (d3.event.pageX) + "px")
+                      .style("top", (d3.event.pageY - 28) + "px");
+            }else{
+              tooltip.html(d.x + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + round(d.y/1000000, 6).toFixed(2)+ " M" )
+                      .style("left", (d3.event.pageX) + "px")
+                      .style("top", (d3.event.pageY - 28) + "px");
+            }
+
+
+            tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
 
 
         })
@@ -1569,53 +1867,19 @@ $( document ).ready(function() {
 
         })
         .on("mousemove", function(d) {
-          tooltip.transition()
-                .duration(200)
-              .style("opacity", .9);
-
           var xPosition = d3.mouse(this)[0] - 15;
           var yPosition = d3.mouse(this)[1] - 25;
 
-          var parent = d3.select(this)._groups[0][0].parentNode.id;
-
-          var img = "";
-
-          switch (parent) {
-            case "Cropland":
-              img = "../img/icons/crop-land.png"
-              break;
-            case "Carbon":
-              img = "../img/icons/carbon.png"
-              break;
-            case "Fishing Ground":
-              img = "../img/icons/fishing-ground.png"
-              break;
-            case "Forest Land":
-              img = "../img/icons/forest-land.png"
-              break;
-            case "Grazing Land":
-              img = "../img/icons/grazing-land.png"
-              break;
-            case "Built Up Land":
-              img = "../img/icons/built-up-land.png"
-              break;
-
-            default:
-              img = "../img/icons/footprint.png"
-          }
-
           if(measureToSee=="earths"){
-            tooltip.html(d.x + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + d.y.toFixed(2)+ " Earths" )
-                    .style("left", (d3.event.pageX) + "px")
+            tooltip.style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 28) + "px");
           }else{
-            tooltip.html(d.x + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + round(d.y/1000000, 6).toFixed(2)+ " M" )
-                    .style("left", (d3.event.pageX) + "px")
+            tooltip.style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 28) + "px");
           }
 
-
           tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+
 
         });
 
