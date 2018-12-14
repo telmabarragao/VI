@@ -8,7 +8,7 @@ Primary style
 }
 
 html {
-  font-size: 62.5%;
+  font-size: 55%;
 }
 
 body {
@@ -46,10 +46,11 @@ Main Components
 }
 .cd-horizontal-timeline .timeline {
   position: relative;
-  height: 100px;
+  height: 50px; /*heree*/
   width: 90%;
-  max-width: 800px;
+  max-width: 500px;
   margin: 0 auto;
+  bottom: -50px;
 }
 .cd-horizontal-timeline .events-wrapper {
   position: relative;
@@ -81,7 +82,7 @@ Main Components
   position: absolute;
   z-index: 1;
   left: 0;
-  top: 49px;
+  top: 30px; /*also here*/
   height: 2px;
   /* width will be set using JavaScript */
   background: #dfdfdf;
