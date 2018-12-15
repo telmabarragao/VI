@@ -13,6 +13,7 @@ $( document ).ready(function() {
       var minValColorContB, maxValColorContB;
       var measureToSee ="gha";
 
+      var continentsToFloatingBars = [];
 
       $("#selectEarthsGha").on("change", function(){
         measureToSee = document.getElementById("selectEarthsGha").value;
@@ -627,6 +628,9 @@ $( document ).ready(function() {
                   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalEcoFootCons+20)).text(d.properties.NAME);
 
 
+                })
+                .on("dblclick", function(d){
+                  floatingBarChartContinent(d.properties, yearTimeline);
                 });
 
           });
@@ -901,6 +905,9 @@ $( document ).ready(function() {
                           d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalEcoFootCons+20)).text(d.properties.NAME);
 
 
+                    })
+                    .on("dblclick", function(d){
+                      floatingBarChartContinent(d.properties, yearTimeline);
                     });
 
               });
@@ -1181,6 +1188,9 @@ $( document ).ready(function() {
                     .on("mouseleave", function(d){
                         d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity));
 
+                    })
+                    .on("dblclick", function(d){
+                      floatingBarChartContinent(d.properties, yearTimeline);
                     });
 
               });
@@ -1521,7 +1531,6 @@ $( document ).ready(function() {
 
       }
 
-
       function stackedBarChartContinent(data, year){
 
             var dataToShow = data.slice(0,6);
@@ -1796,7 +1805,251 @@ $( document ).ready(function() {
 
       }
 
+      function floatingBarChartContinent(data, year){
 
+          $("#floatingBarChartCont g").remove();
+
+            continentsToFloatingBars.push(data.CONTINENT);
+            console.log(continentsToFloatingBars)
+
+            var landtypes = ["Built Up Land", "Carbon", "Cropland", "Fishing Ground", "Forest Land", "Grazing Land", "Total"];
+
+            var yeartoshow = "_"+year+"";
+
+            var dataset;
+
+            if(measureToSee == "gha"){
+
+              if(variableToShow=="Biocapacity"){
+
+                console.log("biocapacity")
+                dataset = data.biogha[yeartoshow];
+                data = [{"landtype":"Built Up Land","value":dataset.built_up_land_biogha},
+                {"landtype":"Carbon","value":dataset.carbon_biogha},
+                {"landtype":"Cropland","value":dataset.cropland_biogha},
+                {"landtype":"Fishing Ground","value":dataset.fishing_grounds_biogha},
+                {"landtype":"Forest Land","value":dataset.forest_products_biogha},
+                {"landtype":"Grazing Land","value":dataset.grazing_land_biogha},
+                {"landtype":"Total","value":dataset.total_biogha}];
+
+              }else{
+
+                console.log("efgha")
+                dataset = data.efgha[yeartoshow];
+
+                data = [{"landtype":"Built Up Land","value":dataset.built_up_land_efgha},
+                {"landtype":"Carbon","value":dataset.carbon_efgha},
+                {"landtype":"Cropland","value":dataset.cropland_efgha},
+                {"landtype":"Fishing Ground","value":dataset.fishing_grounds_efgha},
+                {"landtype":"Forest Land","value":dataset.forest_products_efgha},
+                {"landtype":"Grazing Land","value":dataset.grazing_land_efgha},
+                {"landtype":"Total","value":dataset.total_efgha}];
+
+              }
+            }else{
+
+                console.log("efearths")
+                dataset = data.efearths[yeartoshow];
+
+                data = [{"landtype":"Built Up Land","value":dataset.built_up_land_efearths},
+                {"landtype":"Carbon","value":dataset.carbon_efearths},
+                {"landtype":"Cropland","value":dataset.cropland_efearths},
+                {"landtype":"Fishing Ground","value":dataset.fishing_grounds_efearths},
+                {"landtype":"Forest Land","value":dataset.forest_products_efearths},
+                {"landtype":"Grazing Land","value":dataset.grazing_land_efearths},
+                {"landtype":"Total","value":dataset.total_efearths}];
+            }
+
+            var continent = dataset.CONTINENT;
+
+            var tooltip = d3.select("body").append("g")
+                      .attr("class", "tooltipfloatingcontinent")
+                      .style("opacity", 0);
+
+
+
+             // set the dimensions and margins of the graph
+
+             var statusArray = ["Built Up Land", "Carbon", "Cropland", "Fishing Ground", "Forest Land", "Grazing Land", "Total"];
+             var colors = ["#9C8443", "#686736", "#CDBE90", "#8C9A86", "#C1A95E", "#845E36", "#006080" ];
+
+             var margin = {top: 0, right: 0, bottom: 0, left: 80};
+             width = 400,
+             height = 170;
+
+             var colors = statusArray.map(function (d, i) {
+                  return colors[i];
+             });
+
+             var colorScale = d3.scaleOrdinal()
+                  .domain(statusArray)
+                  .range(colors);
+
+
+             // set the ranges
+             var y = d3.scaleBand()
+               .range([height, 0])
+               .padding(0.1);
+
+             var x = d3.scaleLinear()
+               .range([0, width]);
+
+             // append the svg object to the body of the page
+             // append a 'group' element to 'svg'
+             // moves the 'group' element to the top left margin
+             var svg = d3.select("#floatingBarChartCont")
+               .attr("width", width + margin.left + margin.right)
+               .attr("height", height + margin.top + margin.bottom)
+               .append("g")
+               .attr("transform",
+                 "translate(" + margin.left + "," + margin.top + ")");
+
+             // format the data
+             data.forEach(function(d) {
+               d.value = +d.value;
+             });
+
+             // Scale the range of the data in the domains
+             x.domain([0, d3.max(data, function(d){ return d.value; })])
+             y.domain(data.map(function(d) { return d.landtype; }));
+             //y.domain([0, d3.max(data, function(d) { return d.sales; })]);
+
+             var img="";
+
+             // append the rectangles for the bar chart
+             svg.selectAll(".bar")
+               .data(data)
+               .enter().append("rect")
+               .attr("class", "bar")
+               .attr("id", function(d) { return d.landtype; })
+               .attr("width", function(d) {return x(d.value); } )
+               .attr("y", function(d) { return y(d.landtype); })
+               .attr("height", y.bandwidth())
+               .style("fill", function(d,i){
+                 return colors[i];
+               })
+               .on("mouseover", function(d){
+                 var xPosition = d3.mouse(this)[0] - 15;
+                 var yPosition = d3.mouse(this)[1] - 25;
+
+                 var landtype = d.landtype;
+
+                 switch (landtype) {
+                   case "Cropland":
+                     img = "../img/icons/crop-land.png"
+                     break;
+                   case "Carbon":
+                     img = "../img/icons/carbon.png"
+                     break;
+                   case "Fishing Ground":
+                     img = "../img/icons/fishing-ground.png"
+                     break;
+                   case "Forest Land":
+                     img = "../img/icons/forest-land.png"
+                     break;
+                   case "Grazing Land":
+                     img = "../img/icons/grazing-land.png"
+                     break;
+                   case "Built Up Land":
+                     img = "../img/icons/built-up-land.png"
+                     break;
+
+                   default:
+                      if(measureToSee=="gha"){
+                        if(variableToShow=="Biocapacity"){
+                          img = "../img/icons/biocapacity.png"
+
+                        }else{
+                          img = "../img/icons/footprint.png"
+
+                        }
+                      }else{
+                          img = "../img/icons/earth.png"
+
+                      }
+                 }
+
+
+                 if(measureToSee=="earths"){
+                   tooltip.html(d.landtype + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (d.value).toFixed(2)+ " Earths" )
+                           .style("left", (d3.event.pageX) + "px")
+                           .style("top", (d3.event.pageY - 28) + "px");
+                 }else{
+                   tooltip.html(d.landtype + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (d.value/1000000).toFixed(2)+ " M" )
+                           .style("left", (d3.event.pageX) + "px")
+                           .style("top", (d3.event.pageY - 28) + "px");
+                 }
+
+
+                 tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+
+               })
+               .on("mousemove", function(d) {
+
+                 tooltip.transition()
+                       .duration(200)
+                     .style("opacity", .9);
+
+                 var xPosition = d3.mouse(this)[0] - 15;
+                 var yPosition = d3.mouse(this)[1] - 25;
+
+
+                 tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+
+               })
+               .on("mouseout", function(d){
+                 tooltip.transition()
+                       .duration(100)
+                     .style("opacity", 0);
+               });
+
+
+              if(measureToSee=="earths"){
+                var xAxis = d3.axisBottom(x)
+                              .tickFormat( function(d) { return (d).toFixed(2)+ " Earths" } );
+              }else{
+                console.log(" e gha")
+                var xAxis = d3.axisBottom(x)
+                              .tickFormat( function(d) { return (d/1000000).toFixed()+ " M" } );
+              }
+
+              // add the x Axis
+              svg.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+
+
+              // add the y Axis
+              svg.append("g")
+                .call(d3.axisLeft(y));
+
+              function wrap(text, width) {
+                text.each(function() {
+                  var text = d3.select(this),
+                      words = text.text().split(/\s+/).reverse(),
+                      word,
+                      line = [],
+                      lineNumber = 0,
+                      lineHeight = 1.1, // ems
+                      y = text.attr("y"),
+                      dy = parseFloat(text.attr("dy")),
+                      tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+                  while (word = words.pop()) {
+                    line.push(word);
+                    tspan.text(line.join(" "));
+                    if (tspan.node().getComputedTextLength() > width) {
+                      line.pop();
+                      tspan.text(line.join(" "));
+                      line = [word];
+                      tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                    }
+                  }
+                });
+              }
+
+
+
+      }
       //////////CONTINENTES SMALL FUNCTIONS///////////
 
       function continentsDataForYear(datageo, year){
@@ -1961,18 +2214,33 @@ $( document ).ready(function() {
 
             ///////////// HIGHLIGH MAP /////////////
 
+            if(variableToShow=="Biocapacity"){
+              d3.selectAll("path[title=\'"+continent+"\']")
+                .style("fill", function(d){
+                      var yeartoshow = "_"+yearTimeline+"";
+                      var value = d.properties.biogha[yeartoshow].total_biogha;
 
-            d3.selectAll("path[title=\'"+continent+"\']")
-              .style("fill", function(d){
-                    var yeartoshow = "_"+yearTimeline+"";
-                    var value = d.properties.efgha[yeartoshow].total_efgha;
+                      if(value){
+                          return ramp(minValColorContB,lowColorB, highColorB, "mouseB")
+                      } else {
+                          return "#bfbfbf"
+                      }
+                });
+            }else{
+              d3.selectAll("path[title=\'"+continent+"\']")
+                .style("fill", function(d){
+                      var yeartoshow = "_"+yearTimeline+"";
+                      var value = d.properties.efgha[yeartoshow].total_efgha;
 
-                    if(value){
-                        return ramp(minValColorContFT,lowColorEF, highColorEF, "mouseEF")
-                    } else {
-                        return "#bfbfbf"
-                    }
-              });
+                      if(value){
+                          return ramp(minValColorContFT,lowColorEF, highColorEF, "mouseEF")
+                      } else {
+                          return "#bfbfbf"
+                      }
+                });
+            }
+
+
 
           }else if(where=="search"){
               ///////////// HIGHLIGH STACKED BAR /////////////
@@ -2013,17 +2281,33 @@ $( document ).ready(function() {
 
             }else if(where=="stackedBar"){
 
-              d3.selectAll("path[title=\'"+continent+"\']")
-                .style("fill", function(d){
-                          var yeartoshow = "_"+yearTimeline+"";
-                          var value = d.properties.efgha[yeartoshow].total_efgha;
+              if(variableToShow=="Biocapacity"){
+                d3.selectAll("path[title=\'"+continent+"\']")
+                  .style("fill", function(d){
+                            var yeartoshow = "_"+yearTimeline+"";
+                            var value = d.properties.biogha[yeartoshow].total_biogha;
 
-                            if(value){
-                              return ramp(minValColorContFT,lowColorEF, highColorEF, value)
-                            } else {
-                              return "#bfbfbf"
-                            }
-                });
+                              if(value){
+                                return ramp(minValColorContB,lowColorB, highColorB, value)
+                              } else {
+                                return "#bfbfbf"
+                              }
+                  });
+
+              }else{
+                d3.selectAll("path[title=\'"+continent+"\']")
+                  .style("fill", function(d){
+                            var yeartoshow = "_"+yearTimeline+"";
+                            var value = d.properties.efgha[yeartoshow].total_efgha;
+
+                              if(value){
+                                return ramp(minValColorContFT,lowColorEF, highColorEF, value)
+                              } else {
+                                return "#bfbfbf"
+                              }
+                  });
+
+              }
 
 
             }else if(where=="search"){
@@ -2034,17 +2318,36 @@ $( document ).ready(function() {
                   .style("stroke-width", "0px")
                   .style("filter", "");
 
-                  d3.selectAll("path[title=\'"+continent+"\']")
-                    .style("fill", function(d){
-                              var yeartoshow = "_"+yearTimeline+"";
-                              var value = d.properties.efgha[yeartoshow].total_efgha;
 
-                                if(value){
-                                  return ramp(minValColorContFT,lowColorEF, highColorEF, value)
-                                } else {
-                                  return "#bfbfbf"
+
+                                if(variableToShow=="Biocapacity"){
+                                  d3.selectAll("path[title=\'"+continent+"\']")
+                                    .style("fill", function(d){
+                                              var yeartoshow = "_"+yearTimeline+"";
+                                              var value = d.properties.biogha[yeartoshow].total_biogha;
+
+                                                if(value){
+                                                  return ramp(minValColorContB,lowColorB, highColorB, value)
+                                                } else {
+                                                  return "#bfbfbf"
+                                                }
+                                    });
+
+                                }else{
+                                  d3.selectAll("path[title=\'"+continent+"\']")
+                                    .style("fill", function(d){
+                                              var yeartoshow = "_"+yearTimeline+"";
+                                              var value = d.properties.efgha[yeartoshow].total_efgha;
+
+                                                if(value){
+                                                  return ramp(minValColorContFT,lowColorEF, highColorEF, value)
+                                                } else {
+                                                  return "#bfbfbf"
+                                                }
+                                    });
+
                                 }
-                    });
+
 
             }
 
