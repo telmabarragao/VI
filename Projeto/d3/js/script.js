@@ -14,6 +14,7 @@ $( document ).ready(function() {
       var measureToSee ="gha";
 
       var continentsToFloatingBars = [];
+      var dataToFloatingBars = [];
 
       $("#selectEarthsGha").on("change", function(){
         measureToSee = document.getElementById("selectEarthsGha").value;
@@ -1824,6 +1825,8 @@ $( document ).ready(function() {
 
                 console.log("biocapacity")
                 dataset = data.biogha[yeartoshow];
+
+
                 data = [{"landtype":"Built Up Land","value":dataset.built_up_land_biogha},
                 {"landtype":"Carbon","value":dataset.carbon_biogha},
                 {"landtype":"Cropland","value":dataset.cropland_biogha},
@@ -1836,6 +1839,7 @@ $( document ).ready(function() {
 
                 console.log("efgha")
                 dataset = data.efgha[yeartoshow];
+                
 
                 data = [{"landtype":"Built Up Land","value":dataset.built_up_land_efgha},
                 {"landtype":"Carbon","value":dataset.carbon_efgha},
@@ -1860,6 +1864,9 @@ $( document ).ready(function() {
                 {"landtype":"Total","value":dataset.total_efearths}];
             }
 
+            dataToFloatingBars.push(dataset);
+            console.log(dataToFloatingBars);
+            
             var continent = dataset.CONTINENT;
 
             var tooltip = d3.select("body").append("g")
