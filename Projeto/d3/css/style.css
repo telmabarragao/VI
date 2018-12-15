@@ -6,6 +6,7 @@
 body{
   background-color: #ebebe0;
   font-family: "Fira Sans";
+  overflow-y: hidden;
 }
 
 /************** MAIN TAB ***********/
@@ -522,8 +523,10 @@ body{
   display: block;
   bottom: 0%;
   margin-bottom: 0%;
+  margin-top: 0%;
   width: 100%;
-  top: 79%;
+  height: 10%;
+  top: 97% !important;
 }
 
 /********** GRAPHS WORLD ********/

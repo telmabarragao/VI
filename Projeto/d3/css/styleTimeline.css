@@ -30,7 +30,7 @@ Main Components
 -------------------------------- */
 .cd-horizontal-timeline {
   opacity: 0;
-  margin: 2em auto;
+  margin:0;
   -webkit-transition: opacity 0.2s;
   -moz-transition: opacity 0.2s;
   transition: opacity 0.2s;
@@ -46,11 +46,11 @@ Main Components
 }
 .cd-horizontal-timeline .timeline {
   position: relative;
-  height: 30px; /*heree*/
+  height: 55%; /*heree*/
   width: 90%;
   max-width: 100%;
   margin: 0 auto;
-  bottom: -95px;
+  top: 18%;
 }
 .cd-horizontal-timeline .events-wrapper {
   position: relative;
