@@ -19,6 +19,7 @@ $( document ).ready(function() {
       $("#selectEarthsGha").on("change", function(){
         measureToSee = document.getElementById("selectEarthsGha").value;
         $("#chart").remove();
+        $("#legend1 svg").remove();
         $("#stackBarChartCont").remove();
         $("#stackAreaChartCont g").remove();
 
@@ -135,6 +136,7 @@ $( document ).ready(function() {
                   appendTo = "#world_graph";
 
                   $("#world_graph #chart").remove();
+                  $("#world_graph #legend1 svg").remove();
                   $("#graphs #stackBarChartCont").remove();
                   $("#stackAreaChartCont g").remove();
 
@@ -159,10 +161,11 @@ $( document ).ready(function() {
                 }else{
                   appendTo = "#world_graph";
                   $("#world_graph #chart").remove();
+                  $("#world_graph #legend1 svg").remove();
                   $("#graphs #stackBarChartCont").remove();
                   $("#stackAreaChartCont g").remove();
 
-
+                  $(".main")
                   document.getElementById("selectEarthsGha").value = "gha";
                   measureToSee="gha";
                   document.getElementById("selectMeasure").style.visibility="hidden";
@@ -180,6 +183,7 @@ $( document ).ready(function() {
               if(variableToShow == "EcoFoot"){
                   appendTo = "#countries_graph"
                   $("#chart").remove();
+                  $("#legend1 svg").remove();
 
                   countries_EcoFoot();
 
@@ -194,6 +198,7 @@ $( document ).ready(function() {
               }else{
                   appendTo = "#countries_graph"
                   $("#chart").remove();
+                  $("#legend1 svg").remove();
 
                   countries_Biocapacity();
 
@@ -216,6 +221,7 @@ $( document ).ready(function() {
                   if(document.getElementById("chart").length != 0){
 
                     $("#chart").remove();
+                    $("#legend1 svg").remove();
                     $("#stackBarChartCont").remove();
                     $("#stackAreaChartCont g").remove();
 
@@ -231,6 +237,7 @@ $( document ).ready(function() {
 
                   if(document.getElementById("chart").length != 0){
                     $("#chart").remove();
+                    $("#legend1 svg").remove();
                     $("#stackBarChartCont").remove();
                     $("#stackAreaChartCont g").remove();
 
@@ -245,6 +252,7 @@ $( document ).ready(function() {
             variableToShow = "Biocapacity";
             if(document.getElementById("chart").length != 0){
               $("#chart").remove();
+              $("#legend1 svg").remove();
               $("#stackBarChartCont").remove();
               $("#stackAreaChartCont g").remove();
 
@@ -264,6 +272,7 @@ $( document ).ready(function() {
             variableToShow = "EcoFoot";
             if(document.getElementById("chart").length != 0){
               $("#chart").remove();
+              $("#legend1 svg").remove();
               $("#stackBarChartCont").remove();
               $("#stackAreaChartCont g").remove();
 
@@ -319,6 +328,7 @@ $( document ).ready(function() {
 
           if(variableToShow=="EcoFoot"){
             $("#world_graph #chart").remove();
+            $("#world_graph #legend1 svg").remove();
             $("#graphs #stackBarChartCont").remove();
 
             if(measureToSee=="earths"){
@@ -330,6 +340,7 @@ $( document ).ready(function() {
             }
           }else{
             $("#world_graph #chart").remove();
+            $("#world_graph #legend1 svg").remove();
             $("#graphs #stackBarChartCont").remove();
 
             continents_BiocapacityGha();
@@ -633,6 +644,62 @@ $( document ).ready(function() {
                 .on("dblclick", function(d){
                   floatingBarChartContinent(d.properties, yearTimeline);
                 });
+                    // ADD COLOR SCALE LEGEND
+                    var w = 50, h = 272;
+
+                    var key = d3.select("#legend1")
+                      .append("svg")
+                      .attr("width", w+ 50)
+                      .attr("height", h);
+
+                    var legend = key.append("defs")
+                      .append("svg:linearGradient")
+                      .attr("id", "gradient")
+                      .attr("x1", "100%")
+                      .attr("y1", "100%")
+                      .attr("x2", "100%")
+                      .attr("y2", "0%")
+                      .attr("spreadMethod", "pad");
+
+                    legend.append("stop")
+                      .attr("offset", "0%")
+                      .attr("stop-color", lowColorEF)
+                      .attr("stop-opacity", 1);
+
+                    legend.append("stop")
+                      .attr("offset", "100%")
+                      .attr("stop-color", highColorEF)
+                      .attr("stop-opacity", 1);
+
+                    key.append("rect")
+                      .attr("width", w -40)
+                      .attr("height", h)
+                      .style("fill", "url(#gradient)")
+                      .attr("transform", "translate(20,0)");
+
+                    var y = d3.scaleLinear()
+                      .range([0, 271])
+                      .domain([maxValColorContFT, minValColorContFT]);
+
+                    var yAxis = d3.axisRight()
+                      .scale(y)
+                      .ticks(5)
+                      .tickFormat( function(d) { 
+                        return d.toFixed(2)+ " Earths" 
+                      });
+
+
+                    key.append("g")
+                      .attr("class", "y axis")
+                      .attr("transform", "translate(30,0)")
+                      .call(yAxis)
+                      .append("text")
+                      .attr("transform", "rotate(-90)")
+                      .attr("y", 0)
+                      .attr("dy", ".71em")
+                      .style("text-anchor", "end")
+                      .text("axis title");
+
 
           });
 
@@ -910,10 +977,68 @@ $( document ).ready(function() {
                     .on("dblclick", function(d){
                       floatingBarChartContinent(d.properties, yearTimeline);
                     });
+                    // ADD COLOR SCALE LEGEND
+                    var w = 50, h = 272;
+
+                    var key = d3.select("#legend1")
+                      .append("svg")
+                      .attr("width", w+ 50)
+                      .attr("height", h);
+
+                    var legend = key.append("defs")
+                      .append("svg:linearGradient")
+                      .attr("id", "gradient")
+                      .attr("x1", "100%")
+                      .attr("y1", "100%")
+                      .attr("x2", "100%")
+                      .attr("y2", "0%")
+                      .attr("spreadMethod", "pad");
+
+                    legend.append("stop")
+                      .attr("offset", "0%")
+                      .attr("stop-color", lowColorEF)
+                      .attr("stop-opacity", 1);
+
+                    legend.append("stop")
+                      .attr("offset", "100%")
+                      .attr("stop-color", highColorEF)
+                      .attr("stop-opacity", 1);
+
+                    key.append("rect")
+                      .attr("width", w -40)
+                      .attr("height", h)
+                      .style("fill", "url(#gradient)")
+                      .attr("transform", "translate(20,0)");
+
+                    var y = d3.scaleLinear()
+                      .range([0, 271])
+                      .domain([maxValColorContFT, minValColorContFT]);
+
+                    var yAxis = d3.axisRight()
+                      .scale(y)
+                      .ticks(5)
+                      .tickFormat( function(d) { 
+                        return (d/1000000).toFixed(2)+ " M"  
+                      });
+
+
+                    key.append("g")
+                      .attr("class", "y axis")
+                      .attr("transform", "translate(30,0)")
+                      .call(yAxis)
+                      .append("text")
+                      .attr("transform", "rotate(-90)")
+                      .attr("y", 0)
+                      .attr("dy", ".71em")
+                      .style("text-anchor", "end")
+                      .text("axis title");
+
+
 
               });
 
             });
+        
 
             autocomplete(document.getElementById("myInput-continent"), continents_list);
 
@@ -1193,6 +1318,63 @@ $( document ).ready(function() {
                     .on("dblclick", function(d){
                       floatingBarChartContinent(d.properties, yearTimeline);
                     });
+                                        // ADD COLOR SCALE LEGEND
+                    var w = 50, h = 272;
+
+                    var key = d3.select("#legend1")
+                      .append("svg")
+                      .attr("width", w+ 50)
+                      .attr("height", h);
+
+                    var legend = key.append("defs")
+                      .append("svg:linearGradient")
+                      .attr("id", "gradient")
+                      .attr("x1", "100%")
+                      .attr("y1", "100%")
+                      .attr("x2", "100%")
+                      .attr("y2", "0%")
+                      .attr("spreadMethod", "pad");
+
+                    legend.append("stop")
+                      .attr("offset", "0%")
+                      .attr("stop-color", lowColorB)
+                      .attr("stop-opacity", 1);
+
+                    legend.append("stop")
+                      .attr("offset", "100%")
+                      .attr("stop-color",highColorB)
+                      .attr("stop-opacity", 1);
+                      
+
+                    key.append("rect")
+                      .attr("width", w -40)
+                      .attr("height", h)
+                      .style("fill", "url(#gradient)")
+                      .attr("transform", "translate(20,0)");
+
+                    var y = d3.scaleLinear()
+                      .range([0, 271])
+                      .domain([maxValColorContB, minValColorContB]);
+
+                    var yAxis = d3.axisRight()
+                      .scale(y)
+                      .ticks(5)
+                      .tickFormat( function(d) { 
+                        return (d/1000000).toFixed(2)+ " M"  
+                      });
+
+
+                    key.append("g")
+                      .attr("class", "y axis")
+                      .attr("transform", "translate(30,0)")
+                      .call(yAxis)
+                      .append("text")
+                      .attr("transform", "rotate(-90)")
+                      .attr("y", 0)
+                      .attr("dy", ".71em")
+                      .style("text-anchor", "end")
+                      .text("axis title");
+
 
               });
 
@@ -1537,7 +1719,7 @@ $( document ).ready(function() {
             var dataToShow = data.slice(0,6);
             // Setup svg using Bostock's margin convention
 
-            var margin = {top: 20, right: 160, bottom: 35, left: 80};
+            var margin = {top: 20, right: 100, bottom: 35, left: 80};
 
             var width = 400;
             var height = 250;
@@ -2565,6 +2747,62 @@ $( document ).ready(function() {
                 .on("click", function(d){
                     singlecountry_floatingBar(d.properties.NAME);
                 });
+
+                    // ADD COLOR SCALE LEGEND
+                    var w = 400, h = 50;
+
+                    var key = d3.select("#legend1")
+                      .append("svg")
+                      .attr("width", w)
+                      .attr("height", h);
+
+                    var legend = key.append("defs")
+                      .append("svg:linearGradient")
+                      .attr("id", "gradient")
+                      .attr("x1", "0%")
+                      .attr("y1", "100%")
+                      .attr("x2", "100%")
+                      .attr("y2", "100%")
+                      .attr("spreadMethod", "pad");
+
+                    legend.append("stop")
+                      .attr("offset", "0%")
+                      .attr("stop-color", "#DFF4C6")
+                      .attr("stop-opacity", 1);
+
+                    legend.append("stop")
+                      .attr("offset", "100%")
+                      .attr("stop-color", "#607744")
+                      .attr("stop-opacity", 1);
+
+                    key.append("rect")
+                      .attr("width", w)
+                      .attr("height", h - 30)
+                      .style("fill", "url(#gradient)")
+                      .attr("transform", "translate(20,10)");
+
+                    var y = d3.scaleLinear()
+                      .range([400, 0])
+                      .domain([maxValColorCouFT, minValColorCouFT]);
+
+                    var yAxis = d3.axisBottom()
+                      .scale(y)
+                      .ticks(5)
+                      .tickFormat( function(d) { 
+                        return (d/1000000).toFixed(2)+ " M"  
+                      });
+
+
+                    key.append("g")
+                      .attr("class", "y axis")
+                      .attr("transform", "translate(20,30)")
+                      .call(yAxis)
+                      .append("text")
+                      .attr("transform", "rotate(-90)")
+                      .attr("y", 0)
+                      .attr("dy", ".71em")
+                      .style("text-anchor", "end")
+                      .text("axis title");
 
           });
 

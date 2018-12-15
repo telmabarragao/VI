@@ -21,6 +21,7 @@ body{
   z-index: -1;
 }
 
+
 #continents_view{
   visibility: visible;
 }
@@ -41,17 +42,16 @@ body{
   padding: 0%;
   margin-left: 1.5%;
   margin-top: -3.5%;
+  z-index: -2;
 }
 
 #graphs{
   position: relative;
   display: inline-block;
-  width: 40% !important;
-  height: 60% !important;
+  float: right;
   margin: 0% !important;
-  right: 0% !important;
   padding: 0%;
-  margin-top: 10%;
+  margin-top: 0%;
 }
 
 #bottomgraphs{
@@ -62,7 +62,7 @@ body{
   margin: 0% !important;
   right: 0% !important;
   padding: 0%;
-  margin-top: 10%;
+  top:-25%;
 }
 
 #stackBarChartCont{
@@ -73,6 +73,7 @@ body{
   margin: 0%;
   margin-right: 5%;
   margin-top: 5%;
+  bottom:2%;
   padding: 0%;
 }
 
@@ -97,11 +98,18 @@ body{
   padding: 0%;
 }
 
+#legend1{
+  position: relative;
+  display:inline-block;
+  margin-top: 10%;
+  left: -7%;
+  float: right;
+}
 
 #chart{
   position: relative;
-  display: block;
-
+  display: inline-block;
+  margin-top:5%;
 }
 
 .second-header{
