@@ -1753,7 +1753,7 @@ $( document ).ready(function() {
             .domain(dataset[0].map(function(d) {
                 return d.x;
             }))
-            .rangeRoundBands([10, width-10], 0.02);
+            .rangeRoundBands([10, width-10], 0.2);
 
           var y = d3.scale.linear()
             .domain([0, d3.max(dataset, function(d) {
@@ -1783,6 +1783,7 @@ $( document ).ready(function() {
 
         var xAxis = d3.axisBottom()
                       .scale(x);
+        var bandSize = x.rangeBand();
 
         svg.append("g")
           .attr("class", "y axis")
@@ -1790,12 +1791,13 @@ $( document ).ready(function() {
 
         svg.append("g")
           .attr("class", "x axis")
-          .attr("transform", "translate(0," + height + ")")
+          .attr("transform", "translate("+ bandSize/2 + "," + height + " )")
           .call(xAxis)
           .selectAll("text")
-            .attr("y", 6)
+            .attr("y", 10)
             .attr("x", 20)
             .style("text-anchor", "Start")
+            .attr("transform", "translate(-" + bandSize/4 + ", 0)")
             .text(function(d){
 
                   return d;
