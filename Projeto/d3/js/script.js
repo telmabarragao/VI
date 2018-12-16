@@ -1440,7 +1440,7 @@ $( document ).ready(function() {
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
             .style("text-decoration", "strong")
-            .text("Landtype Values per Continent");
+            .text("Landtype Values Over Time");
 
             var content = container.content();
 
