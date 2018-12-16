@@ -1402,6 +1402,7 @@ $( document ).ready(function() {
 
         $("#stackAreaChartCont g").remove();
         $("#stackedAreaTitle").remove();
+        document.getElementById("filterdivstackedAreaCC").style.display= "block";
 
             var continent = data.CONTINENT;
             if(measureToSee=="gha")
@@ -1423,7 +1424,7 @@ $( document ).ready(function() {
             var container = d3_container.container();
 
             container
-              .height(200)
+              .height(170)
               .width(500)
               .margin(0, 0, 0, 55);
 
@@ -1440,7 +1441,8 @@ $( document ).ready(function() {
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
             .style("text-decoration", "strong")
-            .text("Landtype Values Over Time");
+            .style("fill", "#888844")
+            .text(continent+" Landtype Values Over Time");
 
             var content = container.content();
 
@@ -1983,6 +1985,7 @@ $( document ).ready(function() {
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
         .style("text-decoration", "strong")
+        .style("fill", "#888844")
         .text("Landtype Values per Continent");
 
 

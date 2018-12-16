@@ -684,11 +684,46 @@ div.tooltip {
 .Close {
   color: #aaaaaa;
   float: right;
-  font-size: 16px;
+  font-size: 20px;
+  margin-top: 10%;
 }
 
 .Close:hover, .Close:focus {
   color: #000;
   text-decoration: none;
   cursor: pointer;
+}
+
+
+
+/********************** FILTERING OPTIONS *******************/
+
+#filterdivstackedAreaCC{
+  position: relative;
+  display: none;
+  margin-top:-5% !important;
+  width:35%;
+  margin-left: 6% !important;
+}
+
+.buttonfilterstackedAreaCC{
+  text-align: center;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  border-radius: 10px;
+  background-color: white;
+  color: #888844;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #9dd993), color-stop(100%, #65bd63));
+  background-image: -webkit-linear-gradient(top, #b9b992, #ffdf80);
+  background-image: -moz-linear-gradient(top, #b9b992, #ffdf80);
+  background-image: -ms-linear-gradient(top, #b9b992, #ffdf80);
+  background-image: -o-linear-gradient(top, #b9b992, #ffdf80);
+  background-image: linear-gradient(top, #b9b992, #ffdf80);
+  -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+  -webkit-transition: left 0.15s ease-out;
+  -moz-transition: left 0.15s ease-out;
+  -ms-transition: left 0.15s ease-out;
+  -o-transition: left 0.15s ease-out;
+  transition: left 0.15s ease-out;
 }
