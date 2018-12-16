@@ -13,8 +13,7 @@ $( document ).ready(function() {
       var minValColorContB, maxValColorContB;
       var measureToSee ="gha";
 
-      var continentsToFloatingBars = [];
-      var dataToFloatingBars = [];
+      var dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
 
       $("#selectEarthsGha").on("change", function(){
         measureToSee = document.getElementById("selectEarthsGha").value;
@@ -970,7 +969,7 @@ $( document ).ready(function() {
 
                           stackedAreaChartContinent(d.properties);
 
-                          popUpContinent(this, yearTimeline, d.properties.CONTINENT);
+                          //popUpContinent(this, yearTimeline, d.properties.CONTINENT);
 
                           d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalEcoFootCons+20)).text(d.properties.NAME);
 
@@ -1993,14 +1992,14 @@ $( document ).ready(function() {
 
           $("#floatingBarChartCont g").remove();
 
-            continentsToFloatingBars.push(data.CONTINENT);
-            console.log(continentsToFloatingBars)
+            dataToFloatingBars["continents"].push(data.CONTINENT);
 
             var landtypes = ["Built Up Land", "Carbon", "Cropland", "Fishing Ground", "Forest Land", "Grazing Land", "Total"];
+            dataToFloatingBars["categories"]=landtypes;
 
             var yeartoshow = "_"+year+"";
 
-            var dataset;
+            var dataset, data;
 
             if(measureToSee == "gha"){
 
@@ -2047,10 +2046,9 @@ $( document ).ready(function() {
                 {"landtype":"Total","value":dataset.total_efearths}];
             }
 
-            dataToFloatingBars.push(dataset);
+            dataToFloatingBars["layers"].push(data);
             console.log(dataToFloatingBars);
 
-            var continent = dataset.CONTINENT;
 
             var tooltip = d3.select("body").append("g")
                       .attr("class", "tooltipfloatingcontinent")
@@ -2060,29 +2058,43 @@ $( document ).ready(function() {
 
              // set the dimensions and margins of the graph
 
-             var statusArray = ["Built Up Land", "Carbon", "Cropland", "Fishing Ground", "Forest Land", "Grazing Land", "Total"];
-             var colors = ["#9C8443", "#686736", "#CDBE90", "#8C9A86", "#C1A95E", "#845E36", "#006080" ];
+             var colorsa = ["#9C8443", "#686736", "#CDBE90", "#8C9A86", "#C1A95E", "#845E36", "#006080" ];
+             dataToFloatingBars["colors"]=colorsa;
 
              var margin = {top: 0, right: 0, bottom: 0, left: 80};
              width = 400,
              height = 170;
 
-             var colors = statusArray.map(function (d, i) {
-                  return colors[i];
+             var colors = landtypes.map(function (d, i) {
+                  return dataToFloatingBars["colors"][i];
              });
 
              var colorScale = d3.scaleOrdinal()
-                  .domain(statusArray)
-                  .range(colors);
+                  .domain(landtypes)
+                  .range(colorsa);
+
+            n = dataToFloatingBars["continents"].length, // Number of Layers
+            m = dataToFloatingBars["layers"].length, // Number of Samples in 1 layer
+            yGroupMax = d3.max(dataToFloatingBars["layers"], function(layer) { return d3.max(layer, function(d) { return d.value; }); });
+            yGroupMin = d3.min(dataToFloatingBars["layers"], function(layer) { return d3.min(layer, function(d) { return d.value; }); });
 
 
              // set the ranges
-             var y = d3.scaleBand()
-               .range([height, 0])
-               .padding(0.1);
+             var x = d3.scaleBand()
+                 .domain(dataToFloatingBars["categories"])
+                 .rangeRound([0, width], .08);
 
-             var x = d3.scaleLinear()
-               .range([0, width]);
+             var y = d3.scaleLinear()
+                 .domain([0, yGroupMax])
+                 .range([height, 0]);
+
+            var xAxis = d3.axisBottom()
+                .scale(x)
+                .tickSize(7)
+                .tickPadding(6);
+
+            var yAxis = d3.axisLeft()
+                .scale(y);
 
              // append the svg object to the body of the page
              // append a 'group' element to 'svg'
@@ -2100,142 +2112,145 @@ $( document ).ready(function() {
              });
 
              // Scale the range of the data in the domains
-             x.domain([0, d3.max(data, function(d){ return d.value; })])
-             y.domain(data.map(function(d) { return d.landtype; }));
+             // x.domain([0, d3.max(data, function(d){ return d.value; })])
+             // y.domain(data.map(function(d) { return d.landtype; }));
              //y.domain([0, d3.max(data, function(d) { return d.sales; })]);
 
              var img="";
 
+             var layer = svg.selectAll(".layer")
+                     .data(dataToFloatingBars["layers"])
+                     .enter().append("g")
+                     .attr("class", "layer");
+            var count=0;
+            var rect = layer.selectAll("rect")
+                     .data(function(d,i){d.map(function(b){b.colorIndex=i;return b;});return d;})
+                     .enter().append("rect")
+                     .transition()
+                     .duration(500)
+                     .delay(function(d, i) { return i * 10; })
+                     .attr("x", function(d, i, j) {
+                       if(count<7){
+                         console.log("entreiiiii")
+                         count+=1;
+                         return x(d.landtype)/ n + 12 ;
+                       }else{
+                         return x(d.landtype)/ n + 5;
+                       }
+                     }) //+ x.bandwidth() % j.length*m
+                     .attr("width", 10)
+                     .transition()
+                     .attr("y", function(d) { return y(d.value); })
+                     .attr("height", function(d) { return height - y(d.value)})
+                     .attr("class","bar")
+                     .style("fill",function(d){return dataToFloatingBars["colors"][d.colorIndex];})
+
+            svg.append("g")
+                  .attr("class", "x axis")
+                  .attr("transform", "translate(0," + height + ")")
+                  .call(xAxis);
+
+            svg.select("g")
+                  .attr("class", "y axis")
+                  .call(yAxis);
+
              // append the rectangles for the bar chart
-             svg.selectAll(".bar")
-               .data(data)
-               .enter().append("rect")
-               .attr("class", "bar")
-               .attr("id", function(d) { return d.landtype; })
-               .attr("width", function(d) {return x(d.value); } )
-               .attr("y", function(d) { return y(d.landtype); })
-               .attr("height", y.bandwidth())
-               .style("fill", function(d,i){
-                 return colors[i];
-               })
-               .on("mouseover", function(d){
-                 var xPosition = d3.mouse(this)[0] - 15;
-                 var yPosition = d3.mouse(this)[1] - 25;
+             // svg.selectAll(".bar")
+             //   .data(data)
+             //   .enter().append("rect")
+             //   .attr("class", "bar")
+             //   .attr("id", function(d) { return d.landtype; })
+             //   .attr("width", function(d) {return x(d.value); } )
+             //   .attr("y", function(d) { return y(d.landtype); })
+             //   .attr("height", y.bandwidth())
+             //   .style("fill", function(d,i){
+             //     return colors[i];
+             //   })
+             //   .on("mouseover", function(d){
+             //     var xPosition = d3.mouse(this)[0] - 15;
+             //     var yPosition = d3.mouse(this)[1] - 25;
+             //
+             //     var landtype = d.landtype;
+             //
+             //     switch (landtype) {
+             //       case "Cropland":
+             //         img = "../img/icons/crop-land.png"
+             //         break;
+             //       case "Carbon":
+             //         img = "../img/icons/carbon.png"
+             //         break;
+             //       case "Fishing Ground":
+             //         img = "../img/icons/fishing-ground.png"
+             //         break;
+             //       case "Forest Land":
+             //         img = "../img/icons/forest-land.png"
+             //         break;
+             //       case "Grazing Land":
+             //         img = "../img/icons/grazing-land.png"
+             //         break;
+             //       case "Built Up Land":
+             //         img = "../img/icons/built-up-land.png"
+             //         break;
+             //
+             //       default:
+             //          if(measureToSee=="gha"){
+             //            if(variableToShow=="Biocapacity"){
+             //              img = "../img/icons/biocapacity.png"
+             //
+             //            }else{
+             //              img = "../img/icons/footprint.png"
+             //
+             //            }
+             //          }else{
+             //              img = "../img/icons/earth.png"
+             //
+             //          }
+             //     }
+             //
+             //
+             //     if(measureToSee=="earths"){
+             //       tooltip.html(d.landtype + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (d.value).toFixed(2)+ " Earths" )
+             //               .style("left", (d3.event.pageX) + "px")
+             //               .style("top", (d3.event.pageY - 28) + "px");
+             //     }else{
+             //       tooltip.html(d.landtype + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (d.value/1000000).toFixed(2)+ " M" )
+             //               .style("left", (d3.event.pageX) + "px")
+             //               .style("top", (d3.event.pageY - 28) + "px");
+             //     }
+             //
+             //
+             //     tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+             //
+             //   })
+             //   .on("mousemove", function(d) {
+             //
+             //     tooltip.transition()
+             //           .duration(200)
+             //         .style("opacity", .9);
+             //
+             //     var xPosition = d3.mouse(this)[0] - 15;
+             //     var yPosition = d3.mouse(this)[1] - 25;
+             //
+             //
+             //     tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+             //
+             //   })
+             //   .on("mouseout", function(d){
+             //     tooltip.transition()
+             //           .duration(100)
+             //         .style("opacity", 0);
+             //   });
 
-                 var landtype = d.landtype;
+              //
+              // if(measureToSee=="earths"){
+              //   var xAxis = d3.axisBottom(x)
+              //                 .tickFormat( function(d) { return (d).toFixed()+ " Earths" } );
+              // }else{
+              //   console.log(" e gha")
+              //   var xAxis = d3.axisBottom(x)
+              //                 .tickFormat( function(d) { return (d/1000000).toFixed()+ " M" } );
+              // }
 
-                 switch (landtype) {
-                   case "Cropland":
-                     img = "../img/icons/crop-land.png"
-                     break;
-                   case "Carbon":
-                     img = "../img/icons/carbon.png"
-                     break;
-                   case "Fishing Ground":
-                     img = "../img/icons/fishing-ground.png"
-                     break;
-                   case "Forest Land":
-                     img = "../img/icons/forest-land.png"
-                     break;
-                   case "Grazing Land":
-                     img = "../img/icons/grazing-land.png"
-                     break;
-                   case "Built Up Land":
-                     img = "../img/icons/built-up-land.png"
-                     break;
-
-                   default:
-                      if(measureToSee=="gha"){
-                        if(variableToShow=="Biocapacity"){
-                          img = "../img/icons/biocapacity.png"
-
-                        }else{
-                          img = "../img/icons/footprint.png"
-
-                        }
-                      }else{
-                          img = "../img/icons/earth.png"
-
-                      }
-                 }
-
-
-                 if(measureToSee=="earths"){
-                   tooltip.html(d.landtype + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (d.value).toFixed(2)+ " Earths" )
-                           .style("left", (d3.event.pageX) + "px")
-                           .style("top", (d3.event.pageY - 28) + "px");
-                 }else{
-                   tooltip.html(d.landtype + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (d.value/1000000).toFixed(2)+ " M" )
-                           .style("left", (d3.event.pageX) + "px")
-                           .style("top", (d3.event.pageY - 28) + "px");
-                 }
-
-
-                 tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-
-               })
-               .on("mousemove", function(d) {
-
-                 tooltip.transition()
-                       .duration(200)
-                     .style("opacity", .9);
-
-                 var xPosition = d3.mouse(this)[0] - 15;
-                 var yPosition = d3.mouse(this)[1] - 25;
-
-
-                 tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-
-               })
-               .on("mouseout", function(d){
-                 tooltip.transition()
-                       .duration(100)
-                     .style("opacity", 0);
-               });
-
-
-              if(measureToSee=="earths"){
-                var xAxis = d3.axisBottom(x)
-                              .tickFormat( function(d) { return (d).toFixed()+ " Earths" } );
-              }else{
-                console.log(" e gha")
-                var xAxis = d3.axisBottom(x)
-                              .tickFormat( function(d) { return (d/1000000).toFixed()+ " M" } );
-              }
-
-              // add the x Axis
-              svg.append("g")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis);
-
-
-              // add the y Axis
-              svg.append("g")
-                .call(d3.axisLeft(y));
-
-              function wrap(text, width) {
-                text.each(function() {
-                  var text = d3.select(this),
-                      words = text.text().split(/\s+/).reverse(),
-                      word,
-                      line = [],
-                      lineNumber = 0,
-                      lineHeight = 1.1, // ems
-                      y = text.attr("y"),
-                      dy = parseFloat(text.attr("dy")),
-                      tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
-                  while (word = words.pop()) {
-                    line.push(word);
-                    tspan.text(line.join(" "));
-                    if (tspan.node().getComputedTextLength() > width) {
-                      line.pop();
-                      tspan.text(line.join(" "));
-                      line = [word];
-                      tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-                    }
-                  }
-                });
-              }
 
 
 
