@@ -684,8 +684,8 @@ $( document ).ready(function() {
                     var yAxis = d3.axisRight()
                       .scale(y)
                       .ticks(5)
-                      .tickFormat( function(d) { 
-                        return d.toFixed(2)+ " Earths" 
+                      .tickFormat( function(d) {
+                        return d.toFixed(2)+ " Earths"
                       });
 
 
@@ -970,6 +970,8 @@ $( document ).ready(function() {
 
                           stackedAreaChartContinent(d.properties);
 
+                          popUpContinent(this, yearTimeline, d.properties.CONTINENT);
+
                           d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalEcoFootCons+20)).text(d.properties.NAME);
 
 
@@ -1017,8 +1019,8 @@ $( document ).ready(function() {
                     var yAxis = d3.axisRight()
                       .scale(y)
                       .ticks(5)
-                      .tickFormat( function(d) { 
-                        return (d/1000000).toFixed(2)+ " M"  
+                      .tickFormat( function(d) {
+                        return (d/1000000).toFixed(0)+ " M"
                       });
 
 
@@ -1038,7 +1040,7 @@ $( document ).ready(function() {
               });
 
             });
-        
+
 
             autocomplete(document.getElementById("myInput-continent"), continents_list);
 
@@ -1081,10 +1083,6 @@ $( document ).ready(function() {
                   for(var n = 0; n < datageo.features.length; n++){
 
                       var jsonState = datageo.features[n].properties.CONTINENT;
-
-
-                      console.log("E ESTA DATA")
-                      console.log(data)
 
                       for(var i = 0; i < data.length; i++){
 
@@ -1318,7 +1316,9 @@ $( document ).ready(function() {
                     .on("dblclick", function(d){
                       floatingBarChartContinent(d.properties, yearTimeline);
                     });
-                                        // ADD COLOR SCALE LEGEND
+
+
+                    // ADD COLOR SCALE LEGEND
                     var w = 50, h = 272;
 
                     var key = d3.select("#legend1")
@@ -1344,7 +1344,7 @@ $( document ).ready(function() {
                       .attr("offset", "100%")
                       .attr("stop-color",highColorB)
                       .attr("stop-opacity", 1);
-                      
+
 
                     key.append("rect")
                       .attr("width", w -40)
@@ -1359,8 +1359,8 @@ $( document ).ready(function() {
                     var yAxis = d3.axisRight()
                       .scale(y)
                       .ticks(5)
-                      .tickFormat( function(d) { 
-                        return (d/1000000).toFixed(2)+ " M"  
+                      .tickFormat( function(d) {
+                        return (d/1000000).toFixed()+ " M"
                       });
 
 
@@ -1412,9 +1412,9 @@ $( document ).ready(function() {
             var container = d3_container.container();
 
             container
-              .height(170)
-              .width(400)
-              .margin(0, 0, 0, 65);
+              .height(200)
+              .width(500)
+              .margin(0, 0, 0, 55);
 
             var width = container.contentWidth(),
               height = container.contentHeight();
@@ -1517,8 +1517,9 @@ $( document ).ready(function() {
                               .tickFormat( function(d) { return (d).toFixed(2)+ " Earths" } );
             }else{
               var yAxis = d3.axisLeft(y)
-                              .tickFormat( function(d) { return (d/1000000).toFixed()+ " M" } );
+                              .tickFormat( function(d) { return round(d/1000000, 6).toFixed()+ " M" } );
             }
+
 
 
           var gX = content.append("g")
@@ -1719,10 +1720,10 @@ $( document ).ready(function() {
             var dataToShow = data.slice(0,6);
             // Setup svg using Bostock's margin convention
 
-            var margin = {top: 20, right: 100, bottom: 35, left: 80};
+            var margin = {top: 35, right: 100, bottom: 35, left: 80};
 
             var width = 400;
-            var height = 250;
+            var height = 260;
 
             var svg = d3.select("#graphs")
               .append("svg")
@@ -1770,14 +1771,14 @@ $( document ).ready(function() {
                         .scale(y)
                         .ticks(6)
                         .tickSize(-width, 0, 0)
-                        .tickFormat( function(d) { return d.toFixed(2)+ " Earths" } );
+                        .tickFormat( function(d) { return d.toFixed(0)+ " Earths" } );
 
         }else{
           var yAxis = d3.axisLeft()
                         .scale(y)
                         .ticks(6)
                         .tickSize(-width, 0, 0)
-                        .tickFormat( function(d) { return (d/1000000).toFixed(2)+ " M" } );
+                        .tickFormat( function(d) { return (d/1000000).toFixed(0)+ " M" } );
         }
 
 
@@ -2021,7 +2022,7 @@ $( document ).ready(function() {
 
                 console.log("efgha")
                 dataset = data.efgha[yeartoshow];
-                
+
 
                 data = [{"landtype":"Built Up Land","value":dataset.built_up_land_efgha},
                 {"landtype":"Carbon","value":dataset.carbon_efgha},
@@ -2048,7 +2049,7 @@ $( document ).ready(function() {
 
             dataToFloatingBars.push(dataset);
             console.log(dataToFloatingBars);
-            
+
             var continent = dataset.CONTINENT;
 
             var tooltip = d3.select("body").append("g")
@@ -2195,7 +2196,7 @@ $( document ).ready(function() {
 
               if(measureToSee=="earths"){
                 var xAxis = d3.axisBottom(x)
-                              .tickFormat( function(d) { return (d).toFixed(2)+ " Earths" } );
+                              .tickFormat( function(d) { return (d).toFixed()+ " Earths" } );
               }else{
                 console.log(" e gha")
                 var xAxis = d3.axisBottom(x)
@@ -2239,6 +2240,8 @@ $( document ).ready(function() {
 
 
       }
+
+
       //////////CONTINENTES SMALL FUNCTIONS///////////
 
       function continentsDataForYear(datageo, year){
@@ -2543,7 +2546,67 @@ $( document ).ready(function() {
 
       }
 
+      function popUpContinent(path, year, continent){
 
+            // Get the modal
+            var modal = document.getElementById('myModal');
+
+            // Get the main container and the body
+            var container = document.getElementById('world_graph');
+
+            // Get the close button
+            var btnClose = document.getElementById("closeModal");
+
+            // Open the modal
+            modal.className = "Modal is-visuallyHidden";
+            setTimeout(function() {
+                container.className = "MainContainer is-blurred";
+                modal.className = "Modal";
+            }, 100);
+
+            // Close the modal
+            btnClose.onclick = function() {
+              document.getElementById('world_graph').classList.remove("MainContainer");
+
+              document.getElementById('world_graph').classList.remove("is-blurred");
+              modal.className = "Modal is-hidden is-visuallyHidden";
+              container.parentElement.class = "main_tab";
+            }
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+              if (event.target == modal) {
+                  modal.className = "Modal is-hidden";
+                  document.getElementById('world_graph').classList.remove("MainContainer");
+
+                  document.getElementById('world_graph').classList.remove("is-blurred");
+                  container.parentElement.class = "";
+              }
+            }
+
+            var svg = d3.select("#continentpath")
+              .append("svg")
+              .attr("width", 200)
+              .attr("height", 200)
+              .attr("id", "svgwithonepathofcontinent")
+              .attr("tranform", "translate(" + 0 + "," + 0 + ")");
+
+            document.getElementById("svgwithonepathofcontinent").appendChild(path.cloneNode());
+
+
+            var pathy = document.getElementById("svgwithonepathofcontinent").childNodes[0];
+
+            console.log(pathy);
+
+            pathy.setAttribute("x", 50);
+            pathy.setAttribute("y", 50);
+            pathy.setAttribute("tranform", "translate(" + 30 + "," + 30 + ") !important");
+
+
+
+            document.getElementById("popUpContinentTitle").innerHTML = continent;
+
+      }
 
       ////////////////////COUNTRIES FUNCTIONS//////////////////
 
@@ -2788,8 +2851,8 @@ $( document ).ready(function() {
                     var yAxis = d3.axisBottom()
                       .scale(y)
                       .ticks(5)
-                      .tickFormat( function(d) { 
-                        return (d/1000000).toFixed(2)+ " M"  
+                      .tickFormat( function(d) {
+                        return (d/1000000).toFixed()+ " M"
                       });
 
 

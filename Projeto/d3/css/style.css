@@ -16,17 +16,15 @@ body{
   display: block;
   width: 100%;
   margin: 0%;
-  height: 80%;
-  margin-top: 7%;
+  height: 90%;
+  margin-top: 6%;
   left: 0%;
-  z-index: -1;
+  z-index: -2;
 }
-
 
 #continents_view{
   visibility: visible;
 }
-
 
 #countries_view{
   visibility: hidden;
@@ -35,24 +33,26 @@ body{
 #world_graph, #countries_graph{
   position: relative;
   display: inline-block;
+  float:left;
   width: 55%;
   height: 60%;
   margin: 0%;
   top: 0%;
   left: 0%;
   padding: 0%;
-  margin-left: 1.5%;
-  margin-top: -3.5%;
-  z-index: -2;
+  margin-left: 0.5%;
+  margin-top: -3%;
+  z-index: -3;
 }
 
 #graphs{
   position: relative;
   display: inline-block;
   float: right;
+  width: 44% !important;
   margin: 0% !important;
   padding: 0%;
-  margin-top: 0%;
+  height: 53%;
 }
 
 #bottomgraphs{
@@ -63,18 +63,17 @@ body{
   margin: 0% !important;
   right: 0% !important;
   padding: 0%;
-  top:-25%;
+  top:0%;
 }
 
 #stackBarChartCont{
   position: relative;
   display: block;
   width: 90% !important;
-  height: 90% !important;
+  height: 100% !important;
   margin: 0%;
   margin-right: 5%;
-  margin-top: 5%;
-  bottom:2%;
+  margin-top: 0%;
   padding: 0%;
 }
 
@@ -84,10 +83,9 @@ body{
   width: 50% !important;
   height: 100% !important;
   margin: 0%;
-  left:5%;
+  left:2%;
   padding: 0%;
 }
-
 
 #floatingBarChartCont{
   position: relative;
@@ -102,14 +100,18 @@ body{
 #legend1{
   position: relative;
   display:inline-block;
+  margin:0%;
+  padding: 0%;
+  left:0%!important;
   margin-top: 10%;
-  left: -12%;
   float: right;
 }
 
 #chart{
   position: relative;
   display: inline-block;
+  width: 85%;
+  height: 100%;
   margin-top:5%;
 }
 
@@ -124,7 +126,6 @@ body{
   margin-bottom: 10%;
 }
 
-
 #country2014{
   position: relative;
   display:block;
@@ -138,8 +139,10 @@ body{
   top: 102%;
 }
 
-/************ SEARCH **********/
 
+
+
+/************ SEARCH **********/
 
 .search-container, .search-container-continent {
   position: relative;
@@ -150,7 +153,6 @@ body{
   grid-column-start: 0;
   grid-column-end: 1;
 }
-
 .autocomplete, .autocomplete-continent {
   position: relative;
   display: inline-block;
@@ -273,7 +275,7 @@ body{
 
 
 
-
+/***********SELECT MEASURE ***********/
 
 #selectMeasure{ /*here*/
   position: :relative;
@@ -373,7 +375,6 @@ body{
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
   cursor: pointer;
 }
-
 .switcheblabel {
   position: relative;
   z-index: 2;
@@ -400,31 +401,25 @@ body{
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
   cursor: pointer;
 }
-
 .switch-label:active {
   position: :relative;
 
   font-weight: bold;
   color: #888844;
 }
-
 .switcheblabel:active, .switcheblabelc:active {
   position: :relative;
   font-weight: bold;
   color: #888844;
 }
-
 .switch-label-off, .switcheblabeloff , .switcheblabeloffc{
   position: :relative;
   padding-left: 2px;
 }
-
 .switch-label-on, .switcheblabelon, .switcheblabelonc {
   position: :relative;
   padding-right: 2px;
 }
-
-
 .switch-input, .switchebinput, .switchebinputc {
   display: none;
 }
@@ -449,8 +444,6 @@ body{
   left: 50%;
   /* Note: left: 50%; doesn't transition in WebKit */
 }
-
-
 .switch-selection {
   position: absolute;
   z-index: 1;
@@ -475,7 +468,6 @@ body{
   -o-transition: left 0.15s ease-out;
   transition: left 0.15s ease-out;
 }
-
 .switchebselection, .switchebselectionc {
   position: relative;
   z-index: 1;
@@ -501,7 +493,6 @@ body{
  transition: left 0.15s ease-out;
 
 }
-
 .switch-blue .switch-selection, .switch-blue .switchebselection, .switch-blue .switchebselectionc {
   position: :relative;
   background-color: #white;
@@ -521,21 +512,15 @@ body{
 #onlyTimeline{
   position: absolute;
   display: block;
-  bottom: 0%;
-  margin-bottom: 0%;
-  margin-top: 0%;
   width: 100%;
-  height: 10%;
-  top: 97% !important;
+  height: 9%;
+  bottom: 0% !important;
+  margin-bottom: 0% !important;
+
 }
 
-/********** GRAPHS WORLD ********/
 
-
-
-
-
-/********** TOOLTIP ********/
+/********************** TOOLTIP *******************/
 
 div.tooltip {
     position: absolute !important;
@@ -591,7 +576,6 @@ div.tooltip {
     transition: left 0.15s ease-out;
 }
 
-
 .tooltipfloatingcontinent {
     position: absolute;
     text-align: center;
@@ -646,14 +630,65 @@ div.tooltip {
     transition: left 0.15s ease-out;
 }
 
-
-
-
-
-
 .avatar {
   vertical-align: middle;
   width: 30px;
   height: 30px;
   border-radius: 50%;
+}
+
+
+/********************** BLUR *******************/
+
+.is-blurred {
+    -webkit-filter: blur(2px);
+    -moz-filter: blur(2px);
+    -o-filter: blur(2px);
+    -ms-filter: blur(2px);
+    filter: blur(2px);
+}
+
+.Modal {
+  display: block;
+  position: fixed;
+  width: 55%;
+  height: 40%;
+  margin: 0%;
+  top: 0%;
+  left: 0%;
+  padding: 0%;
+  margin-left: 0.5%;
+  margin-top: 7%;
+  z-index: 9;
+  padding-top: 2%;
+  -webkit-transition: 0.5s;
+  overflow: auto;
+  transition: all 0.3s linear;
+}
+
+.Modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border-radius: 4px;
+  max-width: 300px;
+  height: 450px;
+}
+
+.ModalOpen { overflow: hidden; }
+
+.is-hidden { display: none; }
+
+.is-visuallyHidden { opacity: 0; }
+
+.Close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 16px;
+}
+
+.Close:hover, .Close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
 }
