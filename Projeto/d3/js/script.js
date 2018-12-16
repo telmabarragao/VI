@@ -21,6 +21,7 @@ $( document ).ready(function() {
         $("#legend1 svg").remove();
         $("#stackBarChartCont").remove();
         $("#stackAreaChartCont g").remove();
+        $("#stackedAreaTitle").remove();
 
         if(measureToSee=="gha"){
           continents_EcoFootGha();
@@ -138,6 +139,7 @@ $( document ).ready(function() {
                   $("#world_graph #legend1 svg").remove();
                   $("#graphs #stackBarChartCont").remove();
                   $("#stackAreaChartCont g").remove();
+                  $("#stackedAreaTitle").remove();
 
                   document.getElementById("selectMeasure").style.visibility="visible";
 
@@ -163,6 +165,8 @@ $( document ).ready(function() {
                   $("#world_graph #legend1 svg").remove();
                   $("#graphs #stackBarChartCont").remove();
                   $("#stackAreaChartCont g").remove();
+                  $("#stackedAreaTitle").remove();
+
 
                   $(".main")
                   document.getElementById("selectEarthsGha").value = "gha";
@@ -223,6 +227,8 @@ $( document ).ready(function() {
                     $("#legend1 svg").remove();
                     $("#stackBarChartCont").remove();
                     $("#stackAreaChartCont g").remove();
+                    $("#stackedAreaTitle").remove();
+
 
                     countries_EcoFoot();
                   }else{
@@ -239,6 +245,7 @@ $( document ).ready(function() {
                     $("#legend1 svg").remove();
                     $("#stackBarChartCont").remove();
                     $("#stackAreaChartCont g").remove();
+                    $("#stackedAreaTitle").remove();
 
                     countries_Biocapacity();
                   }else{
@@ -254,6 +261,8 @@ $( document ).ready(function() {
               $("#legend1 svg").remove();
               $("#stackBarChartCont").remove();
               $("#stackAreaChartCont g").remove();
+              $("#stackedAreaTitle").remove();
+
 
               document.getElementById("selectEarthsGha").value = "gha";
               measureToSee="gha";
@@ -274,6 +283,7 @@ $( document ).ready(function() {
               $("#legend1 svg").remove();
               $("#stackBarChartCont").remove();
               $("#stackAreaChartCont g").remove();
+              $("#stackedAreaTitle").remove();
 
               document.getElementById("selectMeasure").style.visibility="visible";
 
@@ -288,6 +298,7 @@ $( document ).ready(function() {
             }else{
               $("#stackBarChartCont").remove();
               $("#stackAreaChartCont g").remove();
+              $("#stackedAreaTitle").remove();
 
               document.getElementById("selectMeasure").style.visibility="visible";
 
@@ -1390,6 +1401,7 @@ $( document ).ready(function() {
       function stackedAreaChartContinent(data){
 
         $("#stackAreaChartCont g").remove();
+        $("#stackedAreaTitle").remove();
 
             var continent = data.CONTINENT;
             if(measureToSee=="gha")
@@ -1419,6 +1431,16 @@ $( document ).ready(function() {
               height = container.contentHeight();
 
             svg.call(container);
+
+            //GRAPH_TITLE
+            svg.append("text")
+            .attr("id", "stackedAreaTitle")
+            .attr("x", 3*width/5)
+            .attr("y", 11.5)
+            .attr("text-anchor", "middle")
+            .style("font-size", "16px")
+            .style("text-decoration", "strong")
+            .text("Landtype Values per Continent");
 
             var content = container.content();
 
@@ -1566,6 +1588,7 @@ $( document ).ready(function() {
           svg.append("g")
                .attr("class", "legend")
                .attr("transform", "translate(" + legendOffset.toString() + ",0)");
+
 
           // svg.select(".legend")
           //      .call(legend);
@@ -1952,6 +1975,15 @@ $( document ).ready(function() {
 
 
         });
+
+        //GRAPH_TITLE
+        svg.append("text")
+        .attr("x", (width / 2))
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .style("text-decoration", "strong")
+        .text("Landtype Values per Continent");
 
 
       // Draw legend
