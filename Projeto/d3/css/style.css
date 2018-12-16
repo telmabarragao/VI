@@ -637,7 +637,12 @@ div.tooltip {
   border-radius: 50%;
 }
 
-
+.avatarbutton {
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
 /********************** BLUR *******************/
 
 .is-blurred {

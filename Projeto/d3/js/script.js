@@ -13,6 +13,8 @@ $( document ).ready(function() {
       var minValColorContB, maxValColorContB;
       var measureToSee ="gha";
 
+      var filterArrayStackedAreaCC=[];
+
       var dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
 
       $("#selectEarthsGha").on("change", function(){
@@ -1409,14 +1411,11 @@ $( document ).ready(function() {
             {
               if(variableToShow=="Biocapacity"){
                 data = data.biogha;
-
               }else{
                 data = data.efgha;
-
               }
             } else if(measureToSee=="earths"){
               data = data.efearths;
-              console.log(data)
             }
 
             var svg = d3.select("#bottomgraphs svg")
@@ -1592,9 +1591,6 @@ $( document ).ready(function() {
                .attr("transform", "translate(" + legendOffset.toString() + ",0)");
 
 
-          // svg.select(".legend")
-          //      .call(legend);
-
           var img = "";
 
           layerGroups.append("path")
@@ -1670,6 +1666,7 @@ $( document ).ready(function() {
                  var yPosition = d3.mouse(this)[1] - 25;
 
                  var parent = d3.select(this)._groups[0][0].parentNode.id;
+                 console.log(d3.select(this)._groups[0][0].parentNode)
                  var landtype = parent;
                  var img = "";
 
@@ -1736,6 +1733,71 @@ $( document ).ready(function() {
           function stackMax(layer) {
                return d3.max(layer, function (d) { return d[1]; });
              }
+
+             $(".buttonfilterstackedAreaCC").on("click", function(){
+               filterArrayStackedAreaCC.push(this.value);
+
+               var child = document.getElementById("stackAreaChartCont").childNodes[0];
+               var childChilds = child.childNodes;
+
+               childChilds.forEach(function(element){
+                 filterArrayStackedAreaCC.forEach(function(ele){
+                   if(element.id==ele){
+                     switch (ele) {
+                       case "Built Up Land":
+                            statusArray.splice(statusArray.indexOf("Built Up Land"),1);
+                         break;
+                       case "Grazing Land":
+                            statusArray.splice(statusArray.indexOf("Grazing Land"),1);
+                         break;
+                       case "Forest Land":
+                            statusArray.splice(statusArray.indexOf("Forest Land"),1);
+
+                         break;
+                       case "Fishing Ground":
+                          statusArray.splice(statusArray.indexOf("Fishing Ground"),1);
+                         break;
+                       case "Carbon":
+                          statusArray.splice(statusArray.indexOf("Carbon"),1);
+
+                         break;
+                       case "Cropland":
+                          statusArray.splice(statusArray.indexOf("Cropland"),1);
+
+                         break;
+                       default:
+
+                     }
+
+                     console.log(statusArray)
+                     var stack = d3.stack()
+                          .keys(statusArray)
+                          .offset(d3.stackOffsetNone)
+                          ;
+
+                     var layers = stack(parsedData);
+                     //element.style.display="none";
+                    // d3.select(element).remove()
+                  		//			.exit();
+
+                    var layerGroups = content.selectAll(".layer")
+                                 .data(layers)
+                                 .enter().append("g")
+                                 .attr("class", "layer")
+                                 .attr("id", function(d, i) { return statusArray[i]; })
+                                 .attr("fill", function (d, i) {
+                                      return colors[i];
+                                 });
+
+                   }
+
+                 })
+
+
+               })
+
+             });
+
 
       }
 
@@ -3431,7 +3493,6 @@ $( document ).ready(function() {
 function myFunction() {
     return false;
 }
-
 
 function round(value, precision){
 
