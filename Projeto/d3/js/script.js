@@ -1863,7 +1863,7 @@ $( document ).ready(function() {
             feMerge.append("feMergeNode")
                 .attr("in","SourceGraphic");
 
-            d3.selectAll("rect[id=\'"+d.x+"\']")
+            d3.select(this)
             .style("stroke", "#FFFFFF")
             .style("stroke-width", "1px")
             .style("filter", "url(#glow)");
