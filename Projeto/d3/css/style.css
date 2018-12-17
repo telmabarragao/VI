@@ -311,99 +311,8 @@ body{
   height: 60%;
 }
 
-/******* MODAL LEGEND ********/
-
-/* The button */
-
-.legend-button {
-  position: relative;
-  display:inline-grid;
-  grid-column-start: 7;
-  grid-column-end: 8;
-  margin: auto;
-  margin-left: -150%;
-  right: -130%;
-  margin-top: 11%;
-
-  border-radius: 3px;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #9dd993), color-stop(100%, #65bd63));
-  background-image: -webkit-linear-gradient(top, #b9b992, #ffdf80);
-  background-image: -moz-linear-gradient(top, #b9b992, #ffdf80);
-  background-image: -ms-linear-gradient(top, #b9b992, #ffdf80);
-  background-image: -o-linear-gradient(top, #b9b992, #ffdf80);
-  background-image: linear-gradient(top, #b9b992, #ffdf80);
-  -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
-  color:white;
-  text-align: center;
-  align-content: center;
-  border: 1px solid #d4d4d4;
-  background-color: #b9b992 !important;
-  -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
-  height: 60%;
-}
-
-/* The Modal (background) */
-.modal-legend {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 3; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-
-/* Modal Header */
-.modal-header {
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #9dd993), color-stop(100%, #65bd63));
-  background-image: -webkit-linear-gradient(top, #b9b992, #ffdf80);
-  background-image: -moz-linear-gradient(top, #b9b992, #ffdf80);
-  background-image: -ms-linear-gradient(top, #b9b992, #ffdf80);
-  background-image: -o-linear-gradient(top, #b9b992, #ffdf80);
-  background-image: linear-gradient(top, #b9b992, #ffdf80);
-  -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
-  color:black;
-  text-align: left;
-  align-content: left;
-}
-
-/* Modal Body */
-.modal-body {
-  padding: 10px 16px;
-}
 
 
-/* Modal Content */
-.modal-legend-content {
-  position: relative;
-  background-color: #fefefe;
-  margin: auto;
-  padding: 0;
-  border: 1px solid #888;
-  width: 80%;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
-  animation-name: animatetop;
-  animation-duration: 0.4s;
-  margin-top: 15%;  
-}
-
-/* Add Animation */
-@keyframes animatetop {
-  from {top: -300px; opacity: 0}
-  to {top: 0; opacity: 1}
-}
-
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
 
 /*******TOGGLE SWITCH ********/
 
@@ -612,6 +521,8 @@ body{
 }
 
 
+
+
 /********************** TOOLTIP *******************/
 
 div.tooltip {
@@ -735,6 +646,11 @@ div.tooltip {
   height: 20px;
   border-radius: 50%;
 }
+
+
+
+
+
 /********************** BLUR *******************/
 
 .is-blurred {
@@ -824,4 +740,100 @@ div.tooltip {
   -ms-transition: left 0.15s ease-out;
   -o-transition: left 0.15s ease-out;
   transition: left 0.15s ease-out;
+}
+
+
+
+
+
+/******************* MODAL LEGEND *******************/
+
+/* The button */
+.legend-button {
+  position: relative;
+  display:inline-grid;
+  grid-column-start: 7;
+  grid-column-end: 8;
+  margin: auto;
+  margin-left: -150%;
+  right: -130%;
+  margin-top: 11%;
+
+  border-radius: 3px;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #9dd993), color-stop(100%, #65bd63));
+  background-image: -webkit-linear-gradient(top, #b9b992, #ffdf80);
+  background-image: -moz-linear-gradient(top, #b9b992, #ffdf80);
+  background-image: -ms-linear-gradient(top, #b9b992, #ffdf80);
+  background-image: -o-linear-gradient(top, #b9b992, #ffdf80);
+  background-image: linear-gradient(top, #b9b992, #ffdf80);
+  -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+  color:white;
+  text-align: center;
+  align-content: center;
+  border: 1px solid #d4d4d4;
+  background-color: #b9b992 !important;
+  -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+  height: 60%;
+}
+
+/* The Modal (background) */
+.modal-legend {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 3; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Header */
+.modal-header {
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #9dd993), color-stop(100%, #65bd63));
+  background-image: -webkit-linear-gradient(top, #b9b992, #ffdf80);
+  background-image: -moz-linear-gradient(top, #b9b992, #ffdf80);
+  background-image: -ms-linear-gradient(top, #b9b992, #ffdf80);
+  background-image: -o-linear-gradient(top, #b9b992, #ffdf80);
+  background-image: linear-gradient(top, #b9b992, #ffdf80);
+  -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+  color:black;
+  text-align: left;
+  align-content: left;
+}
+
+/* Modal Body */
+.modal-body {
+  padding: 10px 16px;
+}
+
+/* Modal Content */
+.modal-legend-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  animation-name: animatetop;
+  animation-duration: 0.4s;
+  margin-top: 15%;
+}
+
+/* Add Animation */
+@keyframes animatetop {
+  from {top: -300px; opacity: 0}
+  to {top: 0; opacity: 1}
+}
+
+.closelegend:hover,
+.closelegend:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
