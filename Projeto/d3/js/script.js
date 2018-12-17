@@ -366,28 +366,33 @@ $( document ).ready(function() {
 
 
 
-///////////////////MODAL LEGEND/////////
+/////////// MODAL LEGEND /////////
 
-      // Get the modal
-      var modal_legend = document.getElementById('modal-legend');
-      // Get the button that opens the modal
-      var legend_btn = document.getElementById("legend-button");
-      // Get the <span> element that closes the modal
-      var span = document.getElementsByClassName("close")[0];
-      // When the user clicks on the button, open the modal
-      $("#legend-button").on("click", function() {
-        modal_legend.style.display = "block";
-      });
-      // When the user clicks on <span> (x), close the modal
-      $(".closelegend").on("click", function() {
-        modal_legend.style.display = "none";
-      });
-      // When the user clicks anywhere outside of the modal, close it
-      // window.on("click", function(event) {
-      //   if (event.target == modal_legend) {
-      //     modal_legend.style.display = "none";
-      //   }
-      // });
+  // Get the modal
+  var modal_legend = document.getElementById('modal-legend');
+
+  // Get the button that opens the modal
+  var legend_btn = document.getElementById("legend-button");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("closelegend")[0];
+
+  // When the user clicks on the button, open the modal
+  legend_btn.onclick = function() {
+    modal_legend.style.display = "block";
+  }
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+    modal_legend.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modal_legend) {
+      modal_legend.style.display = "none";
+    }
+  }
 
 ////////////////////D3//////////////////
 
