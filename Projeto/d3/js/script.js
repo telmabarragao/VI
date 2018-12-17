@@ -2159,8 +2159,8 @@ $( document ).ready(function() {
                 {"landtype":"Cropland","value":dataset.cropland_efgha},
                 {"landtype":"Fishing Ground","value":dataset.fishing_grounds_efgha},
                 {"landtype":"Forest Land","value":dataset.forest_products_efgha},
-                {"landtype":"Grazing Land","value":dataset.grazing_land_efgha},
-                {"landtype":"Total","value":dataset.total_efgha}];
+                {"landtype":"Grazing Land","value":dataset.grazing_land_efgha}];
+
 
               }
             }else{
@@ -2189,7 +2189,7 @@ $( document ).ready(function() {
              dataToFloatingBars["colors"]=colorsa;
 
              var margin = {top: 0, right: 0, bottom: 0, left: -10};
-             width = 480,
+             width = 400,
              height = 170;
 
              var colors = landtypes.map(function (d, i) {
@@ -2205,19 +2205,29 @@ $( document ).ready(function() {
             xGroupMax = d3.max(dataToFloatingBars["layers"], function(layer) { return d3.max(layer, function(d) { return d.value; }); });
             xGroupMin = d3.min(dataToFloatingBars["layers"], function(layer) { return d3.min(layer, function(d) { return d.value; }); });
 
+            console.log(xGroupMax)
+            // Set x, y and colors
+            var x = d3.scaleLinear()
+              .domain([-xGroupMax, xGroupMax])
+              .rangeRound([0, width], 0.2);
+
+            var y =d3.scaleBand()
+                .domain(dataToFloatingBars["categories"])
+                .rangeRound([height,0], .08);
+
+          // Define and draw axes
+          if(measureToSee=="earths"){
+            var xAxis = d3.axisBottom()
+                            .scale(x)
+                            .tickFormat( function(d) { return d.toFixed(0)+ " Earths" } );
+
+          }else{
+            var xAxis = d3.axisBottom()
+                            .scale(x)
+                            .tickFormat( function(d) { return (d/1000000).toFixed(0)+ " M" } );
+          }
 
              // set the ranges
-             var x = d3.scaleLinear()
-                 .domain([-xGroupMax, xGroupMax])
-                 .range([0, width], .08);
-
-             var y =d3.scaleBand()
-                 .domain(dataToFloatingBars["categories"])
-                 .rangeRound([height,0], .08);
-
-            var xAxis = d3.axisBottom()
-                .scale(x);
-
             var yAxis = d3.axisLeft()
                 .scale(y)
                 .tickSize(7)
@@ -2240,12 +2250,16 @@ $( document ).ready(function() {
 
              var img="";
 
+             console.log(dataToFloatingBars)
+
              var layer = svg.selectAll(".layer")
                      .data(dataToFloatingBars["layers"])
                      .enter().append("g")
                      .attr("class", "layer");
+
             var county=0;
             var countx=0;
+
             var rect = layer.selectAll("rect")
                      .data(function(d,i){d.map(function(b){b.colorIndex=i;return b;});return d;})
                      .enter().append("rect")
@@ -2258,12 +2272,12 @@ $( document ).ready(function() {
                          return 0;
                        }else{
                          console.log(x(d.value))
-                         return -x(d.value);
+                         return (-x(d.value))/2;
                        }
 
                      })
                      .attr("width", function(d, i, j) {
-                       return x(d.value);
+                       return x(d.value)/2;
 
                      })
                      .transition()
