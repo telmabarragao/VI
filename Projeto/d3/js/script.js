@@ -2279,12 +2279,12 @@ $( document ).ready(function() {
                          return 0;
                        }else{
                          console.log(x(d.value))
-                         return x(-d.value)/2;
+                         return x(-d.value);
                        }
 
                      })
                      .attr("width", function(d, i, j) {
-                       return x(d.value)/2;
+                       return x(d.value)-200;
 
                      })
                      .transition()
