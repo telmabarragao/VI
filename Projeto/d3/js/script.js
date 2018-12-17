@@ -2178,22 +2178,18 @@ $( document ).ready(function() {
             }
 
             dataToFloatingBars["layers"].push(data);
-            console.log(dataToFloatingBars);
-
 
             var tooltip = d3.select("body").append("g")
                       .attr("class", "tooltipfloatingcontinent")
                       .style("opacity", 0);
-
-
 
              // set the dimensions and margins of the graph
 
              var colorsa = ["#9C8443", "#686736", "#CDBE90", "#8C9A86", "#C1A95E", "#845E36", "#006080" ];
              dataToFloatingBars["colors"]=colorsa;
 
-             var margin = {top: 0, right: 0, bottom: 0, left: 80};
-             width = 400,
+             var margin = {top: 0, right: 0, bottom: 0, left: -10};
+             width = 480,
              height = 170;
 
              var colors = landtypes.map(function (d, i) {
@@ -2206,26 +2202,26 @@ $( document ).ready(function() {
 
             n = dataToFloatingBars["continents"].length, // Number of Layers
             m = dataToFloatingBars["layers"].length, // Number of Samples in 1 layer
-            yGroupMax = d3.max(dataToFloatingBars["layers"], function(layer) { return d3.max(layer, function(d) { return d.value; }); });
-            yGroupMin = d3.min(dataToFloatingBars["layers"], function(layer) { return d3.min(layer, function(d) { return d.value; }); });
+            xGroupMax = d3.max(dataToFloatingBars["layers"], function(layer) { return d3.max(layer, function(d) { return d.value; }); });
+            xGroupMin = d3.min(dataToFloatingBars["layers"], function(layer) { return d3.min(layer, function(d) { return d.value; }); });
 
 
              // set the ranges
-             var x = d3.scaleBand()
-                 .domain(dataToFloatingBars["categories"])
-                 .rangeRound([0, width], .08);
+             var x = d3.scaleLinear()
+                 .domain([-xGroupMax, xGroupMax])
+                 .range([0, width], .08);
 
-             var y = d3.scaleLinear()
-                 .domain([0, yGroupMax])
-                 .range([height, 0]);
+             var y =d3.scaleBand()
+                 .domain(dataToFloatingBars["categories"])
+                 .rangeRound([height,0], .08);
 
             var xAxis = d3.axisBottom()
-                .scale(x)
-                .tickSize(7)
-                .tickPadding(6);
+                .scale(x);
 
             var yAxis = d3.axisLeft()
-                .scale(y);
+                .scale(y)
+                .tickSize(7)
+                .tickPadding(6);
 
              // append the svg object to the body of the page
              // append a 'group' element to 'svg'
@@ -2234,18 +2230,13 @@ $( document ).ready(function() {
                .attr("width", width + margin.left + margin.right)
                .attr("height", height + margin.top + margin.bottom)
                .append("g")
-               .attr("transform",
-                 "translate(" + margin.left + "," + margin.top + ")");
+               .attr("transform","translate(" + -margin.left + "," + margin.top + ")");
 
              // format the data
              data.forEach(function(d) {
                d.value = +d.value;
              });
 
-             // Scale the range of the data in the domains
-             // x.domain([0, d3.max(data, function(d){ return d.value; })])
-             // y.domain(data.map(function(d) { return d.landtype; }));
-             //y.domain([0, d3.max(data, function(d) { return d.sales; })]);
 
              var img="";
 
@@ -2253,26 +2244,39 @@ $( document ).ready(function() {
                      .data(dataToFloatingBars["layers"])
                      .enter().append("g")
                      .attr("class", "layer");
-            var count=0;
+            var county=0;
+            var countx=0;
             var rect = layer.selectAll("rect")
                      .data(function(d,i){d.map(function(b){b.colorIndex=i;return b;});return d;})
                      .enter().append("rect")
                      .transition()
                      .duration(500)
-                     .delay(function(d, i) { return i * 10; })
+                     .delay(function(d, i) { return i * 10; })    //
                      .attr("x", function(d, i, j) {
-                       if(count<7){
-                         console.log("entreiiiii")
-                         count+=1;
-                         return x(d.landtype)/ n + 12 ;
+                       if(countx<7){
+                         countx+=1;
+                         return 0;
                        }else{
-                         return x(d.landtype)/ n + 5;
+                         console.log(x(d.value))
+                         return -x(d.value);
                        }
-                     }) //+ x.bandwidth() % j.length*m
-                     .attr("width", 10)
+
+                     })
+                     .attr("width", function(d, i, j) {
+                       return x(d.value);
+
+                     })
                      .transition()
-                     .attr("y", function(d) { return y(d.value); })
-                     .attr("height", function(d) { return height - y(d.value)})
+                     .attr("y", function(d, i, j) {
+                       if(county<7){
+                         console.log("entrei no y")
+                         county+=1;
+                         return y(d.landtype)+7;/// n + 12 ;
+                       }else{
+                         return y(d.landtype)+7;/// n + 5;
+                       }
+                     })
+                     .attr("height", 10)
                      .attr("class","bar")
                      .style("fill",function(d){return dataToFloatingBars["colors"][d.colorIndex];})
 
@@ -2283,6 +2287,7 @@ $( document ).ready(function() {
 
             svg.select("g")
                   .attr("class", "y axis")
+                  .attr("transform", "translate("+width/2+",0)")
                   .call(yAxis);
 
              // append the rectangles for the bar chart
