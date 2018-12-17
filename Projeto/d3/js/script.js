@@ -2164,7 +2164,8 @@ $( document ).ready(function() {
                 {"landtype":"Cropland","value":dataset.cropland_efgha},
                 {"landtype":"Fishing Ground","value":dataset.fishing_grounds_efgha},
                 {"landtype":"Forest Land","value":dataset.forest_products_efgha},
-                {"landtype":"Grazing Land","value":dataset.grazing_land_efgha}];
+                {"landtype":"Grazing Land","value":dataset.grazing_land_efgha},
+                {"landtype":"Total","value":dataset.total_efgha}];
 
 
               }
@@ -2211,6 +2212,7 @@ $( document ).ready(function() {
             xGroupMin = d3.min(dataToFloatingBars["layers"], function(layer) { return d3.min(layer, function(d) { return d.value; }); });
 
             console.log(xGroupMax)
+            console.log(xGroupMin)
             // Set x, y and colors
             var x = d3.scaleLinear()
               .domain([-xGroupMax, xGroupMax])
