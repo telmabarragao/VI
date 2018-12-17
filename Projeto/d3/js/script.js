@@ -2194,6 +2194,7 @@ $( document ).ready(function() {
       function floatingBarChartContinent(data, year){
 
           $("#floatingBarChartCont g").remove();
+          var highlightHere="";
 
             dataToFloatingBars["continents"].push(data.CONTINENT);
 
@@ -2278,8 +2279,6 @@ $( document ).ready(function() {
             xGroupMax = d3.max(dataToFloatingBars["layers"], function(layer) { return d3.max(layer, function(d) { return d.value; }); });
             xGroupMin = d3.min(dataToFloatingBars["layers"], function(layer) { return d3.min(layer, function(d) { return d.value; }); });
 
-            console.log(xGroupMax)
-            console.log(xGroupMin)
             // Set x, y and colors
             var x = d3.scaleLinear()
               .domain([-xGroupMax, xGroupMax])
@@ -2353,7 +2352,7 @@ $( document ).ready(function() {
                      .enter().append("rect")
                      .transition()
                      .duration(500)
-                     .delay(function(d, i) { return i * 10; })    //
+                     .delay(function(d, i) { return i * 10; })
                      .attr("x", function(d, i, j) {
                        if(countx<7){
                          countx+=1;
@@ -2446,6 +2445,10 @@ $( document ).ready(function() {
 
                          tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
 
+
+                         highlightHere = continent;
+                         highlightContinent("floatingBar", highlightHere);
+
                        })
                        .on("mousemove", function(d) {
 
@@ -2466,6 +2469,9 @@ $( document ).ready(function() {
                          tooltip.transition()
                                .duration(100)
                              .style("opacity", 0);
+
+
+                          unhighlightContinent("floatingBar", highlightHere)
                        });
 
                     svg.append("g")
@@ -2703,6 +2709,61 @@ $( document ).ready(function() {
               .style("stroke-width", "1px")
               .style("filter", "url(#glow)");
           }
+          else if( where=="floatingBar"){
+
+            ///////////// HIGHLIGH MAP /////////////
+
+            if(variableToShow=="Biocapacity"){
+              d3.selectAll("path[title=\'"+continent+"\']")
+                .style("fill", function(d){
+                      var yeartoshow = "_"+yearTimeline+"";
+                      var value = d.properties.biogha[yeartoshow].total_biogha;
+
+                      if(value){
+                          return ramp(minValColorContB,lowColorB, highColorB, "mouseB")
+                      } else {
+                          return "#bfbfbf"
+                      }
+                });
+            }else{
+              d3.selectAll("path[title=\'"+continent+"\']")
+                .style("fill", function(d){
+                      var yeartoshow = "_"+yearTimeline+"";
+                      var value = d.properties.efgha[yeartoshow].total_efgha;
+
+                      if(value){
+                          return ramp(minValColorContFT,lowColorEF, highColorEF, "mouseEF")
+                      } else {
+                          return "#bfbfbf"
+                      }
+                });
+            }
+
+            ///////////// HIGHLIGH STACKED BAR /////////////
+
+            var svg = d3.select("#continents_view #graphs").select("svg");
+
+            //Container for the gradients
+            var defs = svg.append("defs");
+
+            //Filter for the outside glow
+            var filter = defs.append("filter")
+                .attr("id","glow");
+            filter.append("feGaussianBlur")
+                .attr("stdDeviation","3.5")
+                .attr("result","coloredBlur");
+            var feMerge = filter.append("feMerge");
+            feMerge.append("feMergeNode")
+                .attr("in","coloredBlur");
+            feMerge.append("feMergeNode")
+                .attr("in","SourceGraphic");
+
+            d3.selectAll("rect[id=\'"+continent+"\']")
+            .style("stroke", "#FFFFFF")
+            .style("stroke-width", "1px")
+            .style("filter", "url(#glow)");
+
+          }
 
       }
 
@@ -2729,6 +2790,8 @@ $( document ).ready(function() {
                                 return "#bfbfbf"
                               }
                   });
+
+
 
               }else{
                 d3.selectAll("path[title=\'"+continent+"\']")
@@ -2786,6 +2849,46 @@ $( document ).ready(function() {
 
 
             }
+            else if(where=="floatingBar"){
+
+                  d3.selectAll("rect[id=\'"+continent+"\']")
+                  .style("stroke", "#333333")
+                  .style("stroke-width", "0px")
+                  .style("filter", "");
+
+                  if(variableToShow=="Biocapacity"){
+                    d3.selectAll("path[title=\'"+continent+"\']")
+                      .style("fill", function(d){
+                                var yeartoshow = "_"+yearTimeline+"";
+                                var value = d.properties.biogha[yeartoshow].total_biogha;
+
+                                  if(value){
+                                    return ramp(minValColorContB,lowColorB, highColorB, value)
+                                  } else {
+                                    return "#bfbfbf"
+                                  }
+                      });
+
+
+
+                  }else{
+                    d3.selectAll("path[title=\'"+continent+"\']")
+                      .style("fill", function(d){
+                                var yeartoshow = "_"+yearTimeline+"";
+                                var value = d.properties.efgha[yeartoshow].total_efgha;
+
+                                  if(value){
+                                    return ramp(minValColorContFT,lowColorEF, highColorEF, value)
+                                  } else {
+                                    return "#bfbfbf"
+                                  }
+                      });
+
+                  }
+
+            }
+
+
 
 
       }
