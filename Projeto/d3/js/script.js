@@ -13,8 +13,15 @@ $( document ).ready(function() {
       var minValColorContB, maxValColorContB;
       var measureToSee ="gha";
 
-      var filterArrayStackedAreaCC=[];
+      ////////FILTER CONTINENTS VARS//////////
+      var globalDataEFGHA, globalDataEFGHAintact;
+      var globalDataEFEarths, globalDataEFEarthsintact;
+      var globalDataBio, globalDataBiointact;
 
+      ////////FILTER CONTINENTS VARS//////////
+      var filterArrayCC=[];
+
+      ////////FLOATING BAR CONTINENTS VARS//////////
       var numberOfContinentOfFloatingBar=0;
       var dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
 
@@ -151,7 +158,7 @@ $( document ).ready(function() {
                   $("#floatingBarChartCont g").remove();
                   numberOfContinentOfFloatingBar=0;
                   dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
-                  document.getElementById("filterdivstackedAreaCC").style.display= "none";
+                  document.getElementById("filterdivCC").style.display= "none";
 
                   document.getElementById("selectMeasure").style.visibility="visible";
 
@@ -181,7 +188,7 @@ $( document ).ready(function() {
                   $("#floatingBarChartCont g").remove();
                   numberOfContinentOfFloatingBar=0;
                   dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
-                  document.getElementById("filterdivstackedAreaCC").style.display= "none";
+                  document.getElementById("filterdivCC").style.display= "none";
 
                   document.getElementById("selectEarthsGha").value = "gha";
                   measureToSee="gha";
@@ -205,7 +212,7 @@ $( document ).ready(function() {
                   $("#floatingBarChartCont g").remove();
                   numberOfContinentOfFloatingBar=0;
                   dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
-                  document.getElementById("filterdivstackedAreaCC").style.display= "none";
+                  document.getElementById("filterdivCC").style.display= "none";
 
                   countries_EcoFoot();
 
@@ -224,7 +231,7 @@ $( document ).ready(function() {
                   $("#floatingBarChartCont g").remove();
                   numberOfContinentOfFloatingBar=0;
                   dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
-                  document.getElementById("filterdivstackedAreaCC").style.display= "none";
+                  document.getElementById("filterdivCC").style.display= "none";
 
 
                   countries_Biocapacity();
@@ -255,7 +262,7 @@ $( document ).ready(function() {
                     $("#floatingBarChartCont g").remove();
                     numberOfContinentOfFloatingBar=0;
                     dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
-                    document.getElementById("filterdivstackedAreaCC").style.display= "none";
+                    document.getElementById("filterdivCC").style.display= "none";
 
 
                     countries_EcoFoot();
@@ -277,7 +284,7 @@ $( document ).ready(function() {
                     $("#floatingBarChartCont g").remove();
                     numberOfContinentOfFloatingBar=0;
                     dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
-                    document.getElementById("filterdivstackedAreaCC").style.display= "none";
+                    document.getElementById("filterdivCC").style.display= "none";
 
 
                     countries_Biocapacity();
@@ -298,7 +305,7 @@ $( document ).ready(function() {
               $("#floatingBarChartCont g").remove();
               numberOfContinentOfFloatingBar=0;
               dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
-              document.getElementById("filterdivstackedAreaCC").style.display= "none";
+              document.getElementById("filterdivCC").style.display= "none";
 
 
 
@@ -325,7 +332,7 @@ $( document ).ready(function() {
               $("#floatingBarChartCont g").remove();
               numberOfContinentOfFloatingBar=0;
               dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
-              document.getElementById("filterdivstackedAreaCC").style.display= "none";
+              document.getElementById("filterdivCC").style.display= "none";
 
 
               document.getElementById("selectMeasure").style.visibility="visible";
@@ -345,7 +352,7 @@ $( document ).ready(function() {
               $("#floatingBarChartCont g").remove();
               numberOfContinentOfFloatingBar=0;
               dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
-              document.getElementById("filterdivstackedAreaCC").style.display= "none";
+              document.getElementById("filterdivCC").style.display= "none";
 
 
               document.getElementById("selectMeasure").style.visibility="visible";
@@ -612,6 +619,9 @@ $( document ).ready(function() {
 
               minValColorContFT = d3.min(dataArray_efearths)
               maxValColorContFT = d3.max(dataArray_efearths)
+
+              globalDataEFEarths = datageo;
+              globalDataEFEarthsintact = datageo;
 
               stackedBarChartContinent(continentsDataForYear(datageo, yearTimeline), yearTimeline);
 
@@ -951,6 +961,9 @@ $( document ).ready(function() {
 
                   minValColorContFT = d3.min(dataArray_efgha)
                   maxValColorContFT = d3.max(dataArray_efgha)
+
+                  globalDataEFGHA = datageo;
+                  globalDataEFGHAintact = datageo;
 
                   stackedBarChartContinent(continentsDataForYear(datageo, yearTimeline), yearTimeline);
 
@@ -1297,6 +1310,9 @@ $( document ).ready(function() {
                   minValColorContB = d3.min(dataArray_biogha)
                   maxValColorContB = d3.max(dataArray_biogha)
 
+                  globalDataBio = datageo;
+                  globalDataBiointact = datageo;
+
                   stackedBarChartContinent(continentsDataForYear(datageo, yearTimeline), yearTimeline);
 
                   svg.selectAll("path")
@@ -1503,7 +1519,7 @@ $( document ).ready(function() {
             var originalData = data;
             $("#stackAreaChartCont g").remove();
             $("#stackedAreaTitle").remove();
-            document.getElementById("filterdivstackedAreaCC").style.display= "block";
+            document.getElementById("filterdivCC").style.display= "block";
 
             var continent = data.CONTINENT;
             if(measureToSee=="gha")
@@ -1612,8 +1628,7 @@ $( document ).ready(function() {
 
           var stack = d3.stack()
                .keys(statusArray)
-               .offset(d3.stackOffsetNone)
-               ;
+               .offset(d3.stackOffsetNone);
 
           var layers = stack(parsedData);
 
@@ -1832,75 +1847,6 @@ $( document ).ready(function() {
           function stackMax(layer) {
                return d3.max(layer, function (d) { return d[1]; });
              }
-
-          $(".buttonfilterstackedAreaCC").on("click", function(){
-               filterArrayStackedAreaCC.push(this.value);
-
-               var child = document.getElementById("stackAreaChartCont").childNodes[0];
-               var childChilds = child.childNodes;
-
-               childChilds.forEach(function(element){
-                 filterArrayStackedAreaCC.forEach(function(ele){
-                   if(element.id==ele){
-                     switch (ele) {
-                       case "Built Up Land":
-                            statusArray.splice(statusArray.indexOf("Built Up Land"),1);
-                            for (var i = 0; i < 54; i++) {
-                                var year = Object.keys(originalData.efgha)[i];
-                                delete originalData.efgha[year].built_up_land_efgha;
-                            }
-
-                         break;
-                       case "Grazing Land":
-                            statusArray.splice(statusArray.indexOf("Grazing Land"),1);
-                            for (var i = 0; i < 54; i++) {
-                                var year = Object.keys(originalData.efgha)[i];
-                                delete originalData.efgha[year].grazing_land_efgha;
-                            }
-
-                         break;
-                       case "Forest Land":
-                            statusArray.splice(statusArray.indexOf("Forest Land"),1);
-                            for (var i = 0; i < 54; i++) {
-                                var year = Object.keys(originalData.efgha)[i];
-                                delete originalData.efgha[year].forest_products_efgha;
-                            }
-
-                         break;
-                       case "Fishing Ground":
-                          statusArray.splice(statusArray.indexOf("Fishing Ground"),1);
-                          for (var i = 0; i < 54; i++) {
-                              var year = Object.keys(originalData.efgha)[i];
-                              delete originalData.efgha[year].fishing_grounds_efgha;
-                          }
-
-                         break;
-                       case "Carbon":
-                          statusArray.splice(statusArray.indexOf("Carbon"),1);
-                          for (var i = 0; i < 54; i++) {
-                              var year = Object.keys(originalData.efgha)[i];
-                              delete originalData.efgha[year].carbon_efgha;
-                          }
-
-                         break;
-                       case "Cropland":
-                          statusArray.splice(statusArray.indexOf("Cropland"),1);
-                          for (var i = 0; i < 54; i++) {
-                              var year = Object.keys(originalData.efgha)[i];
-                              delete originalData.efgha[year].cropland_efgha;
-                          }
-
-                         break;
-                       default:
-
-                     }
-                  }
-                 })
-               })
-
-               stackedAreaChartContinent(originalData);
-
-             });
 
 
       }
@@ -2474,7 +2420,8 @@ $( document ).ready(function() {
                           unhighlightContinent("floatingBar", highlightHere)
                        });
 
-                    svg.append("g")
+
+                svg.append("g")
                           .attr("class", "x axis")
                           .attr("transform", "translate(0," + height + ")")
                           .call(xAxis);
@@ -2488,6 +2435,8 @@ $( document ).ready(function() {
                                       .attr("transform", "translate(5,-8)")
                                       .attr("text-anchor", "middle")
                                       .attr("font-weight", "bold");
+
+
 
       }
 
@@ -2954,6 +2903,194 @@ $( document ).ready(function() {
             document.getElementById("popUpContinentTitle").innerHTML = continent;
 
       }
+
+        //continentsDataForYear(datageo, yearTimeline)
+
+      /////////////////FILTER CONTINENTS////////////
+      $(".buttonfilterCC").on("click", function(){
+
+              if(this.value == "clearFilterCC"){
+
+                  filterArrayCC = [];
+                  if(variableToShow=="Biocapacity"){
+                      stackedAreaChartContinent(globalDataBiointact.properties)
+                      floatingBarChartContinent(globalDataBiointact.properties ,yearTimeline);
+
+                  }else{
+                      if(measureToSee=="gha"){
+                          stackedAreaChartContinent(globalDataEFGHAintact.properties)
+                          floatingBarChartContinent(globalDataEFGHAintact.properties ,yearTimeline);
+
+                      }else{
+                          stackedAreaChartContinent(globalDataEFEarthsintact.properties)
+                          floatingBarChartContinent(globalDataEFEarthsintact.properties ,yearTimeline);
+
+                      }
+                  }
+
+                  globalDataBio = globalDataBiointact;
+                  globalDataEFGHA = globalDataEFGHAintact;
+                  globalDataEFEarths = globalDataEFEarthsintact;
+
+
+
+              }else{
+                filterArrayCC.push(this.value);
+
+              }
+
+              var stackedAreaChart = document.getElementById("stackAreaChartCont").childNodes[0];
+              var floatingBarChart = document.getElementById("floatingBarChartCont").childNodes[0];
+
+              filterArrayCC.forEach(function(ele){
+                     switch (ele) {
+                       case "Built Up Land":
+
+                            //STACKED AREA - 54 YEARS
+                            for (var i = 0; i < 54; i++) {
+                                if(variableToShow=="Biocapacity"){
+                                  var year = Object.keys(globalDataBio.biogha)[i];
+                                  delete globalDataBio.biogha[year].built_up_land_biogha;
+                                }else{
+                                  if(measureToSee=="gha"){
+                                      console.log(globalDataEFGHA.feautures)
+                                      var year = Object.keys(globalDataEFGHA.properties.efgha)[i];
+                                      delete globalDataEFGHA.properties.efgha[year].built_up_land_efgha;
+                                  }else{
+                                      var year = Object.keys(globalDataEFEarths.efearths)[i];
+                                      delete globalDataEFEarths.efearths[year].built_up_land_efearths;
+                                  }
+                                }
+
+                            }
+
+                            //continentsDataForYear(datageo, yearTimeline)
+                         break;
+                       case "Grazing Land":
+
+                            //STACKED AREA - 54 YEARS
+                            for (var i = 0; i < 54; i++) {
+                                if(variableToShow=="Biocapacity"){
+                                  var year = Object.keys(globalDataBio.biogha)[i];
+                                  delete globalDataBio.biogha[year].grazing_land_biogha;
+
+                                }else{
+                                  if(measureToSee=="gha"){
+                                      var year = Object.keys(globalDataEFGHA.efgha)[i];
+                                      delete globalDataEFGHA.efgha[year].grazing_land_efgha;
+                                  }else{
+                                      var year = Object.keys(globalDataEFEarths.efearths)[i];
+                                      delete globalDataEFEarths.efearths[year].grazing_land_efearths;
+                                  }
+                                }
+                            }
+
+                         break;
+                       case "Forest Land":
+
+                            //STACKED AREA - 54 YEARS
+                            for (var i = 0; i < 54; i++) {
+
+                                if(variableToShow=="Biocapacity"){
+                                  var year = Object.keys(globalDataBio.biogha)[i];
+                                  delete globalDataBio.biogha[year].forest_products_biogha;
+
+                                }else{
+                                  if(measureToSee=="gha"){
+                                      var year = Object.keys(globalDataEFGHA.efgha)[i];
+                                      delete globalDataEFGHA.efgha[year].forest_products_efgha;
+                                  }else{
+                                      var year = Object.keys(globalDataEFEarths.efearths)[i];
+                                      delete globalDataEFEarths.efearths[year].forest_products_efearths;
+                                  }
+                                }
+                            }
+
+                         break;
+                       case "Fishing Ground":
+
+                          //STACKED AREA - 54 YEARS
+                          for (var i = 0; i < 54; i++) {
+                              if(variableToShow=="Biocapacity"){
+                                var year = Object.keys(globalDataBio.biogha)[i];
+                                delete globalDataBio.biogha[year].fishing_grounds_biogha;
+
+                              }else{
+                                if(measureToSee=="gha"){
+                                    var year = Object.keys(globalDataEFGHA.efgha)[i];
+                                    delete globalDataEFGHA.efgha[year].fishing_grounds_efgha;
+                                }else{
+                                    var year = Object.keys(globalDataEFEarths.efearths)[i];
+                                    delete globalDataEFEarths.efearths[year].fishing_grounds_efearths;
+                                }
+                              }
+                          }
+
+                         break;
+                       case "Carbon":
+
+                          //STACKED AREA - 54 YEARS
+                          for (var i = 0; i < 54; i++) {
+                              if(variableToShow=="Biocapacity"){
+                                var year = Object.keys(globalDataBio.biogha)[i];
+                                delete globalDataBio.biogha[year].carbon_biogha;
+
+                              }else{
+                                if(measureToSee=="gha"){
+                                    var year = Object.keys(globalDataEFGHA.efgha)[i];
+                                    delete globalDataEFGHA.efgha[year].carbon_efgha;
+                                }else{
+                                    var year = Object.keys(globalDataEFEarths.efearths)[i];
+                                    delete globalDataEFEarths.efearths[year].carbon_efearths;
+                                }
+                              }
+                          }
+
+                         break;
+                       case "Cropland":
+
+                          //STACKED AREA - 54 YEARS
+                          for (var i = 0; i < 54; i++) {
+                              if(variableToShow=="Biocapacity"){
+                                var year = Object.keys(globalDataBio.biogha)[i];
+                                delete globalDataBio.biogha[year].cropland_biogha;
+
+                              }else{
+                                if(measureToSee=="gha"){
+                                    var year = Object.keys(globalDataEFGHA.efgha)[i];
+                                    delete globalDataEFGHA.efgha[year].cropland_efgha;
+                                }else{
+                                    var year = Object.keys(globalDataEFEarths.efearths)[i];
+                                    delete globalDataEFEarths.efearths[year].cropland_efearths;
+                                }
+                              }
+                          }
+
+                         break;
+                       default:
+
+                     }
+              })
+
+
+              if(variableToShow=="Biocapacity"){
+                  stackedAreaChartContinent(globalDataBiointact.properties)
+                  floatingBarChartContinent(globalDataBiointact.properties ,yearTimeline);
+
+              }else{
+                  if(measureToSee=="gha"){
+                      stackedAreaChartContinent(globalDataEFGHAintact.properties)
+                      floatingBarChartContinent(globalDataEFGHAintact.properties ,yearTimeline);
+
+                  }else{
+                      stackedAreaChartContinent(globalDataEFEarthsintact.properties)
+                      floatingBarChartContinent(globalDataEFEarthsintact.properties ,yearTimeline);
+
+                  }
+              }
+
+      });
+
 
       ////////////////////COUNTRIES FUNCTIONS//////////////////
 
@@ -3565,6 +3702,15 @@ $( document ).ready(function() {
 
                           stackedAreaChartContinent(valueinput_continent.properties);
 
+                          if(numberOfContinentOfFloatingBar<2){
+                            numberOfContinentOfFloatingBar+=1
+                            floatingBarChartContinent(valueinput_continent.properties, yearTimeline);
+                          }else{
+                            dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
+                            numberOfContinentOfFloatingBar=0;
+                            floatingBarChartContinent(valueinput_continent.properties, yearTimeline);
+                          }
+
                           if(value){
                               return ramp(minValColorContFT,lowColorEF, highColorEF, "mouseEF")
                             } else {
@@ -3574,7 +3720,14 @@ $( document ).ready(function() {
                         var yeartoshow = "_"+yearTimeline+"";
                         var value = valueinput_continent.properties.biogha[yeartoshow].total_biogha;
                         stackedAreaChartContinent(valueinput_continent.properties);
-
+                        if(numberOfContinentOfFloatingBar<2){
+                          numberOfContinentOfFloatingBar+=1
+                          floatingBarChartContinent(valueinput_continent.properties, yearTimeline);
+                        }else{
+                          dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
+                          numberOfContinentOfFloatingBar=0;
+                          floatingBarChartContinent(valueinput_continent.properties, yearTimeline);
+                        }
                         if(value){
                           return ramp(minValColorContB,lowColorB, highColorB, "mouseB")
                         } else {
@@ -3595,7 +3748,14 @@ $( document ).ready(function() {
                           var yeartoshow = "_"+yearTimeline+"";
                           var value = valueinput_continent.properties.efgha[yeartoshow].total_efgha;
                           stackedAreaChartContinent(valueinput_continent.properties);
-
+                          if(numberOfContinentOfFloatingBar<2){
+                            numberOfContinentOfFloatingBar+=1
+                            floatingBarChartContinent(valueinput_continent.properties, yearTimeline);
+                          }else{
+                            dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
+                            numberOfContinentOfFloatingBar=0;
+                            floatingBarChartContinent(valueinput_continent.properties, yearTimeline);
+                          }
                           if(value){
                               return ramp(minValColorContFT,lowColorEF, highColorEF, "mouseEF")
                             } else {
@@ -3605,7 +3765,14 @@ $( document ).ready(function() {
                         var yeartoshow = "_"+yearTimeline+"";
                         var value = valueinput_continent.properties.biogha[yeartoshow].total_biogha;
                         stackedAreaChartContinent(valueinput_continent.properties);
-
+                        if(numberOfContinentOfFloatingBar<2){
+                          numberOfContinentOfFloatingBar+=1
+                          floatingBarChartContinent(valueinput_continent.properties, yearTimeline);
+                        }else{
+                          dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
+                          numberOfContinentOfFloatingBar=0;
+                          floatingBarChartContinent(valueinput_continent.properties, yearTimeline);
+                        }
                         if(value){
                           return ramp(minValColorContB,lowColorB, highColorB, "mouseB")
                         } else {
