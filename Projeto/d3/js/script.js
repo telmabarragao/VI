@@ -684,6 +684,7 @@ $( document ).ready(function() {
 
                 })
                 .on("dblclick", function(d){
+
                   floatingBarChartContinent(d.properties, yearTimeline);
                 });
                     // ADD COLOR SCALE LEGEND
@@ -2239,13 +2240,7 @@ $( document ).ready(function() {
                 .scale(y)
                 .tickSize(0)
                 .tickPadding(6);
-              //  .tickFormat( function(d) { return Math.abs((d/1000000)).toFixed(0)+ " M" } );
 
-
-
-             // append the svg object to the body of the page
-             // append a 'group' element to 'svg'
-             // moves the 'group' element to the top left margin
              var svg = d3.select("#floatingBarChartCont")
                .attr("width", width + margin.left + margin.right)
                .attr("height", height + margin.top + margin.bottom)
@@ -2267,6 +2262,25 @@ $( document ).ready(function() {
 
             var county=0;
             var countx=0;
+
+
+            //GRAPH_TITLE
+            svg.append("text")
+            .attr("id", "stackedAreaTitle")
+            .attr("x", 3*width/5)
+            .attr("y", 11.5)
+            .attr("text-anchor", "middle")
+            .style("font-size", "16px")
+            .style("text-decoration", "strong")
+            .style("fill", "#888844")
+            .text(function(){
+              if (dataToFloatingBars["continents"].length == 2){
+                return dataToFloatingBars["continents"][1]+" vs. "+dataToFloatingBars["continents"][0];
+              }else{
+                return dataToFloatingBars["continents"][0];
+              }
+            });
+
 
             var rect = layer.selectAll("rect")
                      .data(function(d,i){d.map(function(b){b.colorIndex=i;return b;});return d;})
@@ -2397,16 +2411,8 @@ $( document ).ready(function() {
                           .attr("class", "y axis")
                           .attr("transform", "translate("+width/2+",0)")
                           .call(yAxis);
-                          // .append("text")
-                          //   .attr("transform", "rotate(-90)")
-                          //   .attr("x", 0 - (height / 2))
-                          //   .attr("y", 10 - margin.left)
-                          //   .attr("dy", "0.32em")
-                          //   .attr("fill", "#000")
-                          //   .attr("font-weight", "bold")
-                          //   .attr("text-anchor", "middle")
 
-                          yAxisTo.selectAll("text")
+                  yAxisTo.selectAll("text")
                                       .attr("transform", "translate(5,-8)")
                                       .attr("text-anchor", "middle")
                                       .attr("font-weight", "bold");
