@@ -2226,12 +2226,12 @@ $( document ).ready(function() {
           if(measureToSee=="earths"){
             var xAxis = d3.axisBottom()
                             .scale(x)
-                            .tickFormat( function(d) { return d.toFixed(0)+ " Earths" } );
+                            .tickFormat( function(d) { return Math.abs(d).toFixed(0)+ " Earths" } );
 
           }else{
             var xAxis = d3.axisBottom()
                             .scale(x)
-                            .tickFormat( function(d) { return (d/1000000).toFixed(0)+ " M" } );
+                            .tickFormat( function(d) { return Math.abs((d/1000000)).toFixed(0)+ " M" } );
           }
 
              // set the ranges
@@ -2257,8 +2257,6 @@ $( document ).ready(function() {
 
              var img="";
 
-             console.log(dataToFloatingBars)
-
              var layer = svg.selectAll(".layer")
                      .data(dataToFloatingBars["layers"])
                      .enter().append("g")
@@ -2278,19 +2276,15 @@ $( document ).ready(function() {
                          countx+=1;
                          return 0;
                        }else{
-                         console.log(x(d.value))
                          return x(-d.value);
                        }
-
                      })
                      .attr("width", function(d, i, j) {
                        return x(d.value)-200;
-
                      })
                      .transition()
                      .attr("y", function(d, i, j) {
                        if(county<7){
-                         console.log("entrei no y")
                          county+=1;
                          return y(d.landtype)+7;/// n + 12 ;
                        }else{
@@ -2299,7 +2293,95 @@ $( document ).ready(function() {
                      })
                      .attr("height", 10)
                      .attr("class","bar")
-                     .style("fill",function(d){return dataToFloatingBars["colors"][d.colorIndex];})
+                     .style("fill",function(d,i){
+                       return colors[i];
+                     });
+
+
+
+                     layer.selectAll("rect")
+                      .on("mouseover", function(d){
+                         var xPosition = d3.mouse(this)[0] - 15;
+                         var yPosition = d3.mouse(this)[1] - 25;
+
+                         var landtype = d.landtype;
+
+                         switch (landtype) {
+                           case "Cropland":
+                             img = "../img/icons/crop-land.png"
+                             break;
+                           case "Carbon":
+                             img = "../img/icons/carbon.png"
+                             break;
+                           case "Fishing Ground":
+                             img = "../img/icons/fishing-ground.png"
+                             break;
+                           case "Forest Land":
+                             img = "../img/icons/forest-land.png"
+                             break;
+                           case "Grazing Land":
+                             img = "../img/icons/grazing-land.png"
+                             break;
+                           case "Built Up Land":
+                             img = "../img/icons/built-up-land.png"
+                             break;
+
+                           default:
+                              if(measureToSee=="gha"){
+                                if(variableToShow=="Biocapacity"){
+                                  img = "../img/icons/biocapacity.png"
+
+                                }else{
+                                  img = "../img/icons/footprint.png"
+
+                                }
+                              }else{
+                                  img = "../img/icons/earth.png"
+
+                              }
+                         }
+
+                         var continent="";
+
+                         if(this.getAttribute("x") == 0){
+                            continent = dataToFloatingBars["continents"][0];
+                         }else{
+                           continent = dataToFloatingBars["continents"][1];
+
+                         }
+
+                         if(measureToSee=="earths"){
+                           tooltip.html(continent+" : "+d.landtype + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (d.value).toFixed(2)+ " Earths" )
+                                   .style("left", (d3.event.pageX) + "px")
+                                   .style("top", (d3.event.pageY - 28) + "px");
+                         }else{
+                           tooltip.html(continent+" : "+d.landtype + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (d.value/1000000).toFixed(2)+ " M" )
+                                   .style("left", (d3.event.pageX) + "px")
+                                   .style("top", (d3.event.pageY - 28) + "px");
+                         }
+
+
+                         tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+
+                       })
+                       .on("mousemove", function(d) {
+
+                         tooltip.transition()
+                               .duration(200)
+                             .style("opacity", .9);
+
+                         var xPosition = d3.mouse(this)[0] - 15;
+                         var yPosition = d3.mouse(this)[1] - 25;
+
+
+                         tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+
+                       })
+                       .on("mouseout", function(d){
+                         tooltip.transition()
+                               .duration(100)
+                             .style("opacity", 0);
+                       });
 
             svg.append("g")
                   .attr("class", "x axis")
@@ -2310,106 +2392,6 @@ $( document ).ready(function() {
                   .attr("class", "y axis")
                   .attr("transform", "translate("+width/2+",0)")
                   .call(yAxis);
-
-             // append the rectangles for the bar chart
-             // svg.selectAll(".bar")
-             //   .data(data)
-             //   .enter().append("rect")
-             //   .attr("class", "bar")
-             //   .attr("id", function(d) { return d.landtype; })
-             //   .attr("width", function(d) {return x(d.value); } )
-             //   .attr("y", function(d) { return y(d.landtype); })
-             //   .attr("height", y.bandwidth())
-             //   .style("fill", function(d,i){
-             //     return colors[i];
-             //   })
-             //   .on("mouseover", function(d){
-             //     var xPosition = d3.mouse(this)[0] - 15;
-             //     var yPosition = d3.mouse(this)[1] - 25;
-             //
-             //     var landtype = d.landtype;
-             //
-             //     switch (landtype) {
-             //       case "Cropland":
-             //         img = "../img/icons/crop-land.png"
-             //         break;
-             //       case "Carbon":
-             //         img = "../img/icons/carbon.png"
-             //         break;
-             //       case "Fishing Ground":
-             //         img = "../img/icons/fishing-ground.png"
-             //         break;
-             //       case "Forest Land":
-             //         img = "../img/icons/forest-land.png"
-             //         break;
-             //       case "Grazing Land":
-             //         img = "../img/icons/grazing-land.png"
-             //         break;
-             //       case "Built Up Land":
-             //         img = "../img/icons/built-up-land.png"
-             //         break;
-             //
-             //       default:
-             //          if(measureToSee=="gha"){
-             //            if(variableToShow=="Biocapacity"){
-             //              img = "../img/icons/biocapacity.png"
-             //
-             //            }else{
-             //              img = "../img/icons/footprint.png"
-             //
-             //            }
-             //          }else{
-             //              img = "../img/icons/earth.png"
-             //
-             //          }
-             //     }
-             //
-             //
-             //     if(measureToSee=="earths"){
-             //       tooltip.html(d.landtype + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (d.value).toFixed(2)+ " Earths" )
-             //               .style("left", (d3.event.pageX) + "px")
-             //               .style("top", (d3.event.pageY - 28) + "px");
-             //     }else{
-             //       tooltip.html(d.landtype + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (d.value/1000000).toFixed(2)+ " M" )
-             //               .style("left", (d3.event.pageX) + "px")
-             //               .style("top", (d3.event.pageY - 28) + "px");
-             //     }
-             //
-             //
-             //     tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-             //
-             //   })
-             //   .on("mousemove", function(d) {
-             //
-             //     tooltip.transition()
-             //           .duration(200)
-             //         .style("opacity", .9);
-             //
-             //     var xPosition = d3.mouse(this)[0] - 15;
-             //     var yPosition = d3.mouse(this)[1] - 25;
-             //
-             //
-             //     tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-             //
-             //   })
-             //   .on("mouseout", function(d){
-             //     tooltip.transition()
-             //           .duration(100)
-             //         .style("opacity", 0);
-             //   });
-
-              //
-              // if(measureToSee=="earths"){
-              //   var xAxis = d3.axisBottom(x)
-              //                 .tickFormat( function(d) { return (d).toFixed()+ " Earths" } );
-              // }else{
-              //   console.log(" e gha")
-              //   var xAxis = d3.axisBottom(x)
-              //                 .tickFormat( function(d) { return (d/1000000).toFixed()+ " M" } );
-              // }
-
-
-
 
       }
 
