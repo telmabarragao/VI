@@ -1402,9 +1402,11 @@ $( document ).ready(function() {
 
       function stackedAreaChartContinent(data){
 
-        $("#stackAreaChartCont g").remove();
-        $("#stackedAreaTitle").remove();
-        document.getElementById("filterdivstackedAreaCC").style.display= "block";
+            var original = data;
+            var originalData = data;
+            $("#stackAreaChartCont g").remove();
+            $("#stackedAreaTitle").remove();
+            document.getElementById("filterdivstackedAreaCC").style.display= "block";
 
             var continent = data.CONTINENT;
             if(measureToSee=="gha")
@@ -1734,7 +1736,7 @@ $( document ).ready(function() {
                return d3.max(layer, function (d) { return d[1]; });
              }
 
-             $(".buttonfilterstackedAreaCC").on("click", function(){
+          $(".buttonfilterstackedAreaCC").on("click", function(){
                filterArrayStackedAreaCC.push(this.value);
 
                var child = document.getElementById("stackAreaChartCont").childNodes[0];
@@ -1746,55 +1748,60 @@ $( document ).ready(function() {
                      switch (ele) {
                        case "Built Up Land":
                             statusArray.splice(statusArray.indexOf("Built Up Land"),1);
+                            for (var i = 0; i < 54; i++) {
+                                var year = Object.keys(originalData.efgha)[i];
+                                delete originalData.efgha[year].built_up_land_efgha;
+                            }
+
                          break;
                        case "Grazing Land":
                             statusArray.splice(statusArray.indexOf("Grazing Land"),1);
+                            for (var i = 0; i < 54; i++) {
+                                var year = Object.keys(originalData.efgha)[i];
+                                delete originalData.efgha[year].grazing_land_efgha;
+                            }
+
                          break;
                        case "Forest Land":
                             statusArray.splice(statusArray.indexOf("Forest Land"),1);
+                            for (var i = 0; i < 54; i++) {
+                                var year = Object.keys(originalData.efgha)[i];
+                                delete originalData.efgha[year].forest_products_efgha;
+                            }
 
                          break;
                        case "Fishing Ground":
                           statusArray.splice(statusArray.indexOf("Fishing Ground"),1);
+                          for (var i = 0; i < 54; i++) {
+                              var year = Object.keys(originalData.efgha)[i];
+                              delete originalData.efgha[year].fishing_grounds_efgha;
+                          }
+
                          break;
                        case "Carbon":
                           statusArray.splice(statusArray.indexOf("Carbon"),1);
+                          for (var i = 0; i < 54; i++) {
+                              var year = Object.keys(originalData.efgha)[i];
+                              delete originalData.efgha[year].carbon_efgha;
+                          }
 
                          break;
                        case "Cropland":
                           statusArray.splice(statusArray.indexOf("Cropland"),1);
+                          for (var i = 0; i < 54; i++) {
+                              var year = Object.keys(originalData.efgha)[i];
+                              delete originalData.efgha[year].cropland_efgha;
+                          }
 
                          break;
                        default:
 
                      }
-
-                     console.log(statusArray)
-                     var stack = d3.stack()
-                          .keys(statusArray)
-                          .offset(d3.stackOffsetNone)
-                          ;
-
-                     var layers = stack(parsedData);
-                     //element.style.display="none";
-                    // d3.select(element).remove()
-                  		//			.exit();
-
-                    var layerGroups = content.selectAll(".layer")
-                                 .data(layers)
-                                 .enter().append("g")
-                                 .attr("class", "layer")
-                                 .attr("id", function(d, i) { return statusArray[i]; })
-                                 .attr("fill", function (d, i) {
-                                      return colors[i];
-                                 });
-
-                   }
-
+                  }
                  })
-
-
                })
+
+               stackedAreaChartContinent(originalData);
 
              });
 
