@@ -2237,8 +2237,11 @@ $( document ).ready(function() {
              // set the ranges
             var yAxis = d3.axisLeft()
                 .scale(y)
-                .tickSize(7)
+                .tickSize(0)
                 .tickPadding(6);
+              //  .tickFormat( function(d) { return Math.abs((d/1000000)).toFixed(0)+ " M" } );
+
+
 
              // append the svg object to the body of the page
              // append a 'group' element to 'svg'
@@ -2286,9 +2289,9 @@ $( document ).ready(function() {
                      .attr("y", function(d, i, j) {
                        if(county<7){
                          county+=1;
-                         return y(d.landtype)+7;/// n + 12 ;
+                         return y(d.landtype)+10;/// n + 12 ;
                        }else{
-                         return y(d.landtype)+7;/// n + 5;
+                         return y(d.landtype)+10;/// n + 5;
                        }
                      })
                      .attr("height", 10)
@@ -2373,6 +2376,8 @@ $( document ).ready(function() {
                          var xPosition = d3.mouse(this)[0] - 15;
                          var yPosition = d3.mouse(this)[1] - 25;
 
+                         tooltip.style("left", (d3.event.pageX) + "px")
+                                   .style("top", (d3.event.pageY - 28) + "px");
 
                          tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
 
@@ -2383,15 +2388,28 @@ $( document ).ready(function() {
                              .style("opacity", 0);
                        });
 
-            svg.append("g")
-                  .attr("class", "x axis")
-                  .attr("transform", "translate(0," + height + ")")
-                  .call(xAxis);
+                    svg.append("g")
+                          .attr("class", "x axis")
+                          .attr("transform", "translate(0," + height + ")")
+                          .call(xAxis);
 
-            svg.select("g")
-                  .attr("class", "y axis")
-                  .attr("transform", "translate("+width/2+",0)")
-                  .call(yAxis);
+                  var yAxisTo=  svg.select("g")
+                          .attr("class", "y axis")
+                          .attr("transform", "translate("+width/2+",0)")
+                          .call(yAxis);
+                          // .append("text")
+                          //   .attr("transform", "rotate(-90)")
+                          //   .attr("x", 0 - (height / 2))
+                          //   .attr("y", 10 - margin.left)
+                          //   .attr("dy", "0.32em")
+                          //   .attr("fill", "#000")
+                          //   .attr("font-weight", "bold")
+                          //   .attr("text-anchor", "middle")
+
+                          yAxisTo.selectAll("text")
+                                      .attr("transform", "translate(5,-8)")
+                                      .attr("text-anchor", "middle")
+                                      .attr("font-weight", "bold");
 
       }
 
