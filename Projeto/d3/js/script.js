@@ -3098,6 +3098,10 @@ $( document ).ready(function() {
           .attr("height", 480)
           .attr("tranform", "translate(" + 0 + "," + 0 + ")");
 
+        var div = d3.select("body").append("div")
+                .attr("class", "tooltipcountry")
+                .style("opacity", 0);
+
 
         d3.json("../data/CountryOutput.json").then(function(json){
 
@@ -3190,7 +3194,6 @@ $( document ).ready(function() {
                         datageo.features[n].properties.grazing_footprint_cons = grazing_footprint_cons;
                         datageo.features[n].properties.grazing_footprint_bio = grazing_footprint_bio;
 
-                        console.log(datageo)
                         break;
 
 
@@ -3202,7 +3205,6 @@ $( document ).ready(function() {
 
               minValColorCouFT = d3.min(dataArray)
               maxValColorCouFT = d3.max(dataArray)
-
 
               svg.selectAll("path")
                 .data(datageo.features)
@@ -3225,12 +3227,21 @@ $( document ).ready(function() {
                 .attr("title", function(d) {return d.properties.NAME;})
                 .on("mouseover", function(d){
 
-                    var mouse = d3.mouse(this);
+
+                      var img = "../img/icons/footprint.png";
+                      var mouse = d3.mouse(this);
+
+
                     var countryMouseOver = d.properties.NAME.replace(/\s/g, "_").replace(".", "_").replace("(", "").replace(")", "");
+
+                    var xPosition = d3.mouse(this)[0] - 15;
+                    var yPosition = d3.mouse(this)[1] - 25;
+
+                    var value;
 
                     d3.select("path[title=\'"+d.properties.NAME+"\']")
                       .style("fill", function(d){
-                                  var value = d.properties.totalEcoFootCons;
+                                  value = d.properties.totalEcoFootCons;
 
                                   if(value){
                                     return ramp(minValColorCouFT,lowColorEF, highColorEF, "mouseEF")
@@ -3240,62 +3251,81 @@ $( document ).ready(function() {
                       })
                       .attr("title", function(d) {return d.properties.NAME;});
 
+                    console.log(value);
+
+                    div.transition()
+                          .duration(200)
+                          .style("opacity", .9);
+                    div.html(d.properties.NAME+  "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + value.toFixed(2) + " M" )//round(value/1000000, 6).toFixed(2)
+                          .style("left", (d3.event.pageX) + "px")
+                          .style("top", (d3.event.pageY - 28) + "px");
+
+
+
                       if(lastCountryOn==countryMouseOver){
-                        d3.select("#"+countryMouseOver+"mover").attr("transform","translate("+ mouse[0]+event.clientX+", "+mouse[1]+event.clientY+") ");
+                        d3.select("#"+countryMouseOver+"mover").attr("transform","translate("+ xPosition +", "+yPosition+") ");
                         lastCountryOn = countryMouseOver;
                       }else if(lastCountryOn==null){
-                        d3.select("body")
-                              .append("div")
-                              .attr("id", function(){
-                                  lastCountryOn = countryMouseOver;
-                                  console.log()
-                                  return lastCountryOn+"mover";
-
-                              })
-                              .style("position", "absolute")
-                              .style("z-index", "10")
-                              .style("visibility", "visible")
-                              .style("background", "#000")
-                              .attr("x", mouse[0]+event.clientX)
-                              .attr("y", mouse[1]+event.clientY)
-                              .text(countryMouseOver);
+                        lastCountryOn = countryMouseOver;
+                                //return lastCountryOn+"mover";
                       }
-
-
                   })
                 .on("mouseout", function(d){
-                      d3.select("path[title=\'"+d.properties.NAME+"\']")
-                        .style("fill", function(d){
-                                var value = d.properties.totalEcoFootCons;
 
-                                    if(value){
-                                      return ramp(minValColorCouFT,lowColorEF, highColorEF, value)
-                                    } else {
-                                      return "#bfbfbf"
-                                    }
-                        });
+                        div.transition()
+                            .duration(500)
+                            .style("opacity", 0);
 
-                        if(lastCountryOn.indexOf(" ") != -1 || lastCountryOn.indexOf(".") != -1 || lastCountryOn.indexOf("(") != -1 || lastCountryOn.indexOf(")") != -1){
-                          d3.select("#"+lastCountryOn.replace(/\s/g, "_").replace(".", "_").replace("(", "_").replace(")", "_")+"mover").remove();
-                          lastCountryOn = null;
 
-                        }else{
-                          d3.select("#"+lastCountryOn+"mover").remove();
-                          lastCountryOn = null;
-                        }
+                            d3.select("path[title=\'"+d.properties.NAME+"\']")
+                              .style("fill", function(d){
+                                      var value = d.properties.totalEcoFootCons;
 
-                  })
-                  .on("dblclick", function(d){
+                                          if(value){
+                                            return ramp(minValColorCouFT,lowColorEF, highColorEF, value)
+                                          } else {
+                                            return "#bfbfbf"
+                                          }
+                              });
+
+                          if(lastCountryOn.indexOf(" ") != -1 || lastCountryOn.indexOf(".") != -1 || lastCountryOn.indexOf("(") != -1 || lastCountryOn.indexOf(")") != -1){
+                            d3.select("#"+lastCountryOn.replace(/\s/g, "_").replace(".", "_").replace("(", "_").replace(")", "_")+"mover").remove();
+                            lastCountryOn = null;
+
+                          }else{
+                            d3.select("#"+lastCountryOn+"mover").remove();
+                            lastCountryOn = null;
+                          }
+
+
+                    })
+                .on("click", function(d){
+                  console.log(numberOfContinentOfFloatingBar);
+                  console.log(dataToFloatingBars);
+
                       if(numberOfContinentOfFloatingBar<2){
                         numberOfContinentOfFloatingBar+=1
-                        floatingBarChartCountries(d.properties);
                         singlecountry_floatingBar(d.properties);
                       }else{
                         dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
                         numberOfContinentOfFloatingBar=0;
-                        floatingBarChartCountries(d.properties);
                         singlecountry_floatingBar(d.properties);
-                      }                    });
+                      }
+                  })
+                .on("dblclick", function(d){
+                  console.log(numberOfContinentOfFloatingBar);
+                  console.log(dataToFloatingBars);
+
+                      if(numberOfContinentOfFloatingBar<2){
+                        numberOfContinentOfFloatingBar+=1
+                        floatingBarChartCountries(d.properties);
+
+                      }else{
+                        dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
+                        numberOfContinentOfFloatingBar=0;
+                        floatingBarChartCountries(d.properties);
+                      }
+                });
 
                     // ADD COLOR SCALE LEGEND
                     var w = 50, h = 272;
@@ -3636,16 +3666,19 @@ $( document ).ready(function() {
 
       function singlecountry_floatingBar(data){
 
-           $("#floatingBarChartCont g").remove();
-          var highlightHere="";
+            $("#floatingBarChartCont g").remove();
+            var highlightHere="";
+            console.log(data)
 
+            dataToFloatingBars["continents"].push(data.NAME);
             dataToFloatingBars["continents"].push(data.NAME);
 
             var landtypes = ["Built-Up Land", "Carbon", "Cropland", "Fishing Ground", "Forest Land", "Grazing Land","Total"];
             dataToFloatingBars["categories"]=landtypes;
 
-            var dataset, data;
+            var dataset, data, dataset2, data2;
 
+            //////////MUDAR AQUI
             if(measureToSee == "gha"){
 
               if(variableToShow=="Biocapacity"){
@@ -3653,20 +3686,22 @@ $( document ).ready(function() {
                 console.log("biocapacity")
                 dataset = data;
 
+                /////////////MUDAR AQUI
 
-                data = [{"landtype":"Built-Up Land","value":dataset.built_up_land_prod},
-                {"landtype":"Carbon","value":dataset.carbon_footprint_prod},
-                {"landtype":"Cropland","value":dataset.cropland_prod},
-                {"landtype":"Fishing Ground","value":dataset.fish_footprint_prod},
-                {"landtype":"Forest Land","value":dataset.forest_product_footprint_prod},
-                {"landtype":"Grazing Land","value":dataset.grazing_footprint_prod},
-                {"landtype":"Total","value":dataset.totalEcoFootProd}];
+                data = [{"landtype":"Built-Up Land","value":dataset.built_up_land_bio},
+                 {"landtype":"Carbon","value":dataset.carbon_footprint_bio},
+                 {"landtype":"Cropland","value":dataset.cropland_bio},
+                 {"landtype":"Fishing Ground","value":dataset.fish_footprint_bio},
+                 {"landtype":"Forest Land","value":dataset.forest_product_footprint_bio},
+                 {"landtype":"Grazing Land","value":dataset.grazing_footprint_bio},
+                 {"landtype":"Total","value":dataset.totalBiocapacity}];
 
               }else{
 
                 console.log("efgha")
                 dataset = data;
 
+                dataset2 = dataset;
 
                data = [{"landtype":"Built-Up Land","value":dataset.built_up_land_prod},
                 {"landtype":"Carbon","value":dataset.carbon_footprint_prod},
@@ -3675,7 +3710,13 @@ $( document ).ready(function() {
                 {"landtype":"Forest Land","value":dataset.forest_product_footprint_prod},
                 {"landtype":"Grazing Land","value":dataset.grazing_footprint_prod},
                 {"landtype":"Total","value":dataset.totalEcoFootProd}];
-
+                data2 = [{"landtype":"Built-Up Land","value":dataset.built_up_land_cons},
+                 {"landtype":"Carbon","value":dataset.carbon_footprint_cons},
+                 {"landtype":"Cropland","value":dataset.cropland_cons},
+                 {"landtype":"Fishing Ground","value":dataset.fish_footprint_cons},
+                 {"landtype":"Forest Land","value":dataset.forest_product_footprint_cons},
+                 {"landtype":"Grazing Land","value":dataset.grazing_footprint_cons},
+                 {"landtype":"Total","value":dataset.totalEcoFootCons}];
 
               }
             }else{
@@ -3693,6 +3734,7 @@ $( document ).ready(function() {
             }
 
             dataToFloatingBars["layers"].push(data);
+            dataToFloatingBars["layers"].push(data2);
 
             var tooltip = d3.select("body").append("g")
                       .attr("class", "tooltipfloatingsinglecountry")
@@ -3715,10 +3757,16 @@ $( document ).ready(function() {
                   .domain(landtypes)
                   .range(colorsa);
 
+            console.log(dataToFloatingBars["continents"])
+            console.log(dataToFloatingBars["layers"])
+
             n = dataToFloatingBars["continents"].length, // Number of Layers
             m = dataToFloatingBars["layers"].length, // Number of Samples in 1 layer
             xGroupMax = d3.max(dataToFloatingBars["layers"], function(layer) { return d3.max(layer, function(d) { return d.value; }); });
             xGroupMin = d3.min(dataToFloatingBars["layers"], function(layer) { return d3.min(layer, function(d) { return d.value; }); });
+
+            console.log(xGroupMax)
+            console.log(xGroupMin)
 
             // Set x, y and colors
             var x = d3.scaleLinear()
@@ -3738,7 +3786,7 @@ $( document ).ready(function() {
           }else{
             var xAxis = d3.axisBottom()
                             .scale(x)
-                            .tickFormat( function(d) { return Math.abs((d/1000000)).toFixed(0)+ " M" } );
+                            .tickFormat( function(d) { return Math.abs(d).toFixed(0)+ " gha" } );
           }
 
              // set the ranges
@@ -3769,7 +3817,6 @@ $( document ).ready(function() {
             var county=0;
             var countx=0;
 
-
             //GRAPH_TITLE
             svg.append("text")
             .attr("id", "stackedAreaTitle")
@@ -3781,7 +3828,7 @@ $( document ).ready(function() {
             .style("fill", "#888844")
             .text(function(){
               if (dataToFloatingBars["continents"].length == 2){
-                return dataToFloatingBars["continents"][1]+" vs. "+dataToFloatingBars["continents"][0];
+                return dataToFloatingBars["continents"][1]+" Consumption Vals vs. "+dataToFloatingBars["continents"][0] +" Production Vals";
               }else{
                 return dataToFloatingBars["continents"][0];
               }
@@ -3799,17 +3846,16 @@ $( document ).ready(function() {
                          countx+=1;
                          return 0;
                        }else{
-                         return x(d.value);
+                         return x(-d.value);
                        }
                      })
                      .attr("width", function(d, i, j) {
-                       return x(d.value);
+                       return x(d.value)-200;
                      })
                      .transition()
                      .attr("y", function(d, i, j) {
                        if(county<7){
                          county+=1;
-                         console.log(y(d.landtype));
                          return y(d.landtype)+10;/// n + 12 ;
                        }else{
                          return y(d.landtype)+10;/// n + 5;
@@ -3879,7 +3925,7 @@ $( document ).ready(function() {
                                    .style("left", (d3.event.pageX) + "px")
                                    .style("top", (d3.event.pageY - 28) + "px");
                          }else{
-                           tooltip.html(continent+" : "+d.landtype + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (d.value/1000000).toFixed(2)+ " M" )
+                           tooltip.html(continent+" : "+d.landtype + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (d.value).toFixed(2)+ " gha" ) //(d.value/1000000)
                                    .style("left", (d3.event.pageX) + "px")
                                    .style("top", (d3.event.pageY - 28) + "px");
                          }

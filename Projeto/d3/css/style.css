@@ -66,6 +66,17 @@ body{
   top:0%;
 }
 
+#cou_bottom_graphs{
+  position: relative;
+  display: inline-block;
+  width: 100% !important;
+  height: 40% !important;
+  margin: 0% !important;
+  right: 0% !important;
+  padding: 0%;
+  top:0%;
+}
+
 #stackBarChartCont{
   position: relative;
   display: block;
@@ -77,7 +88,7 @@ body{
   padding: 0%;
 }
 
-#stackAreaChartCont{
+#stackAreaChartCont, #floatingBarChartSingleCou{
   position: relative;
   display: inline-block;
   width: 50% !important;
@@ -87,7 +98,7 @@ body{
   padding: 0%;
 }
 
-#floatingBarChartCont{
+#floatingBarChartCont, #floatingBarChartCou{
   position: relative;
   display: inline-block;
   width: 40%;
@@ -525,7 +536,7 @@ body{
 
 /********************** TOOLTIP *******************/
 
-div.tooltip {
+div.tooltip , div.tooltipcountry{
     position: absolute !important;
     text-align: center;
     z-index: 10;
@@ -579,7 +590,7 @@ div.tooltip {
     transition: left 0.15s ease-out;
 }
 
-.tooltipfloatingcontinent {
+.tooltipfloatingcontinent, .tooltipfloatingsinglecountry {
     position: absolute;
     text-align: center;
     z-index: 10;
