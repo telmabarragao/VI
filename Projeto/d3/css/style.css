@@ -30,7 +30,7 @@ body{
   visibility: hidden;
 }
 
-#world_graph, #countries_graph{
+#world_graph{
   position: relative;
   display: inline-block;
   float:left;
@@ -39,6 +39,20 @@ body{
   margin: 0%;
   top: 0%;
   left: 0%;
+  padding: 0%;
+  margin-left: 0.5%;
+  margin-top: -3%;
+  z-index: -3;
+}
+ #countries_graph{
+  position: relative;
+  display: inline-block;
+  float:left;
+  width: 55%;
+  height: 60%;
+  margin: 0%;
+  top: 0%;
+  left: 25%;
   padding: 0%;
   margin-left: 0.5%;
   margin-top: -3%;
