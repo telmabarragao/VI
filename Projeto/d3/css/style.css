@@ -97,7 +97,7 @@ body{
   padding: 0%;
 }
 
-#legend1{
+#legend1, #legend2{
   position: relative;
   display:inline-block;
   margin:0%;
