@@ -267,7 +267,7 @@ $( document ).ready(function() {
                   document.getElementById('search_bar').style.visibility = "visible";
                   document.getElementById('search_bar-continent').style.display = "none";
                   document.getElementById('search_bar').style.display = "inline-grid";
-                  document.getElementById('selectFilter').style.visibility = "visible";
+                  document.getElementById('selectFilter').style.visibility = "hidden";
                   document.getElementById('continents_view').style.visibility = "hidden" ;
                   document.getElementById('countries_view').style.visibility = "visible" ;
 
@@ -301,7 +301,7 @@ $( document ).ready(function() {
                   document.getElementById('search_bar').style.visibility = "visible";
                   document.getElementById('search_bar-continent').style.display = "none";
                   document.getElementById('search_bar').style.display = "inline-grid";
-                  document.getElementById('selectFilter').style.visibility = "visible";
+                  document.getElementById('selectFilter').style.visibility = "hidden";
                   document.getElementById('continents_view').style.visibility = "hidden" ;
                   document.getElementById('countries_view').style.visibility = "visible" ;
 
