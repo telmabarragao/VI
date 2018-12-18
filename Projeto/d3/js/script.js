@@ -12,6 +12,7 @@ $( document ).ready(function() {
       var minValColorContFT, maxValColorContFT;
       var minValColorContB, maxValColorContB;
       var measureToSee ="gha";
+      var filterToSee="none";
 
       ////////FILTER CONTINENTS VARS//////////
       var globalDataEFGHA, globalDataEFGHAintact;

@@ -289,10 +289,7 @@ body{
 /***********SELECT MEASURE ***********/
 
 #selectMeasure{ /*here*/
-  position: :relative;
-  display:inline-grid;
-  grid-column-start: 5;
-  grid-column-end: 6;
+  display:inline-block;
   margin: auto;
   margin-left: 0%;
   left: -90%;
@@ -322,7 +319,38 @@ body{
   height: 60%;
 }
 
+/***********SELECT HISTORIC FILTER ***********/
 
+#selectFilter{ /*here*/
+  display: inline-block;
+  margin: auto;
+  margin-left: 0%;
+  left: -90%;
+  margin-top: 3%;
+  height: 95%;
+  width: 50%;
+
+}
+
+#selectFilter select{
+  border-radius: 3px;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #9dd993), color-stop(100%, #65bd63));
+  background-image: -webkit-linear-gradient(top, #b9b992, #ffdf80);
+  background-image: -moz-linear-gradient(top, #b9b992, #ffdf80);
+  background-image: -ms-linear-gradient(top, #b9b992, #ffdf80);
+  background-image: -o-linear-gradient(top, #b9b992, #ffdf80);
+  background-image: linear-gradient(top, #b9b992, #ffdf80);
+  -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+  color:white;
+  text-align: center;
+  align-content: center;
+  border: 1px solid #d4d4d4;
+  background-color: #b9b992 !important;
+  -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+  height: 60%;
+}
 
 
 /*******TOGGLE SWITCH ********/
@@ -766,9 +794,9 @@ div.tooltip , div.tooltipcountry{
   grid-column-start: 7;
   grid-column-end: 8;
   margin: auto;
-  margin-left: -150%;
+  margin-left: -200%;
   right: -130%;
-  margin-top: 11%;
+  margin-top: 14%;
 
   border-radius: 3px;
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #9dd993), color-stop(100%, #65bd63));
