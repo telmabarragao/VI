@@ -1651,8 +1651,8 @@ $( document ).ready(function() {
             //GRAPH_TITLE
             svg.append("text")
             .attr("id", "stackedAreaTitle")
-            .attr("x", 3*width/5)
-            .attr("y", 11.5)
+            .attr("x", width/2)
+            .attr("y", height+ 35)
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
             .style("text-decoration", "strong")
@@ -2380,8 +2380,8 @@ $( document ).ready(function() {
             //GRAPH_TITLE
             svg.append("text")
             .attr("id", "stackedAreaTitle")
-            .attr("x", 3*width/5)
-            .attr("y", 11.5)
+            .attr("x", width/2)
+            .attr("y", height+ 35)
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
             .style("text-decoration", "strong")
@@ -3797,7 +3797,7 @@ $( document ).ready(function() {
             var landtypes = ["Built-Up Land", "Carbon", "Cropland", "Fishing Ground", "Forest Land", "Grazing Land","Total"];
             dataToFloatingBars["categories"]=landtypes;
 
-            var dataset, data, dataset2, data2;
+            var dataset, data, dataset2, data2, dataset3, data3;
 
             //////////MUDAR AQUI
             if(measureToSee == "gha"){
@@ -3806,6 +3806,8 @@ $( document ).ready(function() {
 
                 console.log("biocapacity")
                 dataset = data;
+                dataset2 = dataset;
+                dataset3 = dataset;
 
                 /////////////MUDAR AQUI
 
@@ -3816,6 +3818,24 @@ $( document ).ready(function() {
                  {"landtype":"Forest Land","value":dataset.forest_product_footprint_bio},
                  {"landtype":"Grazing Land","value":dataset.grazing_footprint_bio},
                  {"landtype":"Total","value":dataset.totalBiocapacity}];
+                 data2 = [{"landtype":"Built-Up Land","value":dataset.built_up_land_prod},
+                  {"landtype":"Carbon","value":dataset.carbon_footprint_prod},
+                  {"landtype":"Cropland","value":dataset.cropland_prod},
+                  {"landtype":"Fishing Ground","value":dataset.fish_footprint_prod},
+                  {"landtype":"Forest Land","value":dataset.forest_product_footprint_prod},
+                  {"landtype":"Grazing Land","value":dataset.grazing_footprint_prod},
+                  {"landtype":"Total","value":dataset.totalEcoFootProd}];
+                  data3 = [{"landtype":"Built-Up Land","value":dataset.built_up_land_cons},
+                   {"landtype":"Carbon","value":dataset.carbon_footprint_cons},
+                   {"landtype":"Cropland","value":dataset.cropland_cons},
+                   {"landtype":"Fishing Ground","value":dataset.fish_footprint_cons},
+                   {"landtype":"Forest Land","value":dataset.forest_product_footprint_cons},
+                   {"landtype":"Grazing Land","value":dataset.grazing_footprint_cons},
+                   {"landtype":"Total","value":dataset.totalEcoFootCons}];
+
+                   dataToFloatingBars["layers"].push(data);
+                   dataToFloatingBars["layers"].push(data2);
+                   dataToFloatingBars["layers"].push(data3);
 
               }else{
 
@@ -3839,23 +3859,26 @@ $( document ).ready(function() {
                  {"landtype":"Grazing Land","value":dataset.grazing_footprint_cons},
                  {"landtype":"Total","value":dataset.totalEcoFootCons}];
 
+                 dataToFloatingBars["layers"].push(data);
+                 dataToFloatingBars["layers"].push(data2);
               }
             }else{
 
                 console.log("efearths")
                 dataset = data;
 
-               data = [{"landtype":"Built-Up Land","value":dataset.built_up_land_prod},
-                {"landtype":"Carbon","value":dataset.carbon_footprint_prod},
-                {"landtype":"Cropland","value":dataset.cropland_prod},
-                {"landtype":"Fishing Ground","value":dataset.fish_footprint_prod},
-                {"landtype":"Forest Land","value":dataset.forest_product_footprint_prod},
-                {"landtype":"Grazing Land","value":dataset.grazing_footprint_prod},
-                {"landtype":"Total","value":dataset.totalEcoFootProd}];
+               data = [{"landtype":"Built-Up Land","value":dataset.built_up_land_cons},
+                {"landtype":"Carbon","value":dataset.carbon_footprint_cons},
+                {"landtype":"Cropland","value":dataset.cropland_cons},
+                {"landtype":"Fishing Ground","value":dataset.fish_footprint_cons},
+                {"landtype":"Forest Land","value":dataset.forest_product_footprint_cons},
+                {"landtype":"Grazing Land","value":dataset.grazing_footprint_cons},
+                {"landtype":"Total","value":dataset.totalEcoFootCons}];
+
+                dataToFloatingBars["layers"].push(data);
             }
 
-            dataToFloatingBars["layers"].push(data);
-            dataToFloatingBars["layers"].push(data2);
+
 
             var tooltip = d3.select("body").append("g")
                       .attr("class", "tooltipfloatingsinglecountry")
@@ -3886,10 +3909,8 @@ $( document ).ready(function() {
             xGroupMax = d3.max(dataToFloatingBars["layers"], function(layer) { return d3.max(layer, function(d) { return d.value; }); });
             xGroupMin = d3.min(dataToFloatingBars["layers"], function(layer) { return d3.min(layer, function(d) { return d.value; }); });
 
-            console.log(xGroupMax)
-            console.log(xGroupMin)
-
             // Set x, y and colors
+
             var x = d3.scaleLinear()
               .domain([-xGroupMax, xGroupMax])
               .rangeRound([0, width], 0.2);
@@ -3941,20 +3962,28 @@ $( document ).ready(function() {
             //GRAPH_TITLE
             svg.append("text")
             .attr("id", "stackedAreaTitle")
-            .attr("x", 3*width/5)
-            .attr("y", 11.5)
+            .attr("x", width/2)
+            .attr("y", height+ 35)
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
             .style("text-decoration", "strong")
             .style("fill", "#888844")
             .text(function(){
-              if (dataToFloatingBars["continents"].length == 2){
-                return dataToFloatingBars["continents"][1]+" Consumption Vals vs. "+dataToFloatingBars["continents"][0] +" Production Vals";
+              if(variableToShow=="Biocapacity"){
+                if (dataToFloatingBars["continents"].length == 2){
+                  return dataToFloatingBars["continents"][1]+" EcoFootprint vs. Biocapacity";
+                }else{
+                  return dataToFloatingBars["continents"][0];
+                }
               }else{
-                return dataToFloatingBars["continents"][0];
+                if (dataToFloatingBars["continents"].length == 2){
+                  return dataToFloatingBars["continents"][1]+" EcoFootprint Consumption vs. Production Vals";
+                }else{
+                  return dataToFloatingBars["continents"][0];
+                }
               }
-            });
 
+            });
 
             var rect = layer.selectAll("rect")
                      .data(function(d,i){d.map(function(b){b.colorIndex=i;return b;});return d;})
@@ -3979,10 +4008,28 @@ $( document ).ready(function() {
                          county+=1;
                          return y(d.landtype)+10;/// n + 12 ;
                        }else{
-                         return y(d.landtype)+10;/// n + 5;
+                         if(county<14){
+                           county+=1;
+                           return y(d.landtype)+10;/// n + 5;
+
+                         }else{
+                           return y(d.landtype)+16;/// n + 5;
+
+                         }
                        }
                      })
-                     .attr("height", 10)
+                     .attr("height", function(d){
+                       if(dataToFloatingBars["layers"].length<3){
+                         return 10;/// n + 12 ;
+                       }else{
+                         if(county<7){
+                           return 10;/// n + 12 ;
+                         }else{
+                           return 5;
+
+                         }
+                       }
+                     })
                      .attr("class","bar")
                      .style("fill",function(d,i){
                        return colors[i];
@@ -4035,9 +4082,15 @@ $( document ).ready(function() {
                          var continent="";
 
                          if(this.getAttribute("x") == 0){
-                            continent = "Production";
+                            continent = "Biocapacity";
                          }else{
-                           continent = "Consumption";
+                           if(this.getAttribute("y")%2==0){
+                             continent = "Consumption";
+
+                           }else{
+                             continent = "Production";
+
+                           }
 
                          }
 
