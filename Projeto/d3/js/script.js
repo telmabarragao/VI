@@ -2225,40 +2225,6 @@ $( document ).ready(function() {
         .text("Landtype Values per Continent");
 
 
-      // Draw legend
-      // var legend = svg.selectAll(".legend")
-      //   .data(colors)
-      //   .enter().append("g")
-      //   .attr("class", "legend")
-      //   .attr("transform", function(d, i) { return "translate(30," + i * 19 + ")"; });
-
-      // legend.append("rect")
-      //   .attr("x", width - 18)
-      //   .attr("width", 18)
-      //   .attr("height", 18)
-      //   .style("fill", function(d, i) {return colors.slice().reverse()[i];});
-
-      // legend.append("text")
-      //   .attr("x", width + 5)
-      //   .attr("y", 9)
-      //   .attr("dy", ".35em")
-      //   .style("text-anchor", "start")
-      //   .text(function(d, i) {
-      //     switch (i) {
-      //       case 0: return "Anjou pears";
-      //       case 1: return "Naval oranges";
-      //       case 2: return "McIntosh apples";
-      //       case 3: return "Red Delicious apples";
-      //     }
-      //   });
-
-        //var dataset = d3.layout.stack()(["Built Up Land", "Carbon", "Cropland", "Fishing Ground", "Forest Land", "Grazing Land"].map(function(landtype) {
-
-
-
-        // Prep the tooltip bits, initial display is hidden
-
-
       }
 
       function floatingBarChartContinent(data, year){
@@ -2520,6 +2486,30 @@ $( document ).ready(function() {
                          highlightHere = continent;
                          highlightContinent("floatingBar", highlightHere);
 
+
+
+                         var svg = d3.select("#continents_view #bottomgraphs #floatingBarChartCont"); //.select("svg")
+
+                         //Container for the gradients
+                         var defs = svg.append("defs");
+
+                         //Filter for the outside glow
+                         var filter = defs.append("filter")
+                             .attr("id","glow");
+                         filter.append("feGaussianBlur")
+                             .attr("stdDeviation","3.5")
+                             .attr("result","coloredBlur");
+                         var feMerge = filter.append("feMerge");
+                         feMerge.append("feMergeNode")
+                             .attr("in","coloredBlur");
+                         feMerge.append("feMergeNode")
+                             .attr("in","SourceGraphic");
+
+                         d3.select(this)
+                         .style("stroke", "#FFFFFF")
+                         .style("stroke-width", "1px")
+                         .style("filter", "url(#glow)");
+
                        })
                        .on("mousemove", function(d) {
 
@@ -2541,8 +2531,13 @@ $( document ).ready(function() {
                                .duration(100)
                              .style("opacity", 0);
 
+                        d3.select(this)
+                             .style("stroke", "#333333")
+                             .style("stroke-width", "0px")
+                             .style("filter", "");
 
                           unhighlightContinent("floatingBar", highlightHere)
+
                        });
 
 
@@ -4141,8 +4136,29 @@ $( document ).ready(function() {
                          tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
 
 
-                        // highlightHere = continent;
-                         //highlightContinent("floatingBar", highlightHere);
+
+                                                  var svg = d3.select("#countries_view #cou_bottom_graphs #floatingBarChartSingleCou"); //.select("svg")
+
+                                                  //Container for the gradients
+                                                  var defs = svg.append("defs");
+
+                                                  //Filter for the outside glow
+                                                  var filter = defs.append("filter")
+                                                      .attr("id","glow");
+                                                  filter.append("feGaussianBlur")
+                                                      .attr("stdDeviation","3.5")
+                                                      .attr("result","coloredBlur");
+                                                  var feMerge = filter.append("feMerge");
+                                                  feMerge.append("feMergeNode")
+                                                      .attr("in","coloredBlur");
+                                                  feMerge.append("feMergeNode")
+                                                      .attr("in","SourceGraphic");
+
+                                                  d3.select(this)
+                                                  .style("stroke", "#FFFFFF")
+                                                  .style("stroke-width", "1px")
+                                                  .style("filter", "url(#glow)");
+
 
                        })
                        .on("mousemove", function(d) {
@@ -4161,9 +4177,15 @@ $( document ).ready(function() {
 
                        })
                        .on("mouseout", function(d){
-                         tooltip.transition()
-                               .duration(100)
-                             .style("opacity", 0);
+                           tooltip.transition()
+                                 .duration(100)
+                               .style("opacity", 0);
+
+
+                          d3.select(this)
+                              .style("stroke", "#333333")
+                              .style("stroke-width", "0px")
+                              .style("filter", "");
 
 
                           //unhighlightContinent("floatingBar", highlightHere)
@@ -4379,7 +4401,7 @@ $( document ).ready(function() {
                                      return colorBio[i]
 
                                    }else{
-                                     return colors[i]
+                                     return colorBio[i]
                                    }
                                    //return colorScale(i);
                                  });
@@ -4451,8 +4473,29 @@ $( document ).ready(function() {
                          tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
 
 
-                         //highlightHere = continent;
-                        // highlightContinent("floatingBar", highlightHere);
+
+                         var svg = d3.select("#countries_view #cou_bottom_graphs #floatingBarChartCou"); //.select("svg")
+
+                         //Container for the gradients
+                         var defs = svg.append("defs");
+
+                         //Filter for the outside glow
+                         var filter = defs.append("filter")
+                             .attr("id","glow");
+                         filter.append("feGaussianBlur")
+                             .attr("stdDeviation","3.5")
+                             .attr("result","coloredBlur");
+                         var feMerge = filter.append("feMerge");
+                         feMerge.append("feMergeNode")
+                             .attr("in","coloredBlur");
+                         feMerge.append("feMergeNode")
+                             .attr("in","SourceGraphic");
+
+                         d3.select(this)
+                         .style("stroke", "#FFFFFF")
+                         .style("stroke-width", "1px")
+                         .style("filter", "url(#glow)");
+
 
                        })
                        .on("mousemove", function(d) {
@@ -4475,8 +4518,13 @@ $( document ).ready(function() {
                                .duration(100)
                              .style("opacity", 0);
 
+                         d3.select(this)
+                             .style("stroke", "#333333")
+                             .style("stroke-width", "0px")
+                             .style("filter", "");
 
-                        //  unhighlightContinent("floatingBar", highlightHere)
+
+
                        });
 
                     svg.append("g")
