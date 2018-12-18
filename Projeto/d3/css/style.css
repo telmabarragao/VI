@@ -84,7 +84,7 @@ body{
   position: relative;
   display: inline-block;
   width: 95% !important;
-  height: 40% !important;
+  height: 30% !important;
   margin: 0% !important;
   right: 0% !important;
   padding: 0%;
@@ -152,17 +152,28 @@ body{
   margin-bottom: 10%;
 }
 
-#country2014{
-  position: relative;
-  display:block;
+.title2014{
   align-content: center;
   align-self: center;
   text-align: center;
   margin: auto;
-  font-size: 22px;
+  font-size: 25px;
   font-family: "Fira Sans";
   z-index: 1;
   top: 102%;
+  color: #77773c;
+}
+
+.worldEFCountryValues, .worldBCountryValues{
+  align-content: center;
+  align-self: center;
+  text-align: center;
+  margin: auto;
+  font-size: 15px;
+  font-family: "Fira Sans";
+  z-index: 1;
+  top: 102%;
+  color: #77773c;
 }
 
 
