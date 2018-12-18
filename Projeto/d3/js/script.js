@@ -3375,7 +3375,7 @@ $( document ).ready(function() {
                     div.transition()
                           .duration(200)
                           .style("opacity", .9);
-                    div.html(d.properties.NAME+  "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + value.toFixed(2) + " gha" )//round(value/1000000, 6).toFixed(2)
+                    div.html(d.properties.NAME+  "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + d.value.toFixed(2) + " gha" )//round(value/1000000, 6).toFixed(2)
                           .style("left", (d3.event.pageX) + "px")
                           .style("top", (d3.event.pageY - 28) + "px");
 
