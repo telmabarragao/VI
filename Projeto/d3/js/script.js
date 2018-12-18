@@ -3914,18 +3914,18 @@ $( document ).ready(function() {
                          var continent="";
 
                          if(this.getAttribute("x") == 0){
-                            continent = dataToFloatingBars["continents"][0];
+                            continent = "Production";
                          }else{
-                           continent = dataToFloatingBars["continents"][1];
+                           continent = "Consumption";
 
                          }
 
                          if(measureToSee=="earths"){
-                           tooltip.html(continent+" : "+d.landtype + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (d.value).toFixed(2)+ " Earths" )
+                           tooltip.html(continent+" : "+ "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (d.value).toFixed(2)+ " Earths" )
                                    .style("left", (d3.event.pageX) + "px")
                                    .style("top", (d3.event.pageY - 28) + "px");
                          }else{
-                           tooltip.html(continent+" : "+d.landtype + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (d.value).toFixed(2)+ " gha" ) //(d.value/1000000)
+                           tooltip.html(continent+" : "+ "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (d.value).toFixed(2)+ " gha" ) //(d.value/1000000)
                                    .style("left", (d3.event.pageX) + "px")
                                    .style("top", (d3.event.pageY - 28) + "px");
                          }
