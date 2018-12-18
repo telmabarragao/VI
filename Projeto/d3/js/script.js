@@ -4301,8 +4301,8 @@ $( document ).ready(function() {
             //GRAPH_TITLE
             svg.append("text")
             .attr("id", "stackedAreaTitle")
-            .attr("x", 3*width/5)
-            .attr("y", 11.5)
+            .attr("x", width/2)
+            .attr("y", height+ 35)
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
             .style("text-decoration", "strong")
