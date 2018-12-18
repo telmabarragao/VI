@@ -298,6 +298,7 @@ $( document ).ready(function() {
                   document.getElementById('selectFilter').style.visibility = "visible";
                   document.getElementById('continents_view').style.visibility = "hidden" ;
                   document.getElementById('countries_view').style.visibility = "visible" ;
+                  
               }
           }
       });
@@ -326,9 +327,10 @@ $( document ).ready(function() {
                     numberOfCountryOfFloatingBar=0;
                     document.getElementById("filterdivCC").style.display= "none";
 
-
+                    document.getElementById("selectMeasure").style.visibility="visible";
                     countries_EcoFoot();
                   }else{
+                    document.getElementById("selectMeasure").style.visibility="visible";
                     countries_EcoFoot();
 
                   }
@@ -355,9 +357,10 @@ $( document ).ready(function() {
                     filterArrayCC=[];
                     document.getElementById("filterdivCC").style.display= "none";
 
-
+                    document.getElementById("selectMeasure").style.visibility="hidden";
                     countries_Biocapacity();
                   }else{
+                    document.getElementById("selectMeasure").style.visibility="hidden";
                     countries_Biocapacity();
 
 
