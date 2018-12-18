@@ -715,9 +715,9 @@ div.tooltip {
 #filterdivCC{
   position: relative;
   display: none;
-  margin-top:-5% !important;
+  margin-top:-4% !important;
   width:35%;
-  margin-left: 6% !important;
+  margin-left: 35% !important;
 }
 
 .buttonfilterCC{
