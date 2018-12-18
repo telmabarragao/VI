@@ -4165,7 +4165,7 @@ $( document ).ready(function() {
                   yAxisTo.selectAll("text")
                                       .attr("transform", "translate(5,-8)")
                                       .attr("text-anchor", "middle")
-                                      .attr("font-weight", "bold"
+                                      .attr("font-weight", "bold")
                                       .attr("stroke", "#FFFFFF")
                                       .attr("stroke-width", "0.3px")
                                       .attr("stroke-linejoin", "round");
