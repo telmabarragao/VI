@@ -590,7 +590,7 @@ div.tooltip , div.tooltipcountry{
     transition: left 0.15s ease-out;
 }
 
-.tooltipfloatingcontinent, .tooltipfloatingsinglecountry {
+.tooltipfloatingcontinent, .tooltipfloatingsinglecountry, .tooltipfloatingcountry {
     position: absolute;
     text-align: center;
     z-index: 10;

@@ -23,8 +23,9 @@ $( document ).ready(function() {
 
       ////////FLOATING BAR CONTINENTS VARS//////////
       var numberOfContinentOfFloatingBar=0;
+      var numberOfCountryOfFloatingBar = 0;
       var dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
-
+      var dataToFloatingBarsCountries = {"categories":[], "continents":[], "colors":[], "layers":[]}
       $("#selectEarthsGha").on("change", function(){
         measureToSee = document.getElementById("selectEarthsGha").value;
         $("#chart").remove();
@@ -34,7 +35,10 @@ $( document ).ready(function() {
         $("#stackedAreaTitle").remove();
         $("#floatingBarChartCont g").remove();
         numberOfContinentOfFloatingBar=0;
+        numberOfCountryOfFloatingBar
         dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
+        dataToFloatingBarsCountries = {"categories":[], "continents":[], "colors":[], "layers":[]}
+
         dataToCountriesFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
         dataToSingleFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
         document.getElementById("filterdivCC").style.display= "none";
@@ -160,6 +164,9 @@ $( document ).ready(function() {
                   $("#floatingBarChartCont g").remove();
                   numberOfContinentOfFloatingBar=0;
                   dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
+                  dataToFloatingBarsCountries = {"categories":[], "continents":[], "colors":[], "layers":[]}
+                  numberOfCountryOfFloatingBar=0;
+
                   document.getElementById("filterdivCC").style.display= "none";
 
                   document.getElementById("selectMeasure").style.visibility="visible";
@@ -190,6 +197,8 @@ $( document ).ready(function() {
                   $("#floatingBarChartCont g").remove();
                   numberOfContinentOfFloatingBar=0;
                   dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
+                  dataToFloatingBarsCountries = {"categories":[], "continents":[], "colors":[], "layers":[]}
+                  numberOfCountryOfFloatingBar=0;
                   document.getElementById("filterdivCC").style.display= "none";
 
                   document.getElementById("selectEarthsGha").value = "gha";
@@ -214,6 +223,8 @@ $( document ).ready(function() {
                   $("#floatingBarChartCont g").remove();
                   numberOfContinentOfFloatingBar=0;
                   dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
+                  dataToFloatingBarsCountries = {"categories":[], "continents":[], "colors":[], "layers":[]}
+                  numberOfCountryOfFloatingBar=0;
                   document.getElementById("filterdivCC").style.display= "none";
 
                   countries_EcoFoot();
@@ -233,6 +244,8 @@ $( document ).ready(function() {
                   $("#floatingBarChartCont g").remove();
                   numberOfContinentOfFloatingBar=0;
                   dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
+                  dataToFloatingBarsCountries = {"categories":[], "continents":[], "colors":[], "layers":[]}
+                  numberOfCountryOfFloatingBar=0;
                   document.getElementById("filterdivCC").style.display= "none";
 
 
@@ -264,6 +277,8 @@ $( document ).ready(function() {
                     $("#floatingBarChartCont g").remove();
                     numberOfContinentOfFloatingBar=0;
                     dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
+                    dataToFloatingBarsCountries = {"categories":[], "continents":[], "colors":[], "layers":[]}
+                    numberOfCountryOfFloatingBar=0;
                     document.getElementById("filterdivCC").style.display= "none";
 
 
@@ -286,6 +301,8 @@ $( document ).ready(function() {
                     $("#floatingBarChartCont g").remove();
                     numberOfContinentOfFloatingBar=0;
                     dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
+                    dataToFloatingBarsCountries = {"categories":[], "continents":[], "colors":[], "layers":[]}
+                    numberOfCountryOfFloatingBar=0;
                     document.getElementById("filterdivCC").style.display= "none";
 
 
@@ -307,6 +324,8 @@ $( document ).ready(function() {
               $("#floatingBarChartCont g").remove();
               numberOfContinentOfFloatingBar=0;
               dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
+              dataToFloatingBarsCountries = {"categories":[], "continents":[], "colors":[], "layers":[]}
+              numberOfCountryOfFloatingBar=0;
               document.getElementById("filterdivCC").style.display= "none";
 
 
@@ -334,6 +353,8 @@ $( document ).ready(function() {
               $("#floatingBarChartCont g").remove();
               numberOfContinentOfFloatingBar=0;
               dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
+              dataToFloatingBarsCountries = {"categories":[], "continents":[], "colors":[], "layers":[]}
+              numberOfCountryOfFloatingBar=0;
               document.getElementById("filterdivCC").style.display= "none";
 
 
@@ -354,6 +375,8 @@ $( document ).ready(function() {
               $("#floatingBarChartCont g").remove();
               numberOfContinentOfFloatingBar=0;
               dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
+              dataToFloatingBarsCountries = {"categories":[], "continents":[], "colors":[], "layers":[]}
+              numberOfCountryOfFloatingBar=0;
               document.getElementById("filterdivCC").style.display= "none";
 
 
@@ -1016,7 +1039,7 @@ $( document ).ready(function() {
                         div.transition()
                               .duration(200)
                               .style("opacity", .9);
-                        div.html(d.properties.CONTINENT+  "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  +  round(value/1000000, 6).toFixed(2)+ " M" )
+                        div.html(d.properties.CONTINENT+  "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  +  round(value/1000000, 6).toFixed(2)+ " M gha" )
                               .style("left", (d3.event.pageX) + "px")
                               .style("top", (d3.event.pageY - 28) + "px");
 
@@ -1365,7 +1388,7 @@ $( document ).ready(function() {
                         div.transition()
                               .duration(200)
                               .style("opacity", .9);
-                        div.html(d.properties.CONTINENT+  "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>" + round(value/1000000, 6).toFixed(2)+ " M")
+                        div.html(d.properties.CONTINENT+  "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>" + round(value/1000000, 6).toFixed(2)+ " M gha")
                               .style("left", (d3.event.pageX) + "px")
                               .style("top", (d3.event.pageY - 28) + "px");
 
@@ -1770,7 +1793,7 @@ $( document ).ready(function() {
                            .style("left", (d3.event.pageX) + "px")
                            .style("top", (d3.event.pageY - 28) + "px");
                  }else{
-                   tooltip.html(new Date(d.year).getFullYear() + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (valueWeWant(parsedData, d)/1000000).toFixed(2)+ " M" )
+                   tooltip.html(new Date(d.year).getFullYear() + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (valueWeWant(parsedData, d)/1000000).toFixed(2)+ " M gha" )
                            .style("left", (d3.event.pageX) + "px")
                            .style("top", (d3.event.pageY - 28) + "px");
                  }
@@ -1831,7 +1854,7 @@ $( document ).ready(function() {
                            .style("left", (d3.event.pageX) + "px")
                            .style("top", (d3.event.pageY - 28) + "px");
                  }else{
-                   tooltip.html(new Date(d.year).getFullYear() + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (valueWeWant(parsedData, d)/1000000).toFixed(2)+ " M" )
+                   tooltip.html(new Date(d.year).getFullYear() + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (valueWeWant(parsedData, d)/1000000).toFixed(2)+ " M gha" )
                            .style("left", (d3.event.pageX) + "px")
                            .style("top", (d3.event.pageY - 28) + "px");
                  }
@@ -2051,7 +2074,7 @@ $( document ).ready(function() {
                       .style("left", (d3.event.pageX) + "px")
                       .style("top", (d3.event.pageY - 28) + "px");
             }else{
-              tooltip.html(d.x + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + round(d.y/1000000, 6).toFixed(2)+ " M" )
+              tooltip.html(d.x + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + round(d.y/1000000, 6).toFixed(2)+ " M gha" )
                       .style("left", (d3.event.pageX) + "px")
                       .style("top", (d3.event.pageY - 28) + "px");
             }
@@ -2387,7 +2410,7 @@ $( document ).ready(function() {
                                    .style("left", (d3.event.pageX) + "px")
                                    .style("top", (d3.event.pageY - 28) + "px");
                          }else{
-                           tooltip.html(continent+" : "+d.landtype + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (d.value/1000000).toFixed(2)+ " M" )
+                           tooltip.html(continent+" : "+d.landtype + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (d.value/1000000).toFixed(2)+ " M gha" )
                                    .style("left", (d3.event.pageX) + "px")
                                    .style("top", (d3.event.pageY - 28) + "px");
                          }
@@ -3256,7 +3279,7 @@ $( document ).ready(function() {
                     div.transition()
                           .duration(200)
                           .style("opacity", .9);
-                    div.html(d.properties.NAME+  "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + value.toFixed(2) + " M" )//round(value/1000000, 6).toFixed(2)
+                    div.html(d.properties.NAME+  "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + value.toFixed(2) + " gha" )//round(value/1000000, 6).toFixed(2)
                           .style("left", (d3.event.pageX) + "px")
                           .style("top", (d3.event.pageY - 28) + "px");
 
@@ -3300,32 +3323,32 @@ $( document ).ready(function() {
 
                     })
                 .on("click", function(d){
-                  console.log(numberOfContinentOfFloatingBar);
-                  console.log(dataToFloatingBars);
 
-                      if(numberOfContinentOfFloatingBar<2){
-                        numberOfContinentOfFloatingBar+=1
-                        singlecountry_floatingBar(d.properties);
-                      }else{
-                        dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
-                        numberOfContinentOfFloatingBar=0;
-                        singlecountry_floatingBar(d.properties);
-                      }
-                  })
+                  dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]}
+
+                  singlecountry_floatingBar(d.properties);
+
+                })
                 .on("dblclick", function(d){
-                  console.log(numberOfContinentOfFloatingBar);
+                  console.log(numberOfCountryOfFloatingBar);
                   console.log(dataToFloatingBars);
 
-                      if(numberOfContinentOfFloatingBar<2){
-                        numberOfContinentOfFloatingBar+=1
+                  dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]}
+                  singlecountry_floatingBar(d.properties);
+
+                      if(numberOfCountryOfFloatingBar<2){
+                        numberOfCountryOfFloatingBar+=1
                         floatingBarChartCountries(d.properties);
 
                       }else{
-                        dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
-                        numberOfContinentOfFloatingBar=0;
+                        dataToFloatingBarsCountries = {"categories":[], "continents":[], "colors":[], "layers":[]};
+                        numberOfCountryOfFloatingBar=0;
                         floatingBarChartCountries(d.properties);
                       }
                 });
+
+
+
 
                     // ADD COLOR SCALE LEGEND
                     var w = 50, h = 272;
@@ -3666,7 +3689,7 @@ $( document ).ready(function() {
 
       function singlecountry_floatingBar(data){
 
-            $("#floatingBarChartCont g").remove();
+            $("#floatingBarChartSingleCou g").remove();
             var highlightHere="";
             console.log(data)
 
@@ -3934,8 +3957,8 @@ $( document ).ready(function() {
                          tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
 
 
-                         highlightHere = continent;
-                         highlightContinent("floatingBar", highlightHere);
+                        // highlightHere = continent;
+                         //highlightContinent("floatingBar", highlightHere);
 
                        })
                        .on("mousemove", function(d) {
@@ -3959,7 +3982,7 @@ $( document ).ready(function() {
                              .style("opacity", 0);
 
 
-                          unhighlightContinent("floatingBar", highlightHere)
+                          //unhighlightContinent("floatingBar", highlightHere)
                        });
 
                     svg.append("g")
@@ -3984,13 +4007,13 @@ $( document ).ready(function() {
 
       function floatingBarChartCountries(data){
 
-          $("#floatingBarChartCont g").remove();
+          $("#floatingBarChartCou g").remove();
           var highlightHere="";
 
-            dataToFloatingBars["continents"].push(data.NAME);
+            dataToFloatingBarsCountries["continents"].push(data.NAME);
 
             var landtypes = ["Total Biocapacity", "Total Production EF", "Total Consumption EF", "HDI", "Deficit/Reserve", "Earths"];
-            dataToFloatingBars["categories"]=landtypes;
+            dataToFloatingBarsCountries["categories"]=landtypes;
 
             var dataset, data;
 
@@ -4001,13 +4024,12 @@ $( document ).ready(function() {
                 console.log("biocapacity")
                 dataset = data;
 
-
                 data = [{"landtype":"Total Biocapacity","value":dataset.totalBiocapacity},
                 {"landtype":"Total Production EF","value":dataset.totalEcoFootProd},
                 {"landtype":"Total Consumption EF","value":dataset.totalEcoFootCons},
                 {"landtype":"HDI","value":dataset.hdi},
-                {"landtype":"Deficit/Reserve","value":dataset.deficereserve},
                 {"landtype":"Earths","value":dataset.earths}];
+                //{"landtype":"Deficit/Reserve","value":dataset.deficereserve}
 
               }else{
 
@@ -4019,9 +4041,9 @@ $( document ).ready(function() {
                 {"landtype":"Total Production EF","value":dataset.totalEcoFootProd},
                 {"landtype":"Total Consumption EF","value":dataset.totalEcoFootCons},
                 {"landtype":"HDI","value":dataset.hdi},
-                {"landtype":"Deficit/Reserve","value":dataset.deficereserve},
                 {"landtype":"Earths","value":dataset.earths}];
 
+                //{"landtype":"Deficit/Reserve","value":dataset.deficereserve},
 
               }
             }else{
@@ -4033,11 +4055,13 @@ $( document ).ready(function() {
                 {"landtype":"Total Production EF","value":dataset.totalEcoFootProd},
                 {"landtype":"Total Consumption EF","value":dataset.totalEcoFootCons},
                 {"landtype":"HDI","value":dataset.hdi},
-                {"landtype":"Deficit/Reserve","value":dataset.deficereserve},
                 {"landtype":"Earths","value":dataset.earths}];
+
+                //                {"landtype":"Deficit/Reserve","value":dataset.deficereserve},
+
             }
 
-            dataToFloatingBars["layers"].push(data);
+            dataToFloatingBarsCountries["layers"].push(data);
 
             var tooltip = d3.select("body").append("g")
                       .attr("class", "tooltipfloatingcountry")
@@ -4046,24 +4070,24 @@ $( document ).ready(function() {
              // set the dimensions and margins of the graph
 
              var colorsa = ["#9C8443", "#686736", "#CDBE90", "#8C9A86", "#C1A95E", "#845E36", "#006080" ];
-             dataToFloatingBars["colors"]=colorsa;
+             dataToFloatingBarsCountries["colors"]=colorsa;
 
              var margin = {top: 0, right: 0, bottom: 0, left: -10};
              width = 400,
              height = 170;
 
              var colors = landtypes.map(function (d, i) {
-                  return dataToFloatingBars["colors"][i];
+                  return dataToFloatingBarsCountries["colors"][i];
              });
 
              var colorScale = d3.scaleOrdinal()
                   .domain(landtypes)
                   .range(colorsa);
 
-            n = dataToFloatingBars["continents"].length, // Number of Layers
-            m = dataToFloatingBars["layers"].length, // Number of Samples in 1 layer
-            xGroupMax = d3.max(dataToFloatingBars["layers"], function(layer) { return d3.max(layer, function(d) { return d.value; }); });
-            xGroupMin = d3.min(dataToFloatingBars["layers"], function(layer) { return d3.min(layer, function(d) { return d.value; }); });
+            n = dataToFloatingBarsCountries["continents"].length, // Number of Layers
+            m = dataToFloatingBarsCountries["layers"].length, // Number of Samples in 1 layer
+            xGroupMax = d3.max(dataToFloatingBarsCountries["layers"], function(layer) { return d3.max(layer, function(d) { return d.value; }); });
+            xGroupMin = d3.min(dataToFloatingBarsCountries["layers"], function(layer) { return d3.min(layer, function(d) { return d.value; }); });
 
             // Set x, y and colors
             var x = d3.scaleLinear()
@@ -4071,7 +4095,7 @@ $( document ).ready(function() {
               .rangeRound([0, width], 0.2);
 
             var y =d3.scaleBand()
-                .domain(dataToFloatingBars["categories"])
+                .domain(dataToFloatingBarsCountries["categories"])
                 .rangeRound([height,0], .08);
 
           // Define and draw axes
@@ -4083,7 +4107,7 @@ $( document ).ready(function() {
           }else{
             var xAxis = d3.axisBottom()
                             .scale(x)
-                            .tickFormat( function(d) { return Math.abs((d/1000000)).toFixed(0)+ " M" } );
+                            .tickFormat( function(d) { return Math.abs(d).toFixed(0)+ " gha" } );
           }
 
              // set the ranges
@@ -4107,7 +4131,7 @@ $( document ).ready(function() {
              var img="";
 
              var layer = svg.selectAll(".layer")
-                     .data(dataToFloatingBars["layers"])
+                     .data(dataToFloatingBarsCountries["layers"])
                      .enter().append("g")
                      .attr("class", "layer");
 
@@ -4125,46 +4149,45 @@ $( document ).ready(function() {
             .style("text-decoration", "strong")
             .style("fill", "#888844")
             .text(function(){
-              if (dataToFloatingBars["continents"].length == 2){
-                return dataToFloatingBars["continents"][1]+" vs. "+dataToFloatingBars["continents"][0];
+              if (dataToFloatingBarsCountries["continents"].length == 2){
+                return dataToFloatingBarsCountries["continents"][1]+" vs. "+dataToFloatingBarsCountries["continents"][0];
               }else{
-                return dataToFloatingBars["continents"][0];
+                return dataToFloatingBarsCountries["continents"][0];
               }
             });
 
 
-            var rect = layer.selectAll("rect")
-                     .data(function(d,i){d.map(function(b){b.colorIndex=i;return b;});return d;})
-                     .enter().append("rect")
-                     .transition()
-                     .duration(500)
-                     .delay(function(d, i) { return i * 10; })
-                     .attr("x", function(d, i, j) {
-                       if(countx<7){
-                         countx+=1;
-                         return 0;
-                       }else{
-                         return x(d.value);
-                       }
-                     })
-                     .attr("width", function(d, i, j) {
-                       return x(d.value);
-                     })
-                     .transition()
-                     .attr("y", function(d, i, j) {
-                       if(county<7){
-                         county+=1;
-                         console.log(y(d.landtype));
-                         return y(d.landtype)+10;/// n + 12 ;
-                       }else{
-                         return y(d.landtype)+10;/// n + 5;
-                       }
-                     })
-                     .attr("height", 10)
-                     .attr("class","bar")
-                     .style("fill",function(d,i){
-                       return colors[i];
-                     });
+                        var rect = layer.selectAll("rect")
+                                 .data(function(d,i){d.map(function(b){b.colorIndex=i;return b;});return d;})
+                                 .enter().append("rect")
+                                 .transition()
+                                 .duration(500)
+                                 .delay(function(d, i) { return i * 10; })
+                                 .attr("x", function(d, i, j) {
+                                   if(countx<7){
+                                     countx+=1;
+                                     return 0;
+                                   }else{
+                                     return x(-d.value);
+                                   }
+                                 })
+                                 .attr("width", function(d, i, j) {
+                                   return x(d.value)-200;
+                                 })
+                                 .transition()
+                                 .attr("y", function(d, i, j) {
+                                   if(county<7){
+                                     county+=1;
+                                     return y(d.landtype)+10;/// n + 12 ;
+                                   }else{
+                                     return y(d.landtype)+10;/// n + 5;
+                                   }
+                                 })
+                                 .attr("height", 10)
+                                 .attr("class","bar")
+                                 .style("fill",function(d,i){
+                                   return colors[i];
+                                 });
 
 
 
@@ -4213,9 +4236,9 @@ $( document ).ready(function() {
                          var continent="";
 
                          if(this.getAttribute("x") == 0){
-                            continent = dataToFloatingBars["continents"][0];
+                            continent = dataToFloatingBarsCountries["continents"][0];
                          }else{
-                           continent = dataToFloatingBars["continents"][1];
+                           continent = dataToFloatingBarsCountries["continents"][1];
 
                          }
 
@@ -4224,7 +4247,7 @@ $( document ).ready(function() {
                                    .style("left", (d3.event.pageX) + "px")
                                    .style("top", (d3.event.pageY - 28) + "px");
                          }else{
-                           tooltip.html(continent+" : "+d.landtype + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (d.value/1000000).toFixed(2)+ " M" )
+                           tooltip.html(continent+" : "+d.landtype + "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + (d.value).toFixed(2)+ " gha" )
                                    .style("left", (d3.event.pageX) + "px")
                                    .style("top", (d3.event.pageY - 28) + "px");
                          }
@@ -4233,8 +4256,8 @@ $( document ).ready(function() {
                          tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
 
 
-                         highlightHere = continent;
-                         highlightContinent("floatingBar", highlightHere);
+                         //highlightHere = continent;
+                        // highlightContinent("floatingBar", highlightHere);
 
                        })
                        .on("mousemove", function(d) {
@@ -4258,7 +4281,7 @@ $( document ).ready(function() {
                              .style("opacity", 0);
 
 
-                          unhighlightContinent("floatingBar", highlightHere)
+                        //  unhighlightContinent("floatingBar", highlightHere)
                        });
 
                     svg.append("g")
