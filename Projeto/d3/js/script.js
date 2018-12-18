@@ -35,7 +35,7 @@ $( document ).ready(function() {
         $("#floatingBarChartCont g").remove();
         numberOfContinentOfFloatingBar=0;
         dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
-
+        document.getElementById("filterdivCC").style.display= "none";
 
 
         if(measureToSee=="gha"){
@@ -1709,12 +1709,19 @@ $( document ).ready(function() {
 
           layerGroups.append("path")
                .attr("d", area)
-               .on("mousemove", function(d){
+               .on("mouseover", function(d) {
+
+                 tooltip.transition()
+                       .duration(200)
+                     .style("opacity", .9);
+
                  var xPosition = d3.mouse(this)[0] - 15;
                  var yPosition = d3.mouse(this)[1] - 25;
 
                  var parent = d3.select(this)._groups[0][0].parentNode.id;
+                 console.log(d3.select(this)._groups[0][0].parentNode)
                  var landtype = parent;
+                 var img = "";
 
                  switch (parent) {
                    case "Cropland":
@@ -1770,19 +1777,12 @@ $( document ).ready(function() {
                  tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
 
                })
-               .on("mouseover", function(d) {
-
-                 tooltip.transition()
-                       .duration(200)
-                     .style("opacity", .9);
-
+               .on("mousemove", function(d){
                  var xPosition = d3.mouse(this)[0] - 15;
                  var yPosition = d3.mouse(this)[1] - 25;
 
                  var parent = d3.select(this)._groups[0][0].parentNode.id;
-                 console.log(d3.select(this)._groups[0][0].parentNode)
                  var landtype = parent;
-                 var img = "";
 
                  switch (parent) {
                    case "Cropland":
@@ -2006,6 +2006,7 @@ $( document ).ready(function() {
             .style("stroke-width", "1px")
             .style("filter", "url(#glow)");
 
+            console.log(d.x);
             highlightContinent("stackedBar",d.x);
 
             tooltip.transition()
@@ -2619,17 +2620,32 @@ $( document ).ready(function() {
                       }
                 });
             }else{
-              d3.selectAll("path[title=\'"+continent+"\']")
-                .style("fill", function(d){
-                      var yeartoshow = "_"+yearTimeline+"";
-                      var value = d.properties.efgha[yeartoshow].total_efgha;
+              if(measureToSee=="gha"){
+                d3.selectAll("path[title=\'"+continent+"\']")
+                  .style("fill", function(d){
+                        var yeartoshow = "_"+yearTimeline+"";
+                        var value = d.properties.efgha[yeartoshow].total_efgha;
 
-                      if(value){
-                          return ramp(minValColorContFT,lowColorEF, highColorEF, "mouseEF")
-                      } else {
-                          return "#bfbfbf"
-                      }
-                });
+                        if(value){
+                            return ramp(minValColorContFT,lowColorEF, highColorEF, "mouseEF")
+                        } else {
+                            return "#bfbfbf"
+                        }
+                  });
+              }else{
+                d3.selectAll("path[title=\'"+continent+"\']")
+                  .style("fill", function(d){
+                        var yeartoshow = "_"+yearTimeline+"";
+                        var value = d.properties.efearths[yeartoshow].total_efearths;
+
+                        if(value){
+                            return ramp(minValColorContFT,lowColorEF, highColorEF, "mouseEF")
+                        } else {
+                            return "#bfbfbf"
+                        }
+                  });
+              }
+
             }
 
 
@@ -2744,17 +2760,34 @@ $( document ).ready(function() {
 
 
               }else{
-                d3.selectAll("path[title=\'"+continent+"\']")
-                  .style("fill", function(d){
-                            var yeartoshow = "_"+yearTimeline+"";
-                            var value = d.properties.efgha[yeartoshow].total_efgha;
 
-                              if(value){
-                                return ramp(minValColorContFT,lowColorEF, highColorEF, value)
-                              } else {
-                                return "#bfbfbf"
-                              }
-                  });
+                if(measureToSee=="gha"){
+                  d3.selectAll("path[title=\'"+continent+"\']")
+                    .style("fill", function(d){
+                              var yeartoshow = "_"+yearTimeline+"";
+                              var value = d.properties.efgha[yeartoshow].total_efgha;
+
+                                if(value){
+                                  return ramp(minValColorContFT,lowColorEF, highColorEF, value)
+                                } else {
+                                  return "#bfbfbf"
+                                }
+                    });
+
+                }else{
+                  d3.selectAll("path[title=\'"+continent+"\']")
+                    .style("fill", function(d){
+                              var yeartoshow = "_"+yearTimeline+"";
+                              var value = d.properties.efearths[yeartoshow].total_efearths;
+
+                                if(value){
+                                  return ramp(minValColorContFT,lowColorEF, highColorEF, value)
+                                } else {
+                                  return "#bfbfbf"
+                                }
+                    });
+
+                }
 
               }
 
