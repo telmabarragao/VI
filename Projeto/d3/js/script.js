@@ -4281,7 +4281,7 @@ $( document ).ready(function() {
              var colors = ["#9C8443", "#686736", "#CDBE90", "#8C9A86", "#C1A95E", "#845E36", "#006080" ];
              var colorBio = ["#B2513F", "#2E824B", "#4C9765", "#B2913F", "#35407A"];
 
-             dataToFloatingBarsCountries["colors"]=colors;
+             dataToFloatingBarsCountries["colors"]=colorBio;
 
              var margin = {top: 0, right: 0, bottom: 0, left: -10};
              width = 400,
@@ -4308,6 +4308,11 @@ $( document ).ready(function() {
             var y =d3.scaleBand()
                 .domain(dataToFloatingBarsCountries["categories"])
                 .rangeRound([height,0], .08);
+
+
+                console.log(dataToFloatingBarsCountries)
+
+
 
           // Define and draw axes
           if(measureToSee=="earths"){
@@ -4346,8 +4351,9 @@ $( document ).ready(function() {
                      .enter().append("g")
                      .attr("class", "layer");
 
-            var county=0;
-            var countx=0;
+
+            var county = 0;
+            var countx = 0;
 
 
             //GRAPH_TITLE
@@ -4375,7 +4381,11 @@ $( document ).ready(function() {
                                  .duration(500)
                                  .delay(function(d, i) { return i * 10; })
                                  .attr("x", function(d, i, j) {
-                                   if(countx<7){
+                                   if(countx ==0 ){
+                                     countx+=1;
+                                     return 0;
+                                   }
+                                   else if(countx < 5 ){
                                      countx+=1;
                                      return 0;
                                    }else{
@@ -4387,7 +4397,7 @@ $( document ).ready(function() {
                                  })
                                  .transition()
                                  .attr("y", function(d, i, j) {
-                                   if(county<7){
+                                   if(county<5){
                                      county+=1;
                                      return y(d.landtype)+10;/// n + 12 ;
                                    }else{
@@ -4538,10 +4548,11 @@ $( document ).ready(function() {
                           .call(yAxis);
 
                   yAxisTo.selectAll("text")
-                                      .attr("transform", "translate(5,-8)")
+                                      .attr("transform", "translate(5,-12)")
                                       .attr("text-anchor", "middle")
                                       .attr("font-weight", "bold")
                                       .attr("stroke", "#FFFFFF")
+                                      .attr("z-index", "2")
                                       .attr("stroke-width", "0.3px")
                                       .attr("stroke-linejoin", "round");
 
