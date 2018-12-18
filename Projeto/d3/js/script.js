@@ -37,7 +37,7 @@ $( document ).ready(function() {
         $("#floatingBarChartCont g").remove();
         filterArrayCC=[];
         $("#countries_graph #chart").remove();
-        $("#countries_graph #legend2 svg").remove();
+        $("#legend2 svg").remove();
         $("#floatingBarChartSingleCou g").remove();
         $("#floatingBarChartCou g").remove();
         numberOfContinentOfFloatingBar=0;
@@ -170,7 +170,7 @@ $( document ).ready(function() {
                   $("#floatingBarChartCont g").remove();
 
                   $("#countries_graph #chart").remove();
-                  $("#countries_graph #legend2 svg").remove();
+                  $("#legend2 svg").remove();
                   $("#floatingBarChartSingleCou g").remove();
                   $("#floatingBarChartCou g").remove();
                   numberOfContinentOfFloatingBar=0;
@@ -209,7 +209,7 @@ $( document ).ready(function() {
                   $("#floatingBarChartCont g").remove();
 
                   $("#countries_graph #chart").remove();
-                  $("#countries_graph #legend2 svg").remove();
+                  $("#legend2 svg").remove();
                   $("#floatingBarChartSingleCou g").remove();
                   $("#floatingBarChartCou g").remove();
                   filterArrayCC=[];
@@ -244,7 +244,7 @@ $( document ).ready(function() {
                   $("#floatingBarChartCont g").remove();
 
                   $("#countries_graph #chart").remove();
-                  $("#countries_graph #legend2 svg").remove();
+                  $("#legend2 svg").remove();
                   $("#floatingBarChartSingleCou g").remove();
                   $("#floatingBarChartCou g").remove();
                   filterArrayCC=[];
@@ -274,7 +274,7 @@ $( document ).ready(function() {
                   $("#floatingBarChartCont g").remove();
 
                   $("#countries_graph #chart").remove();
-                  $("#countries_graph #legend2 svg").remove();
+                  $("#legend2 svg").remove();
                   $("#floatingBarChartSingleCou g").remove();
                   $("#floatingBarChartCou g").remove();
                   numberOfContinentOfFloatingBar=0;
@@ -312,7 +312,7 @@ $( document ).ready(function() {
                     $("#stackedAreaTitle").remove();
                     $("#floatingBarChartCont g").remove();
                     $("#countries_graph #chart").remove();
-                    $("#countries_graph #legend2 svg").remove();
+                    $("#legend2 svg").remove();
                     $("#floatingBarChartSingleCou g").remove();
                     $("#floatingBarChartCou g").remove();
                     numberOfContinentOfFloatingBar=0;
@@ -340,7 +340,7 @@ $( document ).ready(function() {
                     $("#stackedAreaTitle").remove();
                     $("#floatingBarChartCont g").remove();
                     $("#countries_graph #chart").remove();
-                    $("#countries_graph #legend2 svg").remove();
+                    $("#legend2 svg").remove();
                     $("#floatingBarChartSingleCou g").remove();
                     $("#floatingBarChartCou g").remove();
                     numberOfContinentOfFloatingBar=0;
@@ -368,7 +368,7 @@ $( document ).ready(function() {
               $("#stackedAreaTitle").remove();
               $("#floatingBarChartCont g").remove();
               $("#countries_graph #chart").remove();
-              $("#countries_graph #legend2 svg").remove();
+              $("#legend2 svg").remove();
               $("#floatingBarChartSingleCou g").remove();
               $("#floatingBarChartCou g").remove();
               filterArrayCC=[];
@@ -402,7 +402,7 @@ $( document ).ready(function() {
               $("#stackedAreaTitle").remove();
               $("#floatingBarChartCont g").remove();
               $("#countries_graph #chart").remove();
-              $("#countries_graph #legend2 svg").remove();
+              $("#legend2 svg").remove();
               $("#floatingBarChartSingleCou g").remove();
               $("#floatingBarChartCou g").remove();
               numberOfContinentOfFloatingBar=0;
@@ -428,6 +428,8 @@ $( document ).ready(function() {
               $("#stackAreaChartCont g").remove();
               $("#stackedAreaTitle").remove();
               $("#floatingBarChartCont g").remove();
+              $("#legend2 svg").remove();
+
               numberOfContinentOfFloatingBar=0;
               dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
               dataToFloatingBarsCountries = {"categories":[], "continents":[], "colors":[], "layers":[]}
@@ -478,6 +480,7 @@ $( document ).ready(function() {
             $("#graphs #stackBarChartCont").remove();
             $("#floatingBarChartCont g").remove();
             $("#stackedAreaTitle").remove();
+            $("#legend2 svg").remove();
 
             filterArrayCC=[];
             numberOfContinentOfFloatingBar=0;
@@ -3420,9 +3423,6 @@ $( document ).ready(function() {
                       }
                 });
 
-
-
-
                     // ADD COLOR SCALE LEGEND
                     var w = 50, h = 272;
 
@@ -3489,6 +3489,10 @@ $( document ).ready(function() {
       }
 
       function countries_Biocapacity(){
+        var div = d3.select("body").append("div")
+                .attr("class", "tooltipcountry")
+                .style("opacity", 0);
+
               var svg = d3.select("#countries_graph")
                 .append("svg")
                 .attr("id", "chart")
@@ -3619,136 +3623,157 @@ $( document ).ready(function() {
                       .attr("title", function(d) {return d.properties.NAME;})
                       .on("mouseover", function(d){
 
-
-                        var countryMouseOver = d.properties.NAME.replace(/\s/g, "_").replace(".", "_").replace("(", "").replace(")", "");
-
-                          d3.select("path[title=\'"+d.properties.NAME+"\']")
-                            .style("fill", function(d){
-                                    var value = d.properties.totalBiocapacity;
-
-                                        if(value){
-                                          return ramp(minValColorCouB,lowColorB, highColorB, "mouseB")
-                                        } else {
-                                          return "#bfbfbf"
-                                        }
-                            })
-                            .attr("title", function(d) {return d.properties.NAME;});
-
-                            if(lastCountryOn==countryMouseOver){
-                              d3.select("#"+countryMouseOver+"mover").attr("transform","translate("+ event.clientX+", "+event.clientY+") ");
-                            }else if(lastCountryOn==null){
-                              d3.select("body")
-                                    .append("div")
-                                    .attr("id", function(){
-                                        lastCountryOn= ""+countryMouseOver;
-                                        return lastCountryOn+"mover";
-                                    })
-                                    .style("position", "absolute")
-                                    .style("z-index", "10")
-                                    .style("visibility", "visible")
-                                    .style("background", "#000")
-                                    .attr("transform","translate("+ event.clientX+", "+event.clientY+") ")
-                                    .text(countryMouseOver);
-                            }
+                              var img = "../img/icons/biocapacity.png";
+                              var mouse = d3.mouse(this);
 
 
-                        })
-                        .on("mouseout", function(d){
+                            var countryMouseOver = d.properties.NAME.replace(/\s/g, "_").replace(".", "_").replace("(", "").replace(")", "");
+
+                            var xPosition = d3.mouse(this)[0] - 15;
+                            var yPosition = d3.mouse(this)[1] - 25;
+
+                            var value;
+
                             d3.select("path[title=\'"+d.properties.NAME+"\']")
                               .style("fill", function(d){
-                                      var value = d.properties.totalBiocapacity;
+                                          value = d.properties.totalBiocapacity;
 
                                           if(value){
-                                            return ramp(minValColorCouB,lowColorB, highColorB, value)
+                                            return ramp(minValColorCouB,lowColorB, highColorB, "mouseB")
                                           } else {
                                             return "#bfbfbf"
                                           }
-                              });
+                              })
+                              .attr("title", function(d) {return d.properties.NAME;});
 
-                              if(lastCountryOn.indexOf(" ") != -1 || lastCountryOn.indexOf(".") != -1 || lastCountryOn.indexOf("(") != -1 || lastCountryOn.indexOf(")") != -1){
-                                d3.select("#"+lastCountryOn.replace(/\s/g, "_").replace(".", "_").replace("(", "_").replace(")", "_")+"mover").remove();
-                                lastCountryOn = null;
+
+                            div.transition()
+                                  .duration(200)
+                                  .style("opacity", .9);
+                            div.html(d.properties.NAME+  "<br/>"  + " <img src="+img+" alt='Avatar' class='avatar'> " + "<br/>"  + value.toFixed(2) + " Earths" )//round(value/1000000, 6).toFixed(2)
+                                  .style("left", (d3.event.pageX) + "px")
+                                  .style("top", (d3.event.pageY - 28) + "px");
+
+
+
+                              if(lastCountryOn==countryMouseOver){
+                                d3.select("#"+countryMouseOver+"mover").attr("transform","translate("+ xPosition +", "+yPosition+") ");
+                                lastCountryOn = countryMouseOver;
+                              }else if(lastCountryOn==null){
+                                lastCountryOn = countryMouseOver;
+                                        //return lastCountryOn+"mover";
+                              }
+                        })
+                      .on("mouseout", function(d){
+
+                                div.transition()
+                                    .duration(500)
+                                    .style("opacity", 0);
+
+
+                                    d3.select("path[title=\'"+d.properties.NAME+"\']")
+                                      .style("fill", function(d){
+                                              var value = d.properties.totalBiocapacity;
+
+                                                  if(value){
+                                                    return ramp(minValColorCouB,lowColorB, highColorB, value)
+                                                  } else {
+                                                    return "#bfbfbf"
+                                                  }
+                                      });
+
+                                  if(lastCountryOn.indexOf(" ") != -1 || lastCountryOn.indexOf(".") != -1 || lastCountryOn.indexOf("(") != -1 || lastCountryOn.indexOf(")") != -1){
+                                    d3.select("#"+lastCountryOn.replace(/\s/g, "_").replace(".", "_").replace("(", "_").replace(")", "_")+"mover").remove();
+                                    lastCountryOn = null;
+
+                                  }else{
+                                    d3.select("#"+lastCountryOn+"mover").remove();
+                                    lastCountryOn = null;
+                                  }
+
+
+                            })
+                      .on("click", function(d){
+
+                          dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]}
+
+                          singlecountry_floatingBar(d.properties);
+
+                      })
+                      .on("dblclick", function(d){
+                          console.log(numberOfCountryOfFloatingBar);
+                          console.log(dataToFloatingBars);
+
+                          dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]}
+                          singlecountry_floatingBar(d.properties);
+
+                              if(numberOfCountryOfFloatingBar<2){
+                                numberOfCountryOfFloatingBar+=1
+                                floatingBarChartCountries(d.properties);
 
                               }else{
-                                d3.select("#"+lastCountryOn+"mover").remove();
-                                lastCountryOn = null;
+                                dataToFloatingBarsCountries = {"categories":[], "continents":[], "colors":[], "layers":[]};
+                                numberOfCountryOfFloatingBar=0;
+                                floatingBarChartCountries(d.properties);
                               }
+                        });
 
-                        })
-                         .on("dblclick", function(d){
-                      if(numberOfContinentOfFloatingBar<2){
-                        numberOfContinentOfFloatingBar+=1
-                        floatingBarChartContinent(d.properties);
-                        singlecountry_floatingBar(d.properties);
-                      }else{
-                        dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
-                        numberOfContinentOfFloatingBar=0;
-                        floatingBarChartCountries(d.properties);
-                        singlecountry_floatingBar(d.properties);
-                      }                    });
-                        // .on("mouseenter", function(d){
-                        //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity+20)).text(d.properties.NAME);
-                        // })
-                        // .on("mouseleave", function(d){
-                        //   d3.select("path[title=\'"+d.properties.NAME+"\']").attr("fill", ramp(d.properties.totalBiocapacity));
-                        //
-                        // });
+                        // ADD COLOR SCALE LEGEND
+                        var w = 50, h = 272;
 
-                       var w = 50, h = 272;
+                        var key = d3.select("#legend2")
+                          .append("svg")
+                          .attr("width", w+ 50)
+                          .attr("height", h);
 
-                    var key = d3.select("#legend2")
-                      .append("svg")
-                      .attr("width", w+ 50)
-                      .attr("height", h);
+                        var legend = key.append("defs")
+                          .append("svg:linearGradient")
+                          .attr("id", "gradient")
+                          .attr("x1", "100%")
+                          .attr("y1", "100%")
+                          .attr("x2", "100%")
+                          .attr("y2", "0%")
+                          .attr("spreadMethod", "pad");
 
-                    var legend = key.append("defs")
-                      .append("svg:linearGradient")
-                      .attr("id", "gradient")
-                      .attr("x1", "100%")
-                      .attr("y1", "100%")
-                      .attr("x2", "100%")
-                      .attr("y2", "0%")
-                      .attr("spreadMethod", "pad");
+                        legend.append("stop")
+                          .attr("offset", "0%")
+                          .attr("stop-color", lowColorB)
+                          .attr("stop-opacity", 1);
 
-                    legend.append("stop")
-                      .attr("offset", "0%")
-                      .attr("stop-color", lowColorEF)
-                      .attr("stop-opacity", 1);
-
-                    legend.append("stop")
-                      .attr("offset", "100%")
-                      .attr("stop-color",highColorEF)
-                      .attr("stop-opacity", 1);
+                        legend.append("stop")
+                          .attr("offset", "100%")
+                          .attr("stop-color",highColorB)
+                          .attr("stop-opacity", 1);
 
 
-                    key.append("rect")
-                      .attr("width", w -40)
-                      .attr("height", h)
-                      .style("fill", "url(#gradient)")
-                      .attr("transform", "translate(20,0)");
+                        key.append("rect")
+                          .attr("width", w -40)
+                          .attr("height", h)
+                          .style("fill", "url(#gradient)")
+                          .attr("transform", "translate(20,0)");
 
-                    var y = d3.scaleLinear()
-                      .range([0, 271])
-                      .domain([maxValColorCouFT, minValColorCouFT]);
+                        var y = d3.scaleLinear()
+                          .range([0, 271])
+                          .domain([maxValColorCouB, minValColorCouB]);
 
-                    var yAxis = d3.axisRight()
-                      .scale(y)
-                      .ticks(5)
-                      .tickFormat( function(d) {
-                        return d.toFixed();
-                      });
+                        var yAxis = d3.axisRight()
+                          .scale(y)
+                          .ticks(5)
+                          .tickFormat( function(d) {
+                            return d.toFixed();
+                          });
 
 
-                    key.append("g")
-                      .attr("class", "y axis")
-                      .attr("transform", "translate(30,0)")
-                      .call(yAxis)
-                      .append("text")
-                      .attr("transform", "rotate(-90)")
-                      .attr("y", 0)
-                      .attr("dy", ".71em")
-                      .style("text-anchor", "end")
-                      .text("axis title");
+                        key.append("g")
+                          .attr("class", "y axis")
+                          .attr("transform", "translate(30,0)")
+                          .call(yAxis)
+                          .append("text")
+                          .attr("transform", "rotate(-90)")
+                          .attr("y", 0)
+                          .attr("dy", ".71em")
+                          .style("text-anchor", "end")
+                          .text("axis title");
                 });
 
               });
