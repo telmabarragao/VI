@@ -4511,6 +4511,18 @@ $( document ).ready(function() {
 
             country_to_light.style("fill", function(valueinput){
 
+                dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]}
+                singlecountry_floatingBar(valueinput.properties);
+
+                if(numberOfCountryOfFloatingBar<2){
+                    numberOfCountryOfFloatingBar+=1
+                    floatingBarChartCountries(valueinput.properties);
+
+                }else{
+                    dataToFloatingBarsCountries = {"categories":[], "continents":[], "colors":[], "layers":[]};
+                    numberOfCountryOfFloatingBar=0;
+                    floatingBarChartCountries(valueinput.properties);
+                }
                 if(variableToShow=="EcoFoot"){
                     var value = valueinput.properties.totalEcoFootCons;
                     if(value){
@@ -4527,6 +4539,10 @@ $( document ).ready(function() {
                       return "#bfbfbf"
                     }
                 }
+
+
+
+
 
             })
       };
