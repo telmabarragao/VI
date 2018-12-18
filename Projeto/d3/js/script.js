@@ -2547,7 +2547,10 @@ $( document ).ready(function() {
                   yAxisTo.selectAll("text")
                                       .attr("transform", "translate(5,-8)")
                                       .attr("text-anchor", "middle")
-                                      .attr("font-weight", "bold");
+                                      .attr("font-weight", "bold")
+                                      .attr("stroke", "#FFFFFF")
+                                      .attr("stroke-width", "0.3px")
+                                      .attr("stroke-linejoin", "round");
 
 
 
@@ -4167,7 +4170,10 @@ $( document ).ready(function() {
                   yAxisTo.selectAll("text")
                                       .attr("transform", "translate(5,-8)")
                                       .attr("text-anchor", "middle")
-                                      .attr("font-weight", "bold");
+                                      .attr("font-weight", "bold"
+                                      .attr("stroke", "#FFFFFF")
+                                      .attr("stroke-width", "0.3px")
+                                      .attr("stroke-linejoin", "round");
 
       }
 
@@ -4181,7 +4187,7 @@ $( document ).ready(function() {
 
             dataToFloatingBarsCountries["continents"].push(data.NAME);
 
-            var landtypes = ["Total Biocapacity", "Total Production EF", "Total Consumption EF", "HDI", "Deficit/Reserve", "Earths"];
+            var landtypes = ["Total Biocapacity", "Total Production EF", "Total Consumption EF", "HDI", "Earths"];
             dataToFloatingBarsCountries["categories"]=landtypes;
 
             var dataset, data;
@@ -4238,20 +4244,22 @@ $( document ).ready(function() {
 
              // set the dimensions and margins of the graph
 
-             var colorsa = ["#9C8443", "#686736", "#CDBE90", "#8C9A86", "#C1A95E", "#845E36", "#006080" ];
-             dataToFloatingBarsCountries["colors"]=colorsa;
+             var colors = ["#9C8443", "#686736", "#CDBE90", "#8C9A86", "#C1A95E", "#845E36", "#006080" ];
+             var colorBio = ["#B2513F", "#2E824B", "#4C9765", "#B2913F", "#35407A"];
+
+             dataToFloatingBarsCountries["colors"]=colors;
 
              var margin = {top: 0, right: 0, bottom: 0, left: -10};
              width = 400,
              height = 170;
 
-             var colors = landtypes.map(function (d, i) {
-                  return dataToFloatingBarsCountries["colors"][i];
-             });
+             // var colors = landtypes.map(function (d, i) {
+             //      return dataToFloatingBarsCountries["colors"][i];
+             // });
 
-             var colorScale = d3.scaleOrdinal()
-                  .domain(landtypes)
-                  .range(colorsa);
+             var colorScale = d3.scaleOrdinal(d3.schemeCategory20b);
+                  // .domain(dataToFloatingBarsCountries["categories"])
+                  // .range();
 
             n = dataToFloatingBarsCountries["continents"].length, // Number of Layers
             m = dataToFloatingBarsCountries["layers"].length, // Number of Samples in 1 layer
@@ -4355,7 +4363,13 @@ $( document ).ready(function() {
                                  .attr("height", 10)
                                  .attr("class","bar")
                                  .style("fill",function(d,i){
-                                   return colors[i];
+                                   if(variableToShow=="Biocapacity"){
+                                     return colorBio[i]
+
+                                   }else{
+                                     return colors[i]
+                                   }
+                                   //return colorScale(i);
                                  });
 
 
@@ -4466,7 +4480,10 @@ $( document ).ready(function() {
                   yAxisTo.selectAll("text")
                                       .attr("transform", "translate(5,-8)")
                                       .attr("text-anchor", "middle")
-                                      .attr("font-weight", "bold");
+                                      .attr("font-weight", "bold")
+                                      .attr("stroke", "#FFFFFF")
+                                      .attr("stroke-width", "0.3px")
+                                      .attr("stroke-linejoin", "round");
 
       }
 
