@@ -4013,7 +4013,7 @@ $( document ).ready(function() {
                            return y(d.landtype)+10;/// n + 5;
 
                          }else{
-                           return y(d.landtype)+16;/// n + 5;
+                           return y(d.landtype)+17;/// n + 5;
 
                          }
                        }
@@ -4067,7 +4067,13 @@ $( document ).ready(function() {
                            default:
                               if(measureToSee=="gha"){
                                 if(variableToShow=="Biocapacity"){
-                                  img = "../img/icons/biocapacity.png"
+                                  if(this.getAttribute("x") !=0){
+                                    img = "../img/icons/footprint.png"
+
+                                  }else{
+                                    img = "../img/icons/biocapacity.png"
+
+                                  }
 
                                 }else{
                                   img = "../img/icons/footprint.png"
@@ -4084,10 +4090,12 @@ $( document ).ready(function() {
                          if(this.getAttribute("x") == 0){
                             continent = "Biocapacity";
                          }else{
-                           if(this.getAttribute("y")%2==0){
+                           if(this.getAttribute("y") % 2 ==0){
+                             console.log(this.getAttribute("y"))
                              continent = "Consumption";
 
                            }else{
+                             console.log(this.getAttribute("y"))
                              continent = "Production";
 
                            }
