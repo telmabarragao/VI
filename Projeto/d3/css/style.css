@@ -296,7 +296,7 @@ body{
   left: -90%;
   margin-top: 8%;
   height: 95%;
-  width: 50%;
+  width: 40%;
 
 }
 
@@ -375,7 +375,7 @@ body{
   grid-column-end: 5;
   margin: auto !important;
   margin-left: 0% !important;
-  left: 6% !important; /*here*/
+  left: 36% !important; /*here*/
   width: 60% !important;
   height: 83% !important; /*here*/
   margin-top: 1% !important;

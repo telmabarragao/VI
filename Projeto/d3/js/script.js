@@ -155,6 +155,7 @@ $( document ).ready(function() {
       document.getElementById('search_bar-continent').style.display = "inline-grid";
       document.getElementById('search_bar').style.visibility = "hidden";
       document.getElementById('search_bar').style.display = "none";
+      document.getElementById('selectFilter').style.visibility = "hidden";
 
       $(".switch-input").on("click", function(){
 
@@ -195,6 +196,7 @@ $( document ).ready(function() {
                   document.getElementById('search_bar').style.visibility = "hidden";
                   document.getElementById('search_bar-continent').style.display = "inline-grid";
                   document.getElementById('search_bar').style.display = "none";
+                  document.getElementById('selectFilter').style.visibility = "hidden";
 
                   document.getElementById('continents_view').style.visibility = "visible" ;
                   document.getElementById('countries_view').style.visibility = "hidden" ;
@@ -228,6 +230,7 @@ $( document ).ready(function() {
                   document.getElementById('search_bar').style.visibility = "hidden";
                   document.getElementById('search_bar-continent').style.display = "inline-grid";
                   document.getElementById('search_bar').style.display = "none";
+                  document.getElementById('selectFilter').style.visibility = "hidden";
                   document.getElementById('continents_view').style.visibility = "visible" ;
                   document.getElementById('countries_view').style.visibility = "hidden" ;
 
@@ -260,12 +263,10 @@ $( document ).ready(function() {
                   document.getElementById('search_bar').style.visibility = "visible";
                   document.getElementById('search_bar-continent').style.display = "none";
                   document.getElementById('search_bar').style.display = "inline-grid";
+                  document.getElementById('selectFilter').style.visibility = "visible";
                   document.getElementById('continents_view').style.visibility = "hidden" ;
                   document.getElementById('countries_view').style.visibility = "visible" ;
 
-                  document.getElementById("selectEarthsGha").value = "gha";
-                  measureToSee="gha";
-                  document.getElementById("selectMeasure").style.visibility="hidden";
 
               }else{
                   appendTo = "#countries_graph"
@@ -287,9 +288,6 @@ $( document ).ready(function() {
                   numberOfCountryOfFloatingBar=0;
                   document.getElementById("filterdivCC").style.display= "none";
 
-                  document.getElementById("selectEarthsGha").value = "gha";
-                  measureToSee="gha";
-                  document.getElementById("selectMeasure").style.visibility="hidden";
 
                   countries_Biocapacity();
 
@@ -297,6 +295,7 @@ $( document ).ready(function() {
                   document.getElementById('search_bar').style.visibility = "visible";
                   document.getElementById('search_bar-continent').style.display = "none";
                   document.getElementById('search_bar').style.display = "inline-grid";
+                  document.getElementById('selectFilter').style.visibility = "visible";
                   document.getElementById('continents_view').style.visibility = "hidden" ;
                   document.getElementById('countries_view').style.visibility = "visible" ;
               }
@@ -326,9 +325,7 @@ $( document ).ready(function() {
                     dataToFloatingBarsCountries = {"categories":[], "continents":[], "colors":[], "layers":[]}
                     numberOfCountryOfFloatingBar=0;
                     document.getElementById("filterdivCC").style.display= "none";
-                    document.getElementById("selectEarthsGha").value = "gha";
-                    measureToSee="gha";
-                    document.getElementById("selectMeasure").style.visibility="hidden";
+
 
                     countries_EcoFoot();
                   }else{
@@ -357,9 +354,7 @@ $( document ).ready(function() {
                     numberOfCountryOfFloatingBar=0;
                     filterArrayCC=[];
                     document.getElementById("filterdivCC").style.display= "none";
-                    document.getElementById("selectEarthsGha").value = "gha";
-                    measureToSee="gha";
-                    document.getElementById("selectMeasure").style.visibility="hidden";
+
 
                     countries_Biocapacity();
                   }else{
@@ -4319,8 +4314,8 @@ $( document ).ready(function() {
             //GRAPH_TITLE
             svg.append("text")
             .attr("id", "stackedAreaTitle")
-            .attr("x", width/2)
-            .attr("y", height+ 35)
+            .attr("x", 3*width/5)
+            .attr("y", 11.5)
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
             .style("text-decoration", "strong")
