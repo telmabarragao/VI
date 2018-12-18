@@ -69,12 +69,13 @@ body{
 #cou_bottom_graphs{
   position: relative;
   display: inline-block;
-  width: 100% !important;
+  width: 95% !important;
   height: 40% !important;
   margin: 0% !important;
   right: 0% !important;
   padding: 0%;
   top:0%;
+  margin-left: 5% !important;
 }
 
 #stackBarChartCont{
