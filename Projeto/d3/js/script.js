@@ -2323,7 +2323,8 @@ $( document ).ready(function() {
                      .attr("class","bar")
                      .style("fill",function(d,i){
                        return colors[i];
-                     });
+                     })
+                     .attr("id", function(d){return d.landtype;});
 
 
 
@@ -2909,185 +2910,246 @@ $( document ).ready(function() {
       /////////////////FILTER CONTINENTS////////////
       $(".buttonfilterCC").on("click", function(){
 
+              console.log(filterArrayCC);
+
               if(this.value == "clearFilterCC"){
 
+                  console.log(this.value)
+
+                  console.log(filterArrayCC);
+
+                  filterArrayCC.forEach(function(filt){
+                    d3.selectAll("g[id=\'"+filt+"\']")
+                    .style("stroke", "#333333")
+                    .style("stroke-width", "0px")
+                    .style("filter", "");
+                    d3.selectAll("rect[id=\'"+filt+"\']")
+                    .style("stroke", "#333333")
+                    .style("stroke-width", "0px")
+                    .style("filter", "");
+                    d3.selectAll("#"+filt+"")
+                    .style("stroke", "#333333")
+                    .style("stroke-width", "0px")
+                    .style("filter", "");
+
+
+                  })
+
+
+
+                  // if(variableToShow=="Biocapacity"){
+                  //     // stackedAreaChartContinent(globalDataBiointact.properties)
+                  //     // floatingBarChartContinent(globalDataBiointact.properties ,yearTimeline);
+                  //
+                  // }else{
+                  //     if(measureToSee=="gha"){
+                  //         // stackedAreaChartContinent(globalDataEFGHAintact.properties)
+                  //         // floatingBarChartContinent(globalDataEFGHAintact.properties ,yearTimeline);
+                  //
+                  //     }else{
+                  //         // stackedAreaChartContinent(globalDataEFEarthsintact.properties)
+                  //         // floatingBarChartContinent(globalDataEFEarthsintact.properties ,yearTimeline);
+                  //
+                  //     }
+                  // }
+
+                  // globalDataBio = globalDataBiointact;
+                  // globalDataEFGHA = globalDataEFGHAintact;
+                  // globalDataEFEarths = globalDataEFEarthsintact;
                   filterArrayCC = [];
-                  if(variableToShow=="Biocapacity"){
-                      stackedAreaChartContinent(globalDataBiointact.properties)
-                      floatingBarChartContinent(globalDataBiointact.properties ,yearTimeline);
-
-                  }else{
-                      if(measureToSee=="gha"){
-                          stackedAreaChartContinent(globalDataEFGHAintact.properties)
-                          floatingBarChartContinent(globalDataEFGHAintact.properties ,yearTimeline);
-
-                      }else{
-                          stackedAreaChartContinent(globalDataEFEarthsintact.properties)
-                          floatingBarChartContinent(globalDataEFEarthsintact.properties ,yearTimeline);
-
-                      }
-                  }
-
-                  globalDataBio = globalDataBiointact;
-                  globalDataEFGHA = globalDataEFGHAintact;
-                  globalDataEFEarths = globalDataEFEarthsintact;
 
 
 
               }else{
+
                 filterArrayCC.push(this.value);
+                console.log(filterArrayCC)
+
+                              filterArrayCC.forEach(function(ele){
+                                      var svg = d3.select("#continents_view #graphs").select("svg");
+                                      var svgsa = d3.select("#continents_view #bottomgraphs").select("#stackAreaChartCont");
+                                      var svgfb = d3.select("#continents_view #bottomgraphs").select("#floatingBarChartCont");
+
+                                      //Container for the gradients
+                                      var defs = svg.append("defs");
+                                      var defs = svgsa.append("defs");
+                                      var defs = svgfb.append("defs");
+
+                                      //Filter for the outside glow
+                                      var filter = defs.append("filter")
+                                          .attr("id","glow");
+                                      filter.append("feGaussianBlur")
+                                          .attr("stdDeviation","3.5")
+                                          .attr("result","coloredBlur");
+                                      var feMerge = filter.append("feMerge");
+                                      feMerge.append("feMergeNode")
+                                          .attr("in","coloredBlur");
+                                      feMerge.append("feMergeNode")
+                                          .attr("in","SourceGraphic");
+
+                                      d3.selectAll("g[id=\'"+ele+"\']")
+                                      .style("stroke", "#FFFF00")
+                                      .style("stroke-width", "2px")
+                                      .style("filter", "url(#glow)");
+                                      d3.selectAll("rect[id=\'"+ele+"\']")
+                                      .style("stroke", "#FFFF00")
+                                      .style("stroke-width", "2px")
+                                      .style("filter", "url(#glow)");
+                                      d3.selectAll("#"+ele+"")
+                                      .style("stroke", "#FFFF00")
+                                      .style("stroke-width", "2px")
+                                      .style("filter", "url(#glow)");
+
+                                     // switch (ele) {
+                                     //   case "Built Up Land":
+                                     //
+                                     //        //STACKED AREA - 54 YEARS
+                                     //        for (var i = 0; i < 54; i++) {
+                                     //            if(variableToShow=="Biocapacity"){
+                                     //              var year = Object.keys(globalDataBio.biogha)[i];
+                                     //              delete globalDataBio.biogha[year].built_up_land_biogha;
+                                     //            }else{
+                                     //              if(measureToSee=="gha"){
+                                     //                  console.log(globalDataEFGHA.feautures)
+                                     //                  var year = Object.keys(globalDataEFGHA.properties.efgha)[i];
+                                     //                  delete globalDataEFGHA.properties.efgha[year].built_up_land_efgha;
+                                     //              }else{
+                                     //                  var year = Object.keys(globalDataEFEarths.efearths)[i];
+                                     //                  delete globalDataEFEarths.efearths[year].built_up_land_efearths;
+                                     //              }
+                                     //            }
+                                     //
+                                     //        }
+                                     //
+                                     //        //continentsDataForYear(datageo, yearTimeline)
+                                     //     break;
+                                     //   case "Grazing Land":
+                                     //
+                                     //        //STACKED AREA - 54 YEARS
+                                     //        for (var i = 0; i < 54; i++) {
+                                     //            if(variableToShow=="Biocapacity"){
+                                     //              var year = Object.keys(globalDataBio.biogha)[i];
+                                     //              delete globalDataBio.biogha[year].grazing_land_biogha;
+                                     //
+                                     //            }else{
+                                     //              if(measureToSee=="gha"){
+                                     //                  var year = Object.keys(globalDataEFGHA.efgha)[i];
+                                     //                  delete globalDataEFGHA.efgha[year].grazing_land_efgha;
+                                     //              }else{
+                                     //                  var year = Object.keys(globalDataEFEarths.efearths)[i];
+                                     //                  delete globalDataEFEarths.efearths[year].grazing_land_efearths;
+                                     //              }
+                                     //            }
+                                     //        }
+                                     //
+                                     //     break;
+                                     //   case "Forest Land":
+                                     //
+                                     //        //STACKED AREA - 54 YEARS
+                                     //        for (var i = 0; i < 54; i++) {
+                                     //
+                                     //            if(variableToShow=="Biocapacity"){
+                                     //              var year = Object.keys(globalDataBio.biogha)[i];
+                                     //              delete globalDataBio.biogha[year].forest_products_biogha;
+                                     //
+                                     //            }else{
+                                     //              if(measureToSee=="gha"){
+                                     //                  var year = Object.keys(globalDataEFGHA.efgha)[i];
+                                     //                  delete globalDataEFGHA.efgha[year].forest_products_efgha;
+                                     //              }else{
+                                     //                  var year = Object.keys(globalDataEFEarths.efearths)[i];
+                                     //                  delete globalDataEFEarths.efearths[year].forest_products_efearths;
+                                     //              }
+                                     //            }
+                                     //        }
+                                     //
+                                     //     break;
+                                     //   case "Fishing Ground":
+                                     //
+                                     //      //STACKED AREA - 54 YEARS
+                                     //      for (var i = 0; i < 54; i++) {
+                                     //          if(variableToShow=="Biocapacity"){
+                                     //            var year = Object.keys(globalDataBio.biogha)[i];
+                                     //            delete globalDataBio.biogha[year].fishing_grounds_biogha;
+                                     //
+                                     //          }else{
+                                     //            if(measureToSee=="gha"){
+                                     //                var year = Object.keys(globalDataEFGHA.efgha)[i];
+                                     //                delete globalDataEFGHA.efgha[year].fishing_grounds_efgha;
+                                     //            }else{
+                                     //                var year = Object.keys(globalDataEFEarths.efearths)[i];
+                                     //                delete globalDataEFEarths.efearths[year].fishing_grounds_efearths;
+                                     //            }
+                                     //          }
+                                     //      }
+                                     //
+                                     //     break;
+                                     //   case "Carbon":
+                                     //
+                                     //      //STACKED AREA - 54 YEARS
+                                     //      for (var i = 0; i < 54; i++) {
+                                     //          if(variableToShow=="Biocapacity"){
+                                     //            var year = Object.keys(globalDataBio.biogha)[i];
+                                     //            delete globalDataBio.biogha[year].carbon_biogha;
+                                     //
+                                     //          }else{
+                                     //            if(measureToSee=="gha"){
+                                     //                var year = Object.keys(globalDataEFGHA.efgha)[i];
+                                     //                delete globalDataEFGHA.efgha[year].carbon_efgha;
+                                     //            }else{
+                                     //                var year = Object.keys(globalDataEFEarths.efearths)[i];
+                                     //                delete globalDataEFEarths.efearths[year].carbon_efearths;
+                                     //            }
+                                     //          }
+                                     //      }
+                                     //
+                                     //     break;
+                                     //   case "Cropland":
+                                     //
+                                     //      //STACKED AREA - 54 YEARS
+                                     //      for (var i = 0; i < 54; i++) {
+                                     //          if(variableToShow=="Biocapacity"){
+                                     //            var year = Object.keys(globalDataBio.biogha)[i];
+                                     //            delete globalDataBio.biogha[year].cropland_biogha;
+                                     //
+                                     //          }else{
+                                     //            if(measureToSee=="gha"){
+                                     //                var year = Object.keys(globalDataEFGHA.efgha)[i];
+                                     //                delete globalDataEFGHA.efgha[year].cropland_efgha;
+                                     //            }else{
+                                     //                var year = Object.keys(globalDataEFEarths.efearths)[i];
+                                     //                delete globalDataEFEarths.efearths[year].cropland_efearths;
+                                     //            }
+                                     //          }
+                                     //      }
+                                     //
+                                     //     break;
+                                     //   default:
+                                     //
+                                     // }
+                              })
+
 
               }
 
-              var stackedAreaChart = document.getElementById("stackAreaChartCont").childNodes[0];
-              var floatingBarChart = document.getElementById("floatingBarChartCont").childNodes[0];
+              // var stackedAreaChart = document.getElementById("stackAreaChartCont").childNodes[0];
+              // var floatingBarChart = document.getElementById("floatingBarChartCont").childNodes[0];
 
-              filterArrayCC.forEach(function(ele){
-                     switch (ele) {
-                       case "Built Up Land":
-
-                            //STACKED AREA - 54 YEARS
-                            for (var i = 0; i < 54; i++) {
-                                if(variableToShow=="Biocapacity"){
-                                  var year = Object.keys(globalDataBio.biogha)[i];
-                                  delete globalDataBio.biogha[year].built_up_land_biogha;
-                                }else{
-                                  if(measureToSee=="gha"){
-                                      console.log(globalDataEFGHA.feautures)
-                                      var year = Object.keys(globalDataEFGHA.properties.efgha)[i];
-                                      delete globalDataEFGHA.properties.efgha[year].built_up_land_efgha;
-                                  }else{
-                                      var year = Object.keys(globalDataEFEarths.efearths)[i];
-                                      delete globalDataEFEarths.efearths[year].built_up_land_efearths;
-                                  }
-                                }
-
-                            }
-
-                            //continentsDataForYear(datageo, yearTimeline)
-                         break;
-                       case "Grazing Land":
-
-                            //STACKED AREA - 54 YEARS
-                            for (var i = 0; i < 54; i++) {
-                                if(variableToShow=="Biocapacity"){
-                                  var year = Object.keys(globalDataBio.biogha)[i];
-                                  delete globalDataBio.biogha[year].grazing_land_biogha;
-
-                                }else{
-                                  if(measureToSee=="gha"){
-                                      var year = Object.keys(globalDataEFGHA.efgha)[i];
-                                      delete globalDataEFGHA.efgha[year].grazing_land_efgha;
-                                  }else{
-                                      var year = Object.keys(globalDataEFEarths.efearths)[i];
-                                      delete globalDataEFEarths.efearths[year].grazing_land_efearths;
-                                  }
-                                }
-                            }
-
-                         break;
-                       case "Forest Land":
-
-                            //STACKED AREA - 54 YEARS
-                            for (var i = 0; i < 54; i++) {
-
-                                if(variableToShow=="Biocapacity"){
-                                  var year = Object.keys(globalDataBio.biogha)[i];
-                                  delete globalDataBio.biogha[year].forest_products_biogha;
-
-                                }else{
-                                  if(measureToSee=="gha"){
-                                      var year = Object.keys(globalDataEFGHA.efgha)[i];
-                                      delete globalDataEFGHA.efgha[year].forest_products_efgha;
-                                  }else{
-                                      var year = Object.keys(globalDataEFEarths.efearths)[i];
-                                      delete globalDataEFEarths.efearths[year].forest_products_efearths;
-                                  }
-                                }
-                            }
-
-                         break;
-                       case "Fishing Ground":
-
-                          //STACKED AREA - 54 YEARS
-                          for (var i = 0; i < 54; i++) {
-                              if(variableToShow=="Biocapacity"){
-                                var year = Object.keys(globalDataBio.biogha)[i];
-                                delete globalDataBio.biogha[year].fishing_grounds_biogha;
-
-                              }else{
-                                if(measureToSee=="gha"){
-                                    var year = Object.keys(globalDataEFGHA.efgha)[i];
-                                    delete globalDataEFGHA.efgha[year].fishing_grounds_efgha;
-                                }else{
-                                    var year = Object.keys(globalDataEFEarths.efearths)[i];
-                                    delete globalDataEFEarths.efearths[year].fishing_grounds_efearths;
-                                }
-                              }
-                          }
-
-                         break;
-                       case "Carbon":
-
-                          //STACKED AREA - 54 YEARS
-                          for (var i = 0; i < 54; i++) {
-                              if(variableToShow=="Biocapacity"){
-                                var year = Object.keys(globalDataBio.biogha)[i];
-                                delete globalDataBio.biogha[year].carbon_biogha;
-
-                              }else{
-                                if(measureToSee=="gha"){
-                                    var year = Object.keys(globalDataEFGHA.efgha)[i];
-                                    delete globalDataEFGHA.efgha[year].carbon_efgha;
-                                }else{
-                                    var year = Object.keys(globalDataEFEarths.efearths)[i];
-                                    delete globalDataEFEarths.efearths[year].carbon_efearths;
-                                }
-                              }
-                          }
-
-                         break;
-                       case "Cropland":
-
-                          //STACKED AREA - 54 YEARS
-                          for (var i = 0; i < 54; i++) {
-                              if(variableToShow=="Biocapacity"){
-                                var year = Object.keys(globalDataBio.biogha)[i];
-                                delete globalDataBio.biogha[year].cropland_biogha;
-
-                              }else{
-                                if(measureToSee=="gha"){
-                                    var year = Object.keys(globalDataEFGHA.efgha)[i];
-                                    delete globalDataEFGHA.efgha[year].cropland_efgha;
-                                }else{
-                                    var year = Object.keys(globalDataEFEarths.efearths)[i];
-                                    delete globalDataEFEarths.efearths[year].cropland_efearths;
-                                }
-                              }
-                          }
-
-                         break;
-                       default:
-
-                     }
-              })
-
-
-              if(variableToShow=="Biocapacity"){
-                  stackedAreaChartContinent(globalDataBiointact.properties)
-                  floatingBarChartContinent(globalDataBiointact.properties ,yearTimeline);
-
-              }else{
-                  if(measureToSee=="gha"){
-                      stackedAreaChartContinent(globalDataEFGHAintact.properties)
-                      floatingBarChartContinent(globalDataEFGHAintact.properties ,yearTimeline);
-
-                  }else{
-                      stackedAreaChartContinent(globalDataEFEarthsintact.properties)
-                      floatingBarChartContinent(globalDataEFEarthsintact.properties ,yearTimeline);
-
-                  }
-              }
+              // if(variableToShow=="Biocapacity"){
+              //     stackedAreaChartContinent(globalDataBiointact.properties)
+              //     floatingBarChartContinent(globalDataBiointact.properties ,yearTimeline);
+              //
+              // }else{
+              //     if(measureToSee=="gha"){
+              //         stackedAreaChartContinent(globalDataEFGHAintact.properties)
+              //         floatingBarChartContinent(globalDataEFGHAintact.properties ,yearTimeline);
+              //
+              //     }else{
+              //         stackedAreaChartContinent(globalDataEFEarthsintact.properties)
+              //         floatingBarChartContinent(globalDataEFEarthsintact.properties ,yearTimeline);
+              //
+              //     }
+              // }
 
       });
 
