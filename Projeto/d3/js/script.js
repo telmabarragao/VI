@@ -150,6 +150,7 @@ $( document ).ready(function() {
       document.getElementById('search_bar-continent').style.display = "inline-grid";
       document.getElementById('search_bar').style.visibility = "hidden";
       document.getElementById('search_bar').style.display = "none";
+      document.getElementById('selectFilter').style.visibility = "hidden";
 
       $(".switch-input").on("click", function(){
 
@@ -159,6 +160,7 @@ $( document ).ready(function() {
 
                   $("#world_graph #chart").remove();
                   $("#world_graph #legend1 svg").remove();
+                  $("#world_graph #legend2 svg").remove();
                   $("#graphs #stackBarChartCont").remove();
                   $("#stackAreaChartCont g").remove();
                   $("#stackedAreaTitle").remove();
@@ -184,6 +186,7 @@ $( document ).ready(function() {
                   document.getElementById('search_bar').style.visibility = "hidden";
                   document.getElementById('search_bar-continent').style.display = "inline-grid";
                   document.getElementById('search_bar').style.display = "none";
+                  document.getElementById('selectFilter').style.visibility = "hidden";
 
                   document.getElementById('continents_view').style.visibility = "visible" ;
                   document.getElementById('countries_view').style.visibility = "hidden" ;
@@ -192,6 +195,7 @@ $( document ).ready(function() {
                   appendTo = "#world_graph";
                   $("#world_graph #chart").remove();
                   $("#world_graph #legend1 svg").remove();
+                  $("#world_graph #legend2 svg").remove();
                   $("#graphs #stackBarChartCont").remove();
                   $("#stackAreaChartCont g").remove();
                   $("#stackedAreaTitle").remove();
@@ -211,6 +215,7 @@ $( document ).ready(function() {
                   document.getElementById('search_bar').style.visibility = "hidden";
                   document.getElementById('search_bar-continent').style.display = "inline-grid";
                   document.getElementById('search_bar').style.display = "none";
+                  document.getElementById('selectFilter').style.visibility = "hidden";
                   document.getElementById('continents_view').style.visibility = "visible" ;
                   document.getElementById('countries_view').style.visibility = "hidden" ;
 
@@ -220,7 +225,7 @@ $( document ).ready(function() {
                   appendTo = "#countries_graph"
                   $("#chart").remove();
                   $("#legend1 svg").remove();
-
+                  $("#legend2 svg").remove();
                   $("#floatingBarChartCont g").remove();
                   numberOfContinentOfFloatingBar=0;
                   dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
@@ -236,12 +241,14 @@ $( document ).ready(function() {
                   document.getElementById('search_bar').style.display = "inline-grid";
                   document.getElementById('continents_view').style.visibility = "hidden" ;
                   document.getElementById('countries_view').style.visibility = "visible" ;
+                  document.getElementById('selectFilter').style.visibility = "visible";
 
 
               }else{
                   appendTo = "#countries_graph"
                   $("#chart").remove();
                   $("#legend1 svg").remove();
+                  $("#legend2 svg").remove();
                   $("#floatingBarChartCont g").remove();
                   numberOfContinentOfFloatingBar=0;
                   dataToFloatingBars = {"categories":[], "continents":[], "colors":[], "layers":[]};
@@ -258,6 +265,7 @@ $( document ).ready(function() {
                   document.getElementById('search_bar').style.display = "inline-grid";
                   document.getElementById('continents_view').style.visibility = "hidden" ;
                   document.getElementById('countries_view').style.visibility = "visible" ;
+                  document.getElementById('selectFilter').style.visibility = "visible";
               }
           }
       });
@@ -272,6 +280,7 @@ $( document ).ready(function() {
 
                     $("#chart").remove();
                     $("#legend1 svg").remove();
+                    $("#legend2 svg").remove();
                     $("#stackBarChartCont").remove();
                     $("#stackAreaChartCont g").remove();
                     $("#stackedAreaTitle").remove();
@@ -296,6 +305,7 @@ $( document ).ready(function() {
                   if(document.getElementById("chart").length != 0){
                     $("#chart").remove();
                     $("#legend1 svg").remove();
+                    $("#legend2 svg").remove();
                     $("#stackBarChartCont").remove();
                     $("#stackAreaChartCont g").remove();
                     $("#stackedAreaTitle").remove();
@@ -319,6 +329,7 @@ $( document ).ready(function() {
             if(document.getElementById("chart").length != 0){
               $("#chart").remove();
               $("#legend1 svg").remove();
+              $("#legend2 svg").remove();
               $("#stackBarChartCont").remove();
               $("#stackAreaChartCont g").remove();
               $("#stackedAreaTitle").remove();
@@ -348,6 +359,7 @@ $( document ).ready(function() {
             if(document.getElementById("chart").length != 0){
               $("#chart").remove();
               $("#legend1 svg").remove();
+              $("#legend2 svg").remove();
               $("#stackBarChartCont").remove();
               $("#stackAreaChartCont g").remove();
               $("#stackedAreaTitle").remove();
@@ -420,6 +432,7 @@ $( document ).ready(function() {
           if(variableToShow=="EcoFoot"){
             $("#world_graph #chart").remove();
             $("#world_graph #legend1 svg").remove();
+            $("#world_graph #legend2 svg").remove();
             $("#graphs #stackBarChartCont").remove();
 
             if(measureToSee=="earths"){
@@ -432,6 +445,7 @@ $( document ).ready(function() {
           }else{
             $("#world_graph #chart").remove();
             $("#world_graph #legend1 svg").remove();
+            $("#world_graph #legend2 svg").remove();
             $("#graphs #stackBarChartCont").remove();
 
             continents_BiocapacityGha();
@@ -3640,12 +3654,12 @@ $( document ).ready(function() {
 
                     legend.append("stop")
                       .attr("offset", "0%")
-                      .attr("stop-color", lowColorEF)
+                      .attr("stop-color", lowColorB)
                       .attr("stop-opacity", 1);
 
                     legend.append("stop")
                       .attr("offset", "100%")
-                      .attr("stop-color",highColorEF)
+                      .attr("stop-color",highColorB)
                       .attr("stop-opacity", 1);
 
 
@@ -3657,7 +3671,7 @@ $( document ).ready(function() {
 
                     var y = d3.scaleLinear()
                       .range([0, 271])
-                      .domain([maxValColorCouFT, minValColorCouFT]);
+                      .domain([maxValColorCouB, minValColorCouB]);
 
                     var yAxis = d3.axisRight()
                       .scale(y)
